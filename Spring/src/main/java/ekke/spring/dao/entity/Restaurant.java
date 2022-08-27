@@ -14,10 +14,10 @@ import java.util.Set;
 @NoArgsConstructor
 public class Restaurant extends BaseEntity {
 
-    @Column(name = "name", length = 250)
+    @Column(name = "name", nullable = false, length = 250)
     private String name;
 
-    @Column(name = "maxSeatsNumber")
+    @Column(name = "maxSeatsNumber", nullable = false)
     private Integer maxSeatsNumber;
 
     @ManyToMany

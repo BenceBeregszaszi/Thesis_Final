@@ -19,7 +19,7 @@ public class Reservation extends BaseEntity {
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User person;
 
-    @Column(name = "seatNumber", nullable = false)
+    @Column(nullable = false, name = "seatNumber")
     private Integer seatNumber;
 
     @OneToOne
@@ -30,6 +30,6 @@ public class Reservation extends BaseEntity {
     @JoinColumn(name = "restaurantId",referencedColumnName = "id")
     private Restaurant restaurant;
 
-    @Column(name = "time")
+    @Column(nullable = false, name = "time")
     private Date time;
 }
