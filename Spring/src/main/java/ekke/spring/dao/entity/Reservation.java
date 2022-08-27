@@ -1,4 +1,4 @@
-package ekke.spring.dao;
+package ekke.spring.dao.entity;
 
 import ekke.spring.common.BaseEntity;
 import lombok.*;
