@@ -1,7 +1,7 @@
 package ekke.spring.conversion;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class RestaurantConversionService {
 }
