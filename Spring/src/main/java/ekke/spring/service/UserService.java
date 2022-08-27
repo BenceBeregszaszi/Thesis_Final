@@ -18,6 +18,11 @@ public class UserService implements CrudServices<UserDto> {
     }
 
     @Override
+    public UserDto getById(Long id) {
+        return null;
+    }
+
+    @Override
     public UserDto update(Long id, UserDto dto) {
         return null;
     }

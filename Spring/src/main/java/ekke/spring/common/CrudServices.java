@@ -10,6 +10,8 @@ public interface CrudServices<T> {
 
     List<T> getAll();
 
+    T getById(final Long id);
+
     T update(final Long id, final T dto);
 
     void delete(final Long id);

@@ -18,6 +18,11 @@ public class ReservationService implements CrudServices<ReservationDto> {
     }
 
     @Override
+    public ReservationDto getById(Long id) {
+        return null;
+    }
+
+    @Override
     public ReservationDto update(Long id, ReservationDto dto) {
         return null;
     }
