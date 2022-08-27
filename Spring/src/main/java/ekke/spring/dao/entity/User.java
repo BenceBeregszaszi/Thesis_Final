@@ -23,7 +23,4 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
-
-    @OneToOne(mappedBy = "person", cascade = CascadeType.REMOVE)
-    private Reservation reservation;
 }
