@@ -2,12 +2,12 @@ package ekke.spring.conversion;
 
 import ekke.spring.dao.entity.City;
 import ekke.spring.dto.CityDto;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 public class CityConversionService {
 
     public CityDto CityEntity2CityDto(final City city){

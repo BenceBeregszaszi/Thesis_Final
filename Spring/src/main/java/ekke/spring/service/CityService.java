@@ -9,11 +9,11 @@ import ekke.spring.dto.CityDto;
 import ekke.spring.service.exception.CityNotFoundException;
 import ekke.spring.validators.CityDtoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Transactional
+@Service
 public class CityService implements CrudServices<CityDto> {
 
     @Autowired
@@ -29,7 +29,7 @@ public class CityService implements CrudServices<CityDto> {
     private IdValidator idValidator;
 
     @Override
-    public CityDto add(CityDto dto) {
+    public CityDto add(final CityDto dto) {
         cityDtoValidator.validate(dto);
         City newCity = cityConversionService.CityDto2CityEntity(dto);
         cityRepository.save(newCity);
@@ -43,13 +43,13 @@ public class CityService implements CrudServices<CityDto> {
     }
 
     @Override
-    public CityDto getById(Long id) {
+    public CityDto getById(final Long id) {
         City result = cityRepository.findById(id).orElseThrow(() -> new CityNotFoundException(String.format("City with id %d not found", id)));
         return cityConversionService.CityEntity2CityDto(result);
     }
 
     @Override
-    public CityDto update(Long id, CityDto dto) {
+    public CityDto update(final Long id, final CityDto dto) {
         idValidator.validateId(id);
         cityDtoValidator.validate(dto);
         City oldCity = cityRepository.findById(id).orElseThrow(() -> new CityNotFoundException(String.format("City with id %d not found", id)));
@@ -59,7 +59,7 @@ public class CityService implements CrudServices<CityDto> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(final Long id) {
         idValidator.validateId(id);
         cityRepository.findById(id).orElseThrow(() -> new CityNotFoundException(String.format("City with id %d not found", id)));
         cityRepository.deleteById(id);
