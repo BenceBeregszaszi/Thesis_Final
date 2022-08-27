@@ -2,9 +2,13 @@ package ekke.spring.service;
 
 import ekke.spring.common.CrudServices;
 import ekke.spring.dto.UserDto;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@Transactional
 public class UserService implements CrudServices<UserDto> {
 
     @Override

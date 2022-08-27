@@ -10,10 +10,12 @@ import ekke.spring.service.exception.CityNotFoundException;
 import ekke.spring.validators.CityDtoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class CityService implements CrudServices<CityDto> {
 
     @Autowired
