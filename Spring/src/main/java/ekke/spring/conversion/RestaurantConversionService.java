@@ -19,12 +19,4 @@ public class RestaurantConversionService {
         Restaurant restaurant = new Restaurant();
         return restaurant;
     }
-
-    public List<RestaurantDto> RestaurantEntityList2RestaurantDtoList(List<Restaurant> restaurants){
-        List<RestaurantDto> restaurantDtos = new ArrayList<>();
-        for (Restaurant restaurant : restaurants){
-            restaurantDtos.add(this.RestaurantEntity2RestaurantDto(restaurant));
-        }
-        return restaurantDtos;
-    }
 }

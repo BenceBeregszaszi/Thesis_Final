@@ -19,12 +19,4 @@ public class ReservationConversionService {
         Reservation reservation = new Reservation();
         return reservation;
     }
-
-    public List<ReservationDto> ReservationEntityList2ReservationDtoList(List<Reservation> reservationList) {
-        List<ReservationDto> reservationDtos = new ArrayList<>();
-        for (Reservation reservation : reservationList){
-            reservationDtos.add(this.ReservationEntity2ReservationDto(reservation));
-        }
-        return reservationDtos;
-    }
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,19 +34,18 @@ public class CityService implements CrudServices<CityDto> {
     @Override
     public CityDto add(final CityDto dto) {
         cityDtoValidator.validate(dto);
-        City newCity = cityConversionService.CityDto2CityEntity(dto);
-        cityRepository.save(newCity);
-        return cityConversionService.CityEntity2CityDto(newCity);
+        City savedCityDto = cityRepository.save(cityConversionService.CityDto2CityEntity(dto));
+        return cityConversionService.CityEntity2CityDto(savedCityDto);
     }
 
     @Override
     public List<CityDto> getAll() {
-        List<City> allCity = cityRepository.findAll();
-        return cityConversionService.cityEntityList2CityDtoList(allCity);
+        return cityRepository.findAll().stream().map((city -> cityConversionService.CityEntity2CityDto(city))).collect(Collectors.toList());
     }
 
     @Override
     public CityDto getById(final Long id) {
+        idValidator.validateId(id);
         City result = cityRepository.findById(id).orElseThrow(() -> new CityNotFoundException(String.format("City with id %d not found", id)));
         return cityConversionService.CityEntity2CityDto(result);
     }

@@ -19,12 +19,4 @@ public class UserConversionService {
         User user = new User();
         return user;
     }
-
-    public List<UserDto> UserEntityList2UserDtoList(List<User> users){
-        List<UserDto> userDtos = new ArrayList<>();
-        for (User user : users){
-            userDtos.add(this.UserEntity2UserDto(user));
-        }
-        return userDtos;
-    }
 }

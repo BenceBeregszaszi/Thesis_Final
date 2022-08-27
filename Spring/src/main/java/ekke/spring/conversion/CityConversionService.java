@@ -19,12 +19,4 @@ public class CityConversionService {
         City city = new City();
         return  city;
     }
-
-    public List<CityDto> cityEntityList2CityDtoList(final List<City> cities){
-        List<CityDto> cityDtoList = new ArrayList<>();
-        for (City city : cities){
-            cityDtoList.add(this.CityEntity2CityDto(city));
-        }
-        return cityDtoList;
-    }
 }
