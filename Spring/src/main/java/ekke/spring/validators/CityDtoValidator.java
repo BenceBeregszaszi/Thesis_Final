@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CityDtoValidator extends BaseValidator {
+
     public void validate(final CityDto cityDto) {
         validateObject(cityDto);
         checkArgumentNotNull(cityDto.getPostCode());

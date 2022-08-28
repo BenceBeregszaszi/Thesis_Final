@@ -32,8 +32,10 @@ public class ReservationService implements CrudServices<ReservationDto> {
     private IdValidator idValidator;
 
     @Override
-    public ReservationDto add(ReservationDto dto) {
-        return null;
+    public ReservationDto add(final ReservationDto dto) {
+        reservationDtoValidator.validate(dto);
+        Reservation savedReservation = reservationRepository.save(reservationConversionService.ReservationDto2ReservationEntity(dto));
+        return reservationConversionService.ReservationEntity2ReservationDto(savedReservation);
     }
 
     @Override
@@ -43,7 +45,7 @@ public class ReservationService implements CrudServices<ReservationDto> {
     }
 
     @Override
-    public ReservationDto getById(Long id) {
+    public ReservationDto getById(final Long id) {
         idValidator.validateId(id);
         Reservation reservation = reservationRepository.findById(id).orElseThrow(()
                 -> new ReservationNotFoundException(String.format("Reservation with id %d is not found", id)));
@@ -51,12 +53,12 @@ public class ReservationService implements CrudServices<ReservationDto> {
     }
 
     @Override
-    public ReservationDto update(Long id, ReservationDto dto) {
+    public ReservationDto update(final Long id, final ReservationDto dto) {
         return null;
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(final Long id) {
         idValidator.validateId(id);
         reservationRepository.findById(id).orElseThrow(() -> new ReservationNotFoundException(String.format("Reservation with id %d not found", id)));
         reservationRepository.deleteById(id);
