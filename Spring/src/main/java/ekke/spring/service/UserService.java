@@ -52,7 +52,13 @@ public class UserService implements CrudServices<UserDto> {
 
     @Override
     public UserDto update(final Long id, final UserDto dto) {
-        return null;
+        idValidator.validateId(id);
+        userDtoValidator.validate(dto);
+        userDtoValidator.validateForUpdate(dto.getUsername(), dto.getPassword());
+        User oldUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(String.format("User with id %d not found", id)));
+        User newUser = setUserForUpdate(oldUser, userConversionService.UserDto2UserEntity(dto));
+        userRepository.save(newUser);
+        return userConversionService.UserEntity2UserDto(newUser);
     }
 
     @Override
@@ -61,5 +67,10 @@ public class UserService implements CrudServices<UserDto> {
         userRepository.findById(id).orElseThrow(()
                 -> new UserNotFoundException(String.format("User with id %d not found", id)));
         userRepository.deleteById(id);
+    }
+
+    private User setUserForUpdate(final User oldUser, final User newUser){
+        oldUser.setPassword(newUser.getPassword());
+        return oldUser;
     }
 }

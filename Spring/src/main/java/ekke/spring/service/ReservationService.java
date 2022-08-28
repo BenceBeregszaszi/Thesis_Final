@@ -54,7 +54,14 @@ public class ReservationService implements CrudServices<ReservationDto> {
 
     @Override
     public ReservationDto update(final Long id, final ReservationDto dto) {
-        return null;
+        idValidator.validateId(id);
+        reservationDtoValidator.validate(dto);
+        reservationDtoValidator.validateForUpdate(dto.getTime(), dto.getRestaurantId());
+        Reservation oldReservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ReservationNotFoundException(String.format("Reservation with id %d not found", id)));
+        Reservation newReservation = setReservationForUpdate(oldReservation, reservationConversionService.ReservationDto2ReservationEntity(dto));
+        reservationRepository.save(newReservation);
+        return reservationConversionService.ReservationEntity2ReservationDto(newReservation);
     }
 
     @Override
@@ -62,5 +69,11 @@ public class ReservationService implements CrudServices<ReservationDto> {
         idValidator.validateId(id);
         reservationRepository.findById(id).orElseThrow(() -> new ReservationNotFoundException(String.format("Reservation with id %d not found", id)));
         reservationRepository.deleteById(id);
+    }
+
+    private Reservation setReservationForUpdate(final Reservation oldReservation, final Reservation newReservation) {
+        oldReservation.setSeatNumber(newReservation.getSeatNumber());
+        oldReservation.setTime(newReservation.getTime());
+        return oldReservation;
     }
 }

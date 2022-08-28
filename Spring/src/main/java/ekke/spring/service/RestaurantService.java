@@ -54,7 +54,14 @@ public class RestaurantService implements CrudServices<RestaurantDto> {
 
     @Override
     public RestaurantDto update(final Long id, final RestaurantDto dto) {
-        return null;
+        idValidator.validateId(id);
+        restaurantDtoValidator.validate(dto);
+        restaurantDtoValidator.validateForUpdate(dto.getName(), dto.getMaxSeatsNumber());
+        Restaurant oldRestaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new RestaurantNotFoundException(String.format("Restaurant with id %d not found", id)));
+        Restaurant newRestaurant = setRestaurantForUpdate(oldRestaurant, restaurantConversionService.RestaurantDto2RestaurantEntity(dto));
+        restaurantRepository.save(newRestaurant);
+        return restaurantConversionService.RestaurantEntity2RestaurantDto(newRestaurant);
     }
 
     @Override
@@ -63,5 +70,11 @@ public class RestaurantService implements CrudServices<RestaurantDto> {
         restaurantRepository.findById(id).orElseThrow(()
                 -> new RestaurantNotFoundException(String.format("Restaurant with id %d not found", id)));
         restaurantRepository.deleteById(id);
+    }
+
+    private Restaurant setRestaurantForUpdate(final Restaurant oldRestaurant, final Restaurant newRestaurant){
+        oldRestaurant.setName(newRestaurant.getName());
+        oldRestaurant.setMaxSeatsNumber(newRestaurant.getMaxSeatsNumber());
+        return oldRestaurant;
     }
 }

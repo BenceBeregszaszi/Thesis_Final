@@ -54,10 +54,11 @@ public class CityService implements CrudServices<CityDto> {
     public CityDto update(final Long id, final CityDto dto) {
         idValidator.validateId(id);
         cityDtoValidator.validate(dto);
+        cityDtoValidator.validateForUpdate(dto.getPostCode());
         City oldCity = cityRepository.findById(id).orElseThrow(() -> new CityNotFoundException(String.format("City with id %d not found", id)));
-        City newCity = cityConversionService.CityDto2CityEntity(dto);
-        oldCity.setPostCode(newCity.getPostCode());
-        return cityConversionService.CityEntity2CityDto(oldCity);
+        City newCity = setCityForUpdate(oldCity, cityConversionService.CityDto2CityEntity(dto));
+        cityRepository.save(newCity);
+        return cityConversionService.CityEntity2CityDto(newCity);
     }
 
     @Override
@@ -65,5 +66,10 @@ public class CityService implements CrudServices<CityDto> {
         idValidator.validateId(id);
         cityRepository.findById(id).orElseThrow(() -> new CityNotFoundException(String.format("City with id %d not found", id)));
         cityRepository.deleteById(id);
+    }
+
+    private City setCityForUpdate(final City oldCity, final City newCity){
+        oldCity.setPostCode(newCity.getPostCode());
+        return oldCity;
     }
 }
