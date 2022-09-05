@@ -10,7 +10,8 @@ import javax.persistence.OneToOne;
 import java.util.Date;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reservation extends BaseEntity {

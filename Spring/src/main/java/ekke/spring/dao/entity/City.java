@@ -9,7 +9,8 @@ import javax.persistence.ManyToMany;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class City extends BaseEntity {
