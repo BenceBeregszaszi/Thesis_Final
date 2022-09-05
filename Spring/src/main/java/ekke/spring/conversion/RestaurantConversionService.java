@@ -3,7 +3,6 @@ package ekke.spring.conversion;
 import ekke.spring.dao.entity.City;
 import ekke.spring.dao.entity.Restaurant;
 import ekke.spring.dao.repository.CityRepository;
-import ekke.spring.dao.repository.RestaurantRepository;
 import ekke.spring.dto.RestaurantDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

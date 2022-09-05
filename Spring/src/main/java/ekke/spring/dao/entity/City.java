@@ -3,9 +3,7 @@ package ekke.spring.dao.entity;
 import ekke.spring.common.BaseEntity;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
