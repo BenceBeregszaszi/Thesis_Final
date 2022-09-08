@@ -1,7 +1,14 @@
 package ekke.spring;
 
-import org.springframework.stereotype.Service;
+import ekke.spring.TestConfig.TestConfiguration;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@ContextConfiguration(
+        classes = {TestConfiguration.class},
+        loader = AnnotationConfigContextLoader.class
+)
+@Transactional
 public class DatabaseIntegrationTestBase {
 }
