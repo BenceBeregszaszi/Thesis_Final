@@ -20,7 +20,7 @@ public class RestaurantDtoValidator extends BaseValidator {
     }
 
     public void validateForUpdate(final String name, final int maxSeatsNumber){
-        if (restaurantRepository.findByNameAAndMaxSeatsNumber(name, maxSeatsNumber).isPresent())
+        if (restaurantRepository.findByNameAndMaxSeatsNumber(name, maxSeatsNumber).isPresent())
             throw new ReservationAlreadyExists(String.format("Restaurant with name %s is already exists", name));
     }
 }

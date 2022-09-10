@@ -2,7 +2,6 @@ package ekke.spring.dao.repository;
 
 import ekke.spring.dao.entity.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -10,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
-    @Query
-    Optional<Restaurant> findByNameAAndMaxSeatsNumber(final String name, final int maxSeatsNumber);
+    Optional<Restaurant> findByNameAndMaxSeatsNumber(final String name, final int maxSeatsNumber);
 }

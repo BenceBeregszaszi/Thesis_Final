@@ -6,8 +6,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: schedule
     volumes:
-      - 'src/resources/schedule.sql:docker-entrypoint-initdb.d/schedule.sql'
+      - './src/main/resources/initDb.sql:/docker-entrypoint-initdb.d/initDb.sql'
     ports:
       - '127.0.0.1:3306:3306'
   backend:
