@@ -1,5 +1,6 @@
 package ekke.spring.controller;
 
+import ekke.spring.common.exception.ValidationException;
 import ekke.spring.service.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,10 @@ public class ControllerBase {
     })
     public ResponseEntity<String> handleNotFoundException(final Exception exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }
+
+    @ExceptionHandler({ValidationException.class})
+    public ResponseEntity<String> handleValidationException(final ValidationException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 }
