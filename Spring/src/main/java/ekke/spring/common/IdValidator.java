@@ -8,7 +8,7 @@ import java.util.Objects;
 @Component
 public class IdValidator {
 
-    public void validateId(final Long id){
+    public void validateId(final Long id) {
         if (Objects.isNull(id))
             throw new ValidationException("Given id is null");
     }

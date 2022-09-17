@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-public class CityController extends ControllerBase{
+public class CityController extends ControllerBase {
 
     @Autowired
     private CityService cityService;
 
     @PostMapping("/cities")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<CityDto> createCity(@RequestBody final CityDto cityDto){
+    public ResponseEntity<CityDto> createCity(@RequestBody final CityDto cityDto) {
         return ResponseEntity.ok(cityService.add(cityDto));
     }
 
@@ -27,20 +27,20 @@ public class CityController extends ControllerBase{
     }
 
     @GetMapping("/cities/{id}")
-    public ResponseEntity<CityDto> readOneCity(@PathVariable final Long id){
+    public ResponseEntity<CityDto> readOneCity(@PathVariable final Long id) {
         return ResponseEntity.ok(cityService.getById(id));
     }
 
     @PutMapping("/cities/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<CityDto> updateCity(@PathVariable final Long id, @RequestBody final CityDto cityDto){
+    public ResponseEntity<CityDto> updateCity(@PathVariable final Long id, @RequestBody final CityDto cityDto) {
         return ResponseEntity.ok(cityService.update(id, cityDto));
     }
 
 
     @DeleteMapping("/cities/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Void> deleteCity(@PathVariable final Long id){
+    public ResponseEntity<Void> deleteCity(@PathVariable final Long id) {
         cityService.delete(id);
         return ResponseEntity.ok().build();
     }

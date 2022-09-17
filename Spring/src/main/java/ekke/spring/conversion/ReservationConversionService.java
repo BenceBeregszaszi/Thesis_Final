@@ -8,6 +8,9 @@ import ekke.spring.dao.repository.CityRepository;
 import ekke.spring.dao.repository.RestaurantRepository;
 import ekke.spring.dao.repository.UserRepository;
 import ekke.spring.dto.ReservationDto;
+import ekke.spring.service.exception.CityNotFoundException;
+import ekke.spring.service.exception.RestaurantNotFoundException;
+import ekke.spring.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +39,7 @@ public class ReservationConversionService {
         return reservationDto;
     }
 
-    public Reservation ReservationDto2ReservationEntity(ReservationDto reservationDto){
+    public Reservation ReservationDto2ReservationEntity(ReservationDto reservationDto) {
         Reservation reservation = new Reservation();
         reservation.setId(reservationDto.getId());
         reservation.setVersion(reservationDto.getVersion());
@@ -48,15 +51,16 @@ public class ReservationConversionService {
         return reservation;
     }
 
-    private City cityId2CityEntity(final Long cityId){
-        return cityRepository.findById(cityId).get();
+    private City cityId2CityEntity(final Long cityId) {
+        return cityRepository.findById(cityId).orElseThrow(() -> new CityNotFoundException(String.format("City with id %d not found", cityId)));
     }
 
-    private User userId2UserEntity(final Long userId){
-        return userRepository.findById(userId).get();
+    private User userId2UserEntity(final Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(String.format("User with id %d not found", userId)));
     }
 
     private Restaurant restaurantId2RestaurantEntity(final Long restaurantId){
-        return restaurantRepository.findById(restaurantId).get();
+        return restaurantRepository.findById(restaurantId).orElseThrow(()
+                -> new RestaurantNotFoundException(String.format("Restaurant with id %d not found", restaurantId)));
     }
 }

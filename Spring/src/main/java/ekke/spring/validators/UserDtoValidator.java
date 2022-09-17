@@ -20,7 +20,7 @@ public class UserDtoValidator extends BaseValidator {
         checkArgumentNotNull(userDto.getPassword());
     }
 
-    public void validateForUpdate(final String username, final String password){
+    public void validateForUpdate(final String username, final String password) {
         if (userRepository.findByUsernameAndPassword(username, password).isPresent())
             throw new UserAlreadyExistsException(String.format("This user %s with password %s already occupied", username,password));
     }
