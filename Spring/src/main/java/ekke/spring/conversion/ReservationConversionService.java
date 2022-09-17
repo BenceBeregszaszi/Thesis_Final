@@ -8,6 +8,9 @@ import ekke.spring.dao.repository.CityRepository;
 import ekke.spring.dao.repository.RestaurantRepository;
 import ekke.spring.dao.repository.UserRepository;
 import ekke.spring.dto.ReservationDto;
+import ekke.spring.service.exception.CityNotFoundException;
+import ekke.spring.service.exception.RestaurantNotFoundException;
+import ekke.spring.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -49,14 +52,15 @@ public class ReservationConversionService {
     }
 
     private City cityId2CityEntity(final Long cityId){
-        return cityRepository.findById(cityId).get();
+        return cityRepository.findById(cityId).orElseThrow(() -> new CityNotFoundException(String.format("City with id %d not found", cityId)));
     }
 
     private User userId2UserEntity(final Long userId){
-        return userRepository.findById(userId).get();
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(String.format("User with id %d not found", userId)));
     }
 
     private Restaurant restaurantId2RestaurantEntity(final Long restaurantId){
-        return restaurantRepository.findById(restaurantId).get();
+        return restaurantRepository.findById(restaurantId).orElseThrow(()
+                -> new RestaurantNotFoundException(String.format("Restaurant with id %d not found", restaurantId)));
     }
 }

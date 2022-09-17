@@ -48,7 +48,7 @@ public class RestaurantService implements CrudServices<RestaurantDto> {
     public RestaurantDto getById(final Long id) {
         idValidator.validateId(id);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(()
-                -> new RestaurantNotFoundException(String.format("Restaurant with id %d not found")));
+                -> new RestaurantNotFoundException(String.format("Restaurant with id %d not found", id)));
         return restaurantConversionService.RestaurantEntity2RestaurantDto(restaurant);
     }
 
