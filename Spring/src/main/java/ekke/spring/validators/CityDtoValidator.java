@@ -16,6 +16,7 @@ public class CityDtoValidator extends BaseValidator {
     public void validate(final CityDto cityDto) {
         validateObject(cityDto);
         checkArgumentNotNull(cityDto.getPostCode());
+        checkArgumentNotNull(cityDto.getCityName());
     }
 
     public void validateForUpdate(final String postCode){

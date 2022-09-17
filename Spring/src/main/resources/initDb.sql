@@ -26,6 +26,7 @@ CREATE TABLE `city` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `version` datetime(6) DEFAULT NULL,
   `post_code` varchar(4) NOT NULL,
+  `city_name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -107,3 +108,21 @@ CREATE TABLE `user` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2022-09-17 13:49:31
+
+INSERT INTO `city` VALUES (6,'2020-09-17 14:02:14.000000','3300','Eger'),
+                          (7,'2020-09-17 14:03:03.000000','5400','Mezőtúr'),
+                          (8,'2020-09-17 14:03:15.000000','5000','Szolnok'),
+                          (9,'2020-09-17 14:03:49.000000','8621','Zamárdi');
+
+INSERT INTO `restaurant` VALUES (6,'2020-09-17 14:07:29.000000',40,'Heaven'),
+                                (7,'2020-09-17 14:08:24.000000',20,'Erőd Klub'),
+                                (8,'2020-09-17 14:08:28.000000',20,'Boomerang'),
+                                (9,'2020-09-17 14:08:30.000000',40,'Corner');
+
+INSERT INTO `user` VALUES (3,'2020-09-17 14:05:42.000000','ADMIN','admin@gmail.com','admin','admin'),
+                          (4,'2020-09-17 14:06:08.000000','USER','user@gmail.com','user','user'),
+                          (5,'2020-09-17 14:06:27.000000','USER','bandi@gamil.com','bandi1','bandi');
+
+INSERT INTO `city_link` VALUES (7,7),(6,9);
+
+INSERT INTO `reservation` VALUES (3,'2020-09-17 14:04:46.000000',20,'2020-10-01 14:05:04.000000',6,3,9);

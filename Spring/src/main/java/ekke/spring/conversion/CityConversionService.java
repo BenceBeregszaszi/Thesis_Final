@@ -22,6 +22,7 @@ public class CityConversionService {
         cityDto.setId(city.getId());
         cityDto.setVersion(city.getVersion());
         cityDto.setPostCode(city.getPostCode());
+        cityDto.setCityName(city.getCityName());
         cityDto.setRestaurants(mapRestaurant2Long(city.getRestaurants()));
         return cityDto;
     }
@@ -31,6 +32,7 @@ public class CityConversionService {
         city.setId(cityDto.getId());
         city.setVersion(cityDto.getVersion());
         city.setPostCode(cityDto.getPostCode());
+        city.setCityName(cityDto.getCityName());
         city.setRestaurants(mapLong2Restaurant(cityDto.getRestaurants()));
         return  city;
     }

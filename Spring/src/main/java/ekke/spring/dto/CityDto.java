@@ -16,5 +16,7 @@ public class CityDto {
 
     private String postCode;
 
+    private String cityName;
+
     private Set<Long> restaurants;
 }
