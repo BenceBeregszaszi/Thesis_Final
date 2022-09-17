@@ -81,6 +81,6 @@ The tests are running in an in-memory database **(H2)** for faster test runs.
 ## Useful commands:
 ```
  - docker-compose down  //drop down containers
- - docker-compose up  //starts containers (not the latest compiled)
+ - docker-compose up --build  //build then starts container 
  - docker-compose build  //builds containers
 ```
