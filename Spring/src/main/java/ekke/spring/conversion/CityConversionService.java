@@ -4,6 +4,7 @@ import ekke.spring.dao.entity.City;
 import ekke.spring.dao.entity.Restaurant;
 import ekke.spring.dao.repository.RestaurantRepository;
 import ekke.spring.dto.CityDto;
+import ekke.spring.service.exception.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ public class CityConversionService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    public CityDto CityEntity2CityDto(final City city){
+    public CityDto CityEntity2CityDto(final City city) {
         CityDto cityDto = new CityDto();
         cityDto.setId(city.getId());
         cityDto.setVersion(city.getVersion());
@@ -27,7 +28,7 @@ public class CityConversionService {
         return cityDto;
     }
 
-    public City CityDto2CityEntity(final CityDto cityDto){
+    public City CityDto2CityEntity(final CityDto cityDto) {
         City city = new City();
         city.setId(cityDto.getId());
         city.setVersion(cityDto.getVersion());
@@ -43,9 +44,10 @@ public class CityConversionService {
         return restaurantIds;
     }
 
-    private Set<Restaurant> mapLong2Restaurant(final Set<Long> restaurantIds){
+    private Set<Restaurant> mapLong2Restaurant(final Set<Long> restaurantIds) {
         Set<Restaurant> restaurants = new HashSet<>();
-        restaurantIds.forEach(id -> restaurants.add(restaurantRepository.findById(id).get()));
+        restaurantIds.forEach(id -> restaurants.add(restaurantRepository.findById(id).orElseThrow(()
+                -> new RestaurantNotFoundException(String.format("Restaurant with id %d not found", id)))));
         return restaurants;
     }
 }

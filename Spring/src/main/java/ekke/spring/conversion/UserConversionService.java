@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserConversionService {
 
-    public UserDto UserEntity2UserDto(User user){
+    public UserDto UserEntity2UserDto(User user) {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setVersion(user.getVersion());
@@ -19,7 +19,7 @@ public class UserConversionService {
         return userDto;
     }
 
-    public User UserDto2UserEntity(UserDto userDto){
+    public User UserDto2UserEntity(UserDto userDto) {
         User user = new User();
         user.setId(userDto.getId());
         user.setVersion(userDto.getVersion());

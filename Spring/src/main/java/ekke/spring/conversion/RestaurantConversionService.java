@@ -4,11 +4,14 @@ import ekke.spring.dao.entity.City;
 import ekke.spring.dao.entity.Restaurant;
 import ekke.spring.dao.repository.CityRepository;
 import ekke.spring.dto.RestaurantDto;
+import ekke.spring.service.exception.CityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -38,14 +41,15 @@ public class RestaurantConversionService {
     }
 
     private Set<Long> cityEntity2Long(final Set<City> cities){
-        Set<Long> cityIds = new HashSet<>();
-        cities.forEach(city -> cityIds.add(cityRepository.findById(city.getId()).get().getId()));
-        return cityIds;
+        return cities.stream().map(city -> city.getId()).collect(Collectors.toSet());
     }
 
     private Set<City> long2CityEntity(final Set<Long> cityIds){
         Set<City> cities = new HashSet<>();
-        cityIds.forEach(id -> cities.add(cityRepository.findById(id).get()));
+        cityIds.forEach(id -> {
+            City city = cityRepository.findById(id).orElseThrow(() -> new CityNotFoundException(String.format("City with id %d not found", id)));
+            cities.add(city);
+        });
         return cities;
     }
 }

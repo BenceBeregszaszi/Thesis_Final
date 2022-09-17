@@ -39,7 +39,7 @@ public class ReservationConversionService {
         return reservationDto;
     }
 
-    public Reservation ReservationDto2ReservationEntity(ReservationDto reservationDto){
+    public Reservation ReservationDto2ReservationEntity(ReservationDto reservationDto) {
         Reservation reservation = new Reservation();
         reservation.setId(reservationDto.getId());
         reservation.setVersion(reservationDto.getVersion());
@@ -51,11 +51,11 @@ public class ReservationConversionService {
         return reservation;
     }
 
-    private City cityId2CityEntity(final Long cityId){
+    private City cityId2CityEntity(final Long cityId) {
         return cityRepository.findById(cityId).orElseThrow(() -> new CityNotFoundException(String.format("City with id %d not found", cityId)));
     }
 
-    private User userId2UserEntity(final Long userId){
+    private User userId2UserEntity(final Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(String.format("User with id %d not found", userId)));
     }
 

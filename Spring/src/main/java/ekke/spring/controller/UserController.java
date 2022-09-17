@@ -17,7 +17,7 @@ public class UserController extends ControllerBase{
 
     @PostMapping("/users")
     @PreAuthorize("hasAuthority('ADMIN')  or hasAuthority('NON_USER')")
-    public ResponseEntity<UserDto> createUser(@RequestBody final UserDto userDto){
+    public ResponseEntity<UserDto> createUser(@RequestBody final UserDto userDto) {
         return ResponseEntity.ok(userService.add(userDto));
     }
 
@@ -29,14 +29,14 @@ public class UserController extends ControllerBase{
 
     @PutMapping("/users/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<UserDto> updateUser(@PathVariable final Long id, @RequestBody final UserDto userDto){
+    public ResponseEntity<UserDto> updateUser(@PathVariable final Long id, @RequestBody final UserDto userDto) {
         return ResponseEntity.ok(userService.update(id, userDto));
     }
 
 
     @DeleteMapping("/users/{id}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
-    public ResponseEntity<Void> deleteUser(@PathVariable final Long id){
+    public ResponseEntity<Void> deleteUser(@PathVariable final Long id) {
         userService.delete(id);
         return ResponseEntity.ok().build();
     }
