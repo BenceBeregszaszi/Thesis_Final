@@ -17,10 +17,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - '127.0.0.1:8080:8080'
-    deploy:
-      restart_policy:
-        condition: on-failure
-        max_attempts: 3
+    restart: on-failure
     environment:
       DB_HOST: db
       DB_PORT: 3306
