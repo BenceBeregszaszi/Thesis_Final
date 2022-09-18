@@ -16,7 +16,6 @@ public class CityController extends ControllerBase {
     private CityService cityService;
 
     @PostMapping("/cities")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CityDto> createCity(@RequestBody final CityDto cityDto) {
         return ResponseEntity.ok(cityService.add(cityDto));
     }
@@ -32,14 +31,12 @@ public class CityController extends ControllerBase {
     }
 
     @PutMapping("/cities/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CityDto> updateCity(@PathVariable final Long id, @RequestBody final CityDto cityDto) {
         return ResponseEntity.ok(cityService.update(id, cityDto));
     }
 
 
     @DeleteMapping("/cities/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteCity(@PathVariable final Long id) {
         cityService.delete(id);
         return ResponseEntity.ok().build();

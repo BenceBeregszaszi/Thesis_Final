@@ -16,26 +16,27 @@ public class UserController extends ControllerBase{
     private UserService userService;
 
     @PostMapping("/users")
-    @PreAuthorize("hasAuthority('ADMIN')  or hasAuthority('NON_USER')")
     public ResponseEntity<UserDto> createUser(@RequestBody final UserDto userDto) {
         return ResponseEntity.ok(userService.add(userDto));
     }
 
     @GetMapping("/users")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<UserDto>> readUser(){
         return ResponseEntity.ok(userService.getAll());
     }
 
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDto> readUserById(@PathVariable final Long id) {
+        return ResponseEntity.ok(userService.getById(id));
+    }
+
     @PutMapping("/users/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserDto> updateUser(@PathVariable final Long id, @RequestBody final UserDto userDto) {
         return ResponseEntity.ok(userService.update(id, userDto));
     }
 
 
     @DeleteMapping("/users/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<Void> deleteUser(@PathVariable final Long id) {
         userService.delete(id);
         return ResponseEntity.ok().build();

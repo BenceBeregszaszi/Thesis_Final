@@ -15,31 +15,28 @@ public class RestaurantController extends ControllerBase {
     @Autowired
     private RestaurantService restaurantService;
 
-    @PostMapping("/restaurant")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/restaurants")
     public ResponseEntity<RestaurantDto> createReservation(@RequestBody final RestaurantDto restaurantDto) {
         return ResponseEntity.ok(restaurantService.add(restaurantDto));
     }
 
-    @GetMapping("/restaurant")
+    @GetMapping("/restaurants")
     public ResponseEntity<List<RestaurantDto>> readRestaurant() {
         return ResponseEntity.ok(restaurantService.getAll());
     }
 
-    @GetMapping("/restaurant/{id}")
+    @GetMapping("/restaurants/{id}")
     public ResponseEntity<RestaurantDto> readOneRestaurant(@PathVariable final Long id) {
         return ResponseEntity.ok(restaurantService.getById(id));
     }
 
-    @PutMapping("/restaurant/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("/restaurants/{id}")
     public ResponseEntity<RestaurantDto> updateRestaurant(@PathVariable final Long id, @RequestBody final RestaurantDto restaurantDto) {
         return ResponseEntity.ok(restaurantService.update(id, restaurantDto));
     }
 
 
-    @DeleteMapping("/restaurant/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/restaurants/{id}")
     public ResponseEntity<Void> deleteRestaurant(@PathVariable final Long id) {
         restaurantService.delete(id);
         return ResponseEntity.ok().build();

@@ -15,32 +15,28 @@ public class ReservationController extends ControllerBase {
     @Autowired
     private ReservationService reservationService;
 
-    @PostMapping("/reservation")
+    @PostMapping("/reservations")
     public ResponseEntity<ReservationDto> createReservation(@RequestBody final ReservationDto reservationDto) {
         return ResponseEntity.ok(reservationService.add(reservationDto));
     }
 
-    @GetMapping("/reservation")
-    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/reservations")
     public ResponseEntity<List<ReservationDto>> readReservation() {
         return ResponseEntity.ok(reservationService.getAll());
     }
 
-    @GetMapping("/reservation/{id}")
-    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("/reservations/{id}")
     public ResponseEntity<ReservationDto> readOneReservation(@PathVariable final Long id) {
         return ResponseEntity.ok(reservationService.getById(id));
     }
 
-    @PutMapping("/reservation/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PutMapping("/reservations/{id}")
     public ResponseEntity<ReservationDto> updateReservation(@PathVariable final Long id, @RequestBody final ReservationDto reservationDto) {
         return ResponseEntity.ok(reservationService.update(id, reservationDto));
     }
 
 
-    @DeleteMapping("/reservation/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @DeleteMapping("/reservations/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable final Long id) {
         reservationService.delete(id);
         return ResponseEntity.ok().build();
