@@ -1,4 +1,4 @@
-version: '3'
+version: '2.4'
 services:
   db:
     image: 'mysql:8'
@@ -11,6 +11,11 @@ services:
       - './src/main/resources/initDb.sql:/docker-entrypoint-initdb.d/initDb.sql'
     ports:
       - '127.0.0.1:3306:3306'
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=password --execute \"SHOW DATABASES;\""
+      interval: 2s
+      timeout: 20s
+      retries: 10
   backend:
     build:
       context: .
@@ -25,4 +30,5 @@ services:
       DB_USER: root
       DB_PASSWORD: password
     depends_on:
-      - db
+      db:
+        condition: service_healthy
