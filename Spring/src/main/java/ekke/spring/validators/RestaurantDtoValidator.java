@@ -17,6 +17,10 @@ public class RestaurantDtoValidator extends BaseValidator {
         validateObject(restaurantDto);
         checkArgumentNotNull(restaurantDto.getName());
         checkArgumentNotNull(restaurantDto.getMaxSeatsNumber());
+        if (restaurantRepository.
+                findByNameAndMaxSeatsNumber(restaurantDto.getName(), restaurantDto.getMaxSeatsNumber()).isPresent()){
+            throw new ReservationAlreadyExists(String.format("Restaurant with name %s is already exists", restaurantDto.getName()));
+        }
     }
 
     public void validateForUpdate(final String name, final int maxSeatsNumber) {
