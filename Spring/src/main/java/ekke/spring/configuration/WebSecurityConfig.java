@@ -1,6 +1,8 @@
 package ekke.spring.configuration;
 
+import ekke.spring.configuration.Filter.JwtFilterFactory;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +10,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableAutoConfiguration
@@ -16,12 +22,24 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableGlobalMethodSecurity(
         prePostEnabled = true
 )
-public class MethodSecurityConfig {
+public class WebSecurityConfig {
+
+    @Autowired
+    private JwtFilterFactory jwtFilterFactory;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     @SneakyThrows
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
-        httpSecurity.csrf().disable();
+        httpSecurity
+                .csrf().disable()
+                .authorizeRequests().anyRequest().permitAll().and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        httpSecurity.addFilterBefore(jwtFilterFactory.create(), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }

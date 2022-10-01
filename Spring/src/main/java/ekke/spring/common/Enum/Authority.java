@@ -1,4 +1,4 @@
-package ekke.spring.common;
+package ekke.spring.common.Enum;
 
 public enum Authority {
     ADMIN,

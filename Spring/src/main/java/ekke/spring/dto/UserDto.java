@@ -1,6 +1,6 @@
 package ekke.spring.dto;
 
-import ekke.spring.common.Authority;
+import ekke.spring.common.Enum.Authority;
 import lombok.*;
 
 import java.util.Date;

@@ -1,6 +1,6 @@
 package ekke.spring.TestUsers;
 
-import ekke.spring.common.Authority;
+import ekke.spring.common.Enum.Authority;
 import lombok.Getter;
 
 @Getter

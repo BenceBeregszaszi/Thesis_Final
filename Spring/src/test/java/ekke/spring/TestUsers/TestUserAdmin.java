@@ -1,7 +1,6 @@
 package ekke.spring.TestUsers;
 
-import ekke.spring.common.Authority;
-import lombok.Getter;
+import ekke.spring.common.Enum.Authority;
 
 public class TestUserAdmin {
 

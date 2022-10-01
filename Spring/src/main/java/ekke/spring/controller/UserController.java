@@ -15,11 +15,6 @@ public class UserController extends ControllerBase{
     @Autowired
     private UserService userService;
 
-    @PostMapping("/users")
-    public ResponseEntity<UserDto> createUser(@RequestBody final UserDto userDto) {
-        return ResponseEntity.ok(userService.add(userDto));
-    }
-
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> readUser(){
         return ResponseEntity.ok(userService.getAll());

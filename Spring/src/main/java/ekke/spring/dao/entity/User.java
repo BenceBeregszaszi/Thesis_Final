@@ -1,6 +1,6 @@
 package ekke.spring.dao.entity;
 
-import ekke.spring.common.Authority;
+import ekke.spring.common.Enum.Authority;
 import ekke.spring.common.BaseEntity;
 import lombok.*;
 

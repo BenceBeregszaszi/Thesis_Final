@@ -14,4 +14,10 @@ public class BaseValidator {
         if (Objects.isNull(object))
             throw new ValidationException("Given argument is null");
     }
+
+    protected void validateStringNotNullOrEmpty(final String string){
+        if (Objects.isNull(string)){
+            throw new ValidationException("Given string is null");
+        }
+    }
 }
