@@ -19,6 +19,12 @@ public class City extends BaseEntity {
     @Column(name = "cityName", nullable = false, length = 200)
     private String cityName;
 
+    @Column(name = "longitude", nullable = false)
+    private Double longitude;
+
+    @Column(name = "latitude", nullable = false)
+    private Double latitude;
+
     @ManyToMany(mappedBy = "cities")
     private Set<Restaurant> restaurants;
 }

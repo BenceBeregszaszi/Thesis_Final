@@ -18,5 +18,9 @@ public class CityDto {
 
     private String cityName;
 
+    private Double longitude;
+
+    private Double latitude;
+
     private Set<Long> restaurants;
 }
