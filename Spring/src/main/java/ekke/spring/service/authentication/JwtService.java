@@ -2,7 +2,6 @@ package ekke.spring.service.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ekke.spring.configuration.JwtProperties;
-import ekke.spring.dto.UserDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.DefaultClock;
 import org.springframework.beans.factory.annotation.Autowired;

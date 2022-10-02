@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,7 +22,7 @@ public class AuthenticationController extends ControllerBase {
     private AuthenticationService authenticationService;
 
     @PostMapping("/authentication/authenticate")
-    public ResponseEntity<TokenPairDto> authenticate(final AuthenticationRequestDto authRequestDto){
+    public ResponseEntity<TokenPairDto> authenticate(@RequestBody final AuthenticationRequestDto authRequestDto){
         return ResponseEntity.ok(authenticationService.authenticate(authRequestDto));
     }
 
@@ -33,7 +34,7 @@ public class AuthenticationController extends ControllerBase {
 
 
     @GetMapping("/authentication/refresh-token")
-    public ResponseEntity<TokenPairDto> refreshToken(final TokenPairDto tokenPairDto) {
+    public ResponseEntity<TokenPairDto> refreshToken(@RequestBody final TokenPairDto tokenPairDto) {
         return ResponseEntity.ok(authenticationService.refreshToken(tokenPairDto.getRefreshToken()));
     }
 }

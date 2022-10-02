@@ -20,10 +20,8 @@ import java.util.List;
 public class AuthenticatedUser implements JwtUser, Principal {
 
     private Long id;
-    private Date version;
     private String username;
     private String password;
-    private String email;
     private Collection<? extends GrantedAuthority> authorities;
 
     @Override

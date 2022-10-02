@@ -1,11 +1,10 @@
 package ekke.spring.service.authentication;
 
 import ekke.spring.common.exception.ValidationException;
+import ekke.spring.dao.entity.User;
 import ekke.spring.dao.repository.UserRepository;
 import ekke.spring.dto.AuthenticationRequestDto;
 import ekke.spring.dto.TokenPairDto;
-import ekke.spring.dto.UserDto;
-import ekke.spring.service.UserService;
 import ekke.spring.service.exception.AuthenticationException;
 import ekke.spring.validators.AuthenticationRequestValidator;
 import ekke.spring.validators.JwtValidator;
@@ -16,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Service
@@ -34,10 +34,14 @@ public class AuthenticationService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public TokenPairDto authenticate(final AuthenticationRequestDto requestDto){
         authenticationRequestValidator.validate(requestDto);
         Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDto.getUsername(), requestDto.getPassword()));
-        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
+        User databaseUser = userRepository.findByUsernameAndPassword(auth.getPrincipal().toString(), auth.getCredentials().toString()).get();
+        AuthenticatedUser authenticatedUser = buildAuthenticatedUser(databaseUser, auth);
         final String accessToken = jwtService.generateUserToken(JwtService.TokenType.ACCESS, authenticatedUser);
         final String refreshToken = jwtService.generateUserToken(JwtService.TokenType.REFRESH, authenticatedUser);
         return new TokenPairDto(accessToken, refreshToken);
@@ -56,5 +60,14 @@ public class AuthenticationService {
         final String newRefreshToken = jwtService.refreshToken(JwtService.TokenType.REFRESH, token);
         jwtValidator.invalidateToken(token);
         return new TokenPairDto(newAccessToken, newRefreshToken);
+    }
+
+    private AuthenticatedUser buildAuthenticatedUser(final User user, Authentication authentication) {
+        AuthenticatedUser authenticatedUser = new AuthenticatedUser();
+        authenticatedUser.setId(user.getId());
+        authenticatedUser.setUsername(authentication.getPrincipal().toString());
+        authenticatedUser.setPassword(authentication.getCredentials().toString());
+        authenticatedUser.setAuthorities(Arrays.asList(user.getAuthority()));
+        return authenticatedUser;
     }
 }

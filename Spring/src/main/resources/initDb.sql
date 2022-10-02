@@ -27,6 +27,8 @@ CREATE TABLE `city` (
   `version` datetime(6) DEFAULT NULL,
   `post_code` varchar(4) NOT NULL,
   `city_name` varchar(100) NOT NULL,
+  `longitude` DOUBLE PRECISION NOT NULL,
+  `latitude` DOUBLE PRECISION NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
