@@ -5,7 +5,6 @@ import ekke.spring.common.exception.ValidationException;
 import org.springframework.stereotype.Component;
 
 
-
 @Component
 public class AuthorizationHeaderValidator extends BaseValidator {
     private final String prefix = "Bearer";

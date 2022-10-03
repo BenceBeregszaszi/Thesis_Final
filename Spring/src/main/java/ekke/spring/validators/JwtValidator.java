@@ -15,7 +15,7 @@ public class JwtValidator extends BaseValidator {
     @Autowired
     private JwtService jwtService;
 
-    private Set<String> invalidatedTokens = new HashSet<String>();
+    private Set<String> invalidatedTokens = new HashSet<>();
 
     public void validate(final String token) {
         if (token == null || token.isEmpty())

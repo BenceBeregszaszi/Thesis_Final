@@ -1,6 +1,5 @@
 package ekke.spring.common;
 
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 

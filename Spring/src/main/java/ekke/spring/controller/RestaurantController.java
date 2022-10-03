@@ -16,7 +16,8 @@ public class RestaurantController extends ControllerBase {
     private RestaurantService restaurantService;
 
     @PostMapping("/restaurants")
-    public ResponseEntity<RestaurantDto> createReservation(@RequestBody final RestaurantDto restaurantDto) {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RestaurantDto> createRestaurant(@RequestBody final RestaurantDto restaurantDto) {
         return ResponseEntity.ok(restaurantService.add(restaurantDto));
     }
 
@@ -31,12 +32,14 @@ public class RestaurantController extends ControllerBase {
     }
 
     @PutMapping("/restaurants/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<RestaurantDto> updateRestaurant(@PathVariable final Long id, @RequestBody final RestaurantDto restaurantDto) {
         return ResponseEntity.ok(restaurantService.update(id, restaurantDto));
     }
 
 
     @DeleteMapping("/restaurants/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteRestaurant(@PathVariable final Long id) {
         restaurantService.delete(id);
         return ResponseEntity.ok().build();

@@ -1,5 +1,7 @@
 package ekke.spring.service.authentication;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import ekke.spring.common.Enum.Authority;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,10 +10,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -22,6 +21,7 @@ public class AuthenticatedUser implements JwtUser, Principal {
     private Long id;
     private String username;
     private String password;
+    @JsonDeserialize(contentAs = Authority.class)
     private Collection<? extends GrantedAuthority> authorities;
 
     @Override
@@ -30,6 +30,7 @@ public class AuthenticatedUser implements JwtUser, Principal {
     }
 
     @Override
+    @JsonIgnore
     public String getName() {
         return id.toString();
     }

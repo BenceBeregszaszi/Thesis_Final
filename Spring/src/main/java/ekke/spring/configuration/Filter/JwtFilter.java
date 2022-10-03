@@ -1,6 +1,5 @@
 package ekke.spring.configuration.Filter;
 
-import ekke.spring.dto.UserDto;
 import ekke.spring.service.authentication.AuthenticatedUser;
 import ekke.spring.service.authentication.JwtService;
 import ekke.spring.validators.JwtValidator;
