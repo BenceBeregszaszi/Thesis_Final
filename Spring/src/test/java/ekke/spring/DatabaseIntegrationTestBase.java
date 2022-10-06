@@ -1,62 +1,37 @@
 package ekke.spring;
 
-import ekke.spring.TestConfig.TestConfiguration;
-import lombok.SneakyThrows;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 
-import java.util.Objects;
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
-@ContextConfiguration(
-        classes = {TestConfiguration.class},
-        loader = AnnotationConfigContextLoader.class
-)
-@Transactional
-@SqlGroup({
-        @Sql(scripts = "/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD),
-        @Sql(scripts = "/fill.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-})
-@AutoConfigureMockMvc
-public class DatabaseIntegrationTestBase {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+public class DatabaseIntegrationTestBase extends IntegrationTestBase {
+    private static final String H2_BACKUP_SQL = String.format("/tmp/test-backup%s.sql", UUID.randomUUID());
 
     @Autowired
-    private MockMvc mockMvc;
+    private JdbcTemplate jdbcTemplate;
 
-    @SneakyThrows
-    protected ResultActions get(final String url){
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(url);
-        return mockMvc.perform(request);
+    @BeforeEach
+    protected void backupDb() {
+        jdbcTemplate.execute(String.format("SCRIPT TO '%s'", H2_BACKUP_SQL));
     }
 
-    @SneakyThrows
-    protected ResultActions post(final String url, final Object body){
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(url).accept(MediaType.APPLICATION_JSON);
-        if (Objects.nonNull(body))
-            request.contentType(MediaType.APPLICATION_JSON).content(body.toString());
-        return mockMvc.perform(request);
+    @AfterEach
+    protected void resetDb() {
+        jdbcTemplate.execute("DROP ALL OBJECTS");
+        jdbcTemplate.execute(String.format("RUNSCRIPT FROM '%S'", H2_BACKUP_SQL));
     }
 
-    @SneakyThrows
-    protected  ResultActions put(final String url, final Object body) {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put(url).accept(MediaType.APPLICATION_JSON);
-        if (Objects.nonNull(body))
-            request.contentType(MediaType.APPLICATION_JSON).content(body.toString());
-        return mockMvc.perform(request);
-    }
-
-    @SneakyThrows
-    protected ResultActions delete(final String url) {
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete(url);
-        return mockMvc.perform(request);
+    @AfterAll
+    protected static void afterAll() throws IOException {
+        FileUtils.forceDelete(new File(H2_BACKUP_SQL));
     }
 }

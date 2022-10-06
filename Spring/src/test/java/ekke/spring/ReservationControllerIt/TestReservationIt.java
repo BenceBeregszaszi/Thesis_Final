@@ -1,6 +1,9 @@
 package ekke.spring.ReservationControllerIt;
 
+import ekke.spring.Application;
 import ekke.spring.DatabaseIntegrationTestBase;
+import org.springframework.test.context.ContextConfiguration;
 
-public class TestReservationIt extends DatabaseIntegrationTestBase {
+@ContextConfiguration(classes = Application.class)
+public abstract class TestReservationIt extends DatabaseIntegrationTestBase {
 }

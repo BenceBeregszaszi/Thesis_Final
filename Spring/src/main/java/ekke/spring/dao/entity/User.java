@@ -6,7 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity(name = "user")
+@Entity(name = "_user")
 @Getter
 @Setter
 @AllArgsConstructor

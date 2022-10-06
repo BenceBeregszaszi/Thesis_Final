@@ -1,6 +1,9 @@
 package ekke.spring.RestaurantControllerIt;
 
+import ekke.spring.Application;
 import ekke.spring.DatabaseIntegrationTestBase;
+import org.springframework.test.context.ContextConfiguration;
 
-public class TestRestaurantIt extends DatabaseIntegrationTestBase {
+@ContextConfiguration(classes = Application.class)
+public abstract class TestRestaurantIt extends DatabaseIntegrationTestBase {
 }
