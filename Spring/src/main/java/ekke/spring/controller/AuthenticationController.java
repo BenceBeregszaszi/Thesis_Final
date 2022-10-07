@@ -7,6 +7,7 @@ import ekke.spring.service.UserService;
 import ekke.spring.service.authentication.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,8 @@ public class AuthenticationController extends ControllerBase {
     }
 
     @PostMapping("/authentication/register")
-    public ResponseEntity<Void> register(final UserDto userDto) {
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('NON_USER')")
+    public ResponseEntity<Void> register(@RequestBody final UserDto userDto) {
         userService.add(userDto);
         return ResponseEntity.ok().build();
     }

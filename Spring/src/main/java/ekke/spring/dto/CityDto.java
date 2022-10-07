@@ -1,5 +1,7 @@
 package ekke.spring.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import ekke.spring.conversion.SetDeserializer;
 import lombok.*;
 
 import java.util.Date;
@@ -22,5 +24,6 @@ public class CityDto {
 
     private Double latitude;
 
+    @JsonDeserialize(using = SetDeserializer.class)
     private Set<Long> restaurants;
 }

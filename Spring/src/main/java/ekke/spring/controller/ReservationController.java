@@ -21,7 +21,7 @@ public class ReservationController extends ControllerBase {
     }
 
     @GetMapping("/reservations")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<ReservationDto>> readReservation() {
         return ResponseEntity.ok(reservationService.getAll());
     }

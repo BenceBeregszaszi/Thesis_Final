@@ -5,5 +5,5 @@ import ekke.spring.DatabaseIntegrationTestBase;
 import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(classes = Application.class)
-public abstract class TestCityIt extends DatabaseIntegrationTestBase {
+public abstract class CityIt extends DatabaseIntegrationTestBase {
 }

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class DatabaseIntegrationTestBase extends IntegrationTestBase {
+public abstract class DatabaseIntegrationTestBase extends IntegrationTestBase {
     private static final String H2_BACKUP_SQL = String.format("/tmp/test-backup%s.sql", UUID.randomUUID());
 
     @Autowired
