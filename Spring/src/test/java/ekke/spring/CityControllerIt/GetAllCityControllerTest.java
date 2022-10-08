@@ -1,16 +1,16 @@
-package ekke.spring.RestaurantControllerIt;
+package ekke.spring.CityControllerIt;
 
 import lombok.SneakyThrows;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
-public class GetAllRestaurantControllerIt extends RestaurantIt {
+public class GetAllCityControllerTest extends CityIt {
 
-    private static final String URL = "/restaurants";
+    private static final String URL = "/cities";
 
     @Test
     @SneakyThrows
-    public void getAllRestaurantThenReceiveOk() {
+    public void getAllCityThenReceiveOk() {
         //GIVEN
         //WHEN
         ResultActions resultActions = get(URL);

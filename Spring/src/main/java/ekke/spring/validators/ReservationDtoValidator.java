@@ -41,7 +41,7 @@ public class ReservationDtoValidator extends BaseValidator {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() ->
                         new RestaurantAlreadyExistsException(String.format("Restaurant with id %d is already exists", restaurantId)));
-        int allReservedSeatNumber = seatNumber + reservationRepository.findAllByRestaurantId(restaurantId);
+        int allReservedSeatNumber = seatNumber + reservationRepository.findAllByRestaurantId(restaurantId).orElse(0);
         if (allReservedSeatNumber > restaurant.getMaxSeatsNumber())
             throw new NoMoreFreeSpaceException("Not enough free space in the restaurant");
     }

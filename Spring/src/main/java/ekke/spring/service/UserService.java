@@ -57,7 +57,6 @@ public class UserService implements CrudServices<UserDto> {
     public UserDto update(final Long id, final UserDto dto) {
         idValidator.validateId(id);
         userDtoValidator.validate(dto);
-        userDtoValidator.validateForUpdate(dto.getUsername(), dto.getPassword());
         User oldUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(String.format("User with id %d not found", id)));
         User newUser = setUserForUpdate(oldUser, userConversionService.UserDto2UserEntity(dto));
         userRepository.save(newUser);
@@ -72,14 +71,6 @@ public class UserService implements CrudServices<UserDto> {
         userRepository.deleteById(id);
     }
 
-    public UserDto getForAuthentication(final String username, final String password) {
-        if (Objects.isNull(username) || Objects.isNull(password)){
-            throw new ValidationException("User name or password is null");
-        }
-        User user = userRepository.findByUsernameAndPassword(username, password).
-                orElseThrow(() -> new AuthenticationException("Authentication failed :Wrong Username or password"));
-        return userConversionService.UserEntity2UserDto(user);
-    }
 
     private User setUserForUpdate(final User oldUser, final User newUser){
         oldUser.setPassword(newUser.getPassword());

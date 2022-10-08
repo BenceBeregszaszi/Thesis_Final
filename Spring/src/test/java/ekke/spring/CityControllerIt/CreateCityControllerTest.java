@@ -5,12 +5,11 @@ import ekke.spring.TestUtils.CityTestUtil.CityTestUtil;
 import ekke.spring.TestUtils.TestUsers.TestUserAdam;
 import ekke.spring.TestUtils.TestUsers.TestUserAndras;
 import ekke.spring.TestUtils.WithTestUser;
-import ekke.spring.dto.CityDto;
 import lombok.SneakyThrows;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
-public class CreateCityControllerIt extends CityIt {
+public class CreateCityControllerTest extends CityIt {
 
     //mock
     private static final String URL = "/cities";
@@ -22,7 +21,7 @@ public class CreateCityControllerIt extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                post(URL, CityTestUtil.getTestCityCreatorDto("8765", "Kaposvar", "34.98", "45.267"));
+                post(URL, CityTestUtil.getTestCityDto("8765", "Kaposvar", "34.98", "45.267", "[5,7]"));
         //THEN
         isOk(resultActions);
     }
@@ -34,7 +33,7 @@ public class CreateCityControllerIt extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                post(URL, CityTestUtil.getTestCityCreatorDto("8765", "Kaposvar", "34.98", "45.267"));
+                post(URL, CityTestUtil.getTestCityDto("8765", "Kaposvar", "34.98", "45.267", "[5,7]"));
         //THEN
         hasNoAccess(resultActions);
     }
@@ -57,7 +56,7 @@ public class CreateCityControllerIt extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                post(URL, CityTestUtil.getTestCityCreatorDto("3300", "Kaposvar", "34.98", "45.267"));
+                post(URL, CityTestUtil.getTestCityDto("3300", "Kaposvar", "34.98", "45.267", "[5,7]"));
         //THEN
         isConflict(resultActions);
     }
@@ -65,10 +64,10 @@ public class CreateCityControllerIt extends CityIt {
     @Test
     @SneakyThrows
     @WithTestUser(user = TestUserAndras.class)
-    public void createCityWithPostCodeNullThenBadRequest() {
+    public void createCityWithPostCodeEmptyThenBadRequest() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, CityTestUtil.getTestCityCreatorDto(null, "Kaposvar", "34.98", "45.267"));
+        ResultActions resultActions = post(URL, CityTestUtil.getTestCityDto("", "Kaposvar", "34.98", "45.267", "[5,7]"));
         //THEN
         isBadRequest(resultActions);
     }

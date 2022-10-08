@@ -1,130 +1,23 @@
--- MySQL dump 10.13  Distrib 8.0.30, for Linux (x86_64)
---
--- Host: 127.0.0.1    Database: schedule
--- ------------------------------------------------------
--- Server version	8.0.30
+create table user_details (id bigint not null auto_increment, version datetime(6), authority varchar(255), email varchar(200) not null, password varchar(255) not null, username varchar(200) not null, primary key (id)) engine=InnoDB;
+create table city (id bigint not null auto_increment, version datetime(6), city_name varchar(200) not null, latitude double precision not null, longitude double precision not null, post_code varchar(4) not null, primary key (id)) engine=InnoDB;
+create table city_link (restaurant_id bigint not null, city_id bigint not null, primary key (restaurant_id, city_id)) engine=InnoDB;
+create table reservation (id bigint not null auto_increment, version datetime(6), seat_number integer not null, time datetime(6) not null, city_id bigint, user_id bigint, restaurant_id bigint, primary key (id)) engine=InnoDB;
+create table restaurant (id bigint not null auto_increment, version datetime(6), max_seats_number integer not null, name varchar(250) not null, primary key (id)) engine=InnoDB;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+INSERT INTO `city`(id, version, post_code, city_name, latitude, longitude) VALUES (6,'2020-09-17 14:02:14.000000','3300','Eger', 20.37329, 47.90265);
+INSERT INTO `city`(id, version, post_code, city_name, latitude, longitude) VALUES (7,'2020-09-17 14:03:03.000000','5400','Mezotur', 20.63333, 47);
+INSERT INTO `city`(id, version, post_code, city_name, latitude, longitude) VALUES (8,'2020-09-17 14:03:15.000000','5000','Szolnok', 20.2, 47.18333);
+INSERT INTO `city`(id, version, post_code, city_name, latitude, longitude) VALUES (9,'2020-09-17 14:03:49.000000','8621','Zamardi', 17.95366, 46.88488);
 
---
--- Table structure for table `city`
---
+INSERT INTO `restaurant` (id, version, max_seats_number, name) VALUES (6,'2020-09-17 14:07:29.000000',40,'Heaven');
+INSERT INTO `restaurant` (id, version, max_seats_number, name) VALUES (7,'2020-09-17 14:08:24.000000',20,'Erod Klub');
+INSERT INTO `restaurant` (id, version, max_seats_number, name) VALUES (8,'2020-09-17 14:08:28.000000',20,'Boomerang');
+INSERT INTO `restaurant` (id, version, max_seats_number, name) VALUES (9,'2020-09-17 14:08:30.000000',40,'Corner');
 
-DROP TABLE IF EXISTS `city`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `city` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `version` datetime(6) DEFAULT NULL,
-  `post_code` varchar(4) NOT NULL,
-  `city_name` varchar(100) NOT NULL,
-  `longitude` DOUBLE PRECISION NOT NULL,
-  `latitude` DOUBLE PRECISION NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+INSERT INTO `user_details` (id, version, authority, email, password, username) VALUES (3,'2020-09-17 14:05:42.000000','ADMIN','admin@gmail.com','admin','admin');
+INSERT INTO `user_details` (id, version, authority, email, password, username) VALUES (4,'2020-09-17 14:06:08.000000','USER','user@gmail.com','user','user');
+INSERT INTO `user_details` (id, version, authority, email, password, username) VALUES (5,'2020-09-17 14:06:27.000000','USER','bandi@gamil.com','bandi1','bandi');
 
---
--- Table structure for table `city_link`
---
+INSERT INTO `city_link` (restaurant_id, city_id) VALUES (7,7),(6,9);
 
-DROP TABLE IF EXISTS `city_link`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `city_link` (
-  `restaurant_id` bigint NOT NULL,
-  `city_id` bigint NOT NULL,
-  PRIMARY KEY (`restaurant_id`,`city_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `reservation`
---
-
-DROP TABLE IF EXISTS `reservation`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `reservation` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `version` datetime(6) DEFAULT NULL,
-  `seat_number` int NOT NULL,
-  `time` datetime(6) NOT NULL,
-  `city_id` bigint DEFAULT NULL,
-  `user_id` bigint DEFAULT NULL,
-  `restaurant_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `restaurant`
---
-
-DROP TABLE IF EXISTS `restaurant`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `restaurant` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `version` datetime(6) DEFAULT NULL,
-  `max_seats_number` int NOT NULL,
-  `name` varchar(250) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `version` datetime(6) DEFAULT NULL,
-  `authority` varchar(255) DEFAULT NULL,
-  `email` varchar(200) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `username` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2022-09-17 13:49:31
-
-INSERT INTO `city` VALUES (6,'2020-09-17 14:02:14.000000','3300','Eger', 20.37329, 47.90265),
-                          (7,'2020-09-17 14:03:03.000000','5400','Mezotur', 20.63333, 47),
-                          (8,'2020-09-17 14:03:15.000000','5000','Szolnok', 20.2, 47.18333),
-                          (9,'2020-09-17 14:03:49.000000','8621','Zamardi', 17.95366, 46.88488);
-
-INSERT INTO `restaurant` VALUES (6,'2020-09-17 14:07:29.000000',40,'Heaven'),
-                                (7,'2020-09-17 14:08:24.000000',20,'Erod Klub'),
-                                (8,'2020-09-17 14:08:28.000000',20,'Boomerang'),
-                                (9,'2020-09-17 14:08:30.000000',40,'Corner');
-
-INSERT INTO `user` VALUES (3,'2020-09-17 14:05:42.000000','ADMIN','admin@gmail.com','admin','admin'),
-                          (4,'2020-09-17 14:06:08.000000','USER','user@gmail.com','user','user'),
-                          (5,'2020-09-17 14:06:27.000000','USER','bandi@gamil.com','bandi1','bandi');
-
-INSERT INTO `city_link` VALUES (7,7),(6,9);
-
-INSERT INTO `reservation` VALUES (3,'2020-09-17 14:04:46.000000',20,'2020-10-01 14:05:04.000000',6,3,9);
+INSERT INTO `reservation` (id, version, seat_number, time, city_id, user_id, restaurant_id) VALUES (3,'2020-09-17 14:04:46.000000',20,'2020-10-01 14:05:04.000000',6,3,9);

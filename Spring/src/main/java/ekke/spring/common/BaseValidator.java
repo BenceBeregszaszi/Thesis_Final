@@ -16,7 +16,7 @@ public class BaseValidator {
     }
 
     protected void validateStringNotNullOrEmpty(final String string){
-        if (Objects.isNull(string)){
+        if (Objects.isNull(string) || string.isEmpty()){
             throw new ValidationException("Given string is null");
         }
     }

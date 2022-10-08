@@ -1,20 +1,20 @@
-package ekke.spring.UserControllerIt;
+package ekke.spring.ReservationControllerIt;
 
 import ekke.spring.TestUtils.TestUsers.TestUserAdam;
 import ekke.spring.TestUtils.TestUsers.TestUserAndras;
 import ekke.spring.TestUtils.WithTestUser;
 import lombok.SneakyThrows;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
-public class GetAllUserControllerIt extends UserIt {
+public class GetAllReservationControllerTest extends ReservationIt {
 
-    private static final String URL = "/users";
+    private static final String URL = "/reservations";
 
     @Test
     @SneakyThrows
     @WithTestUser(user = TestUserAndras.class)
-    public void getAllUserThenReceiveOk() {
+    public void getAllReservationThenReceiveOk() {
         //GIVEN
         //WHEN
         ResultActions resultActions = get(URL);
@@ -25,7 +25,7 @@ public class GetAllUserControllerIt extends UserIt {
     @Test
     @SneakyThrows
     @WithTestUser(user = TestUserAdam.class)
-    public void getAllUserWithWrongAuthority() {
+    public void getAllReservationWithWrongAuthorityThenReceivesBadRequest(){
         //GIVEN
         //WHEN
         ResultActions resultActions = get(URL);

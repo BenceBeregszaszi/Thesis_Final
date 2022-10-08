@@ -4,12 +4,11 @@ import ekke.spring.TestUtils.CityTestUtil.CityTestUtil;
 import ekke.spring.TestUtils.TestUsers.TestUserAdam;
 import ekke.spring.TestUtils.TestUsers.TestUserAndras;
 import ekke.spring.TestUtils.WithTestUser;
-import ekke.spring.dto.CityDto;
 import lombok.SneakyThrows;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
-public class UpdateCityControllerIt extends CityIt {
+public class UpdateCityControllerTest extends CityIt {
 
     private static final String URL = "/cities/%d";
 
@@ -24,7 +23,7 @@ public class UpdateCityControllerIt extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, EXISTING_ID), CityTestUtil.getTestCityCreatorDto("8765", "Kaposvar", "34.98", "45.267"));
+                put(String.format(URL, EXISTING_ID), CityTestUtil.getTestCityDto("8765", "Kaposvar", "34.98", "45.267", "[5,7]"));
         //THEN
         isOk(resultActions);
     }
@@ -36,7 +35,7 @@ public class UpdateCityControllerIt extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, null), CityTestUtil.getTestCityCreatorDto("8765", "Kaposvar", "34.98", "45.267"));
+                put(String.format(URL, null), CityTestUtil.getTestCityDto("8765", "Kaposvar", "34.98", "45.267", "[5,7]"));
         //THEN
         isBadRequest(resultActions);
     }
@@ -59,7 +58,7 @@ public class UpdateCityControllerIt extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, EXISTING_ID), CityTestUtil.getTestCityCreatorDto("3300", "Kaposvar", "34.98", "45.267"));
+                put(String.format(URL, EXISTING_ID), CityTestUtil.getTestCityDto("3300", "Kaposvar", "34.98", "45.267", "[5,7]"));
         //THEN
         isConflict(resultActions);
     }
@@ -71,7 +70,7 @@ public class UpdateCityControllerIt extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, NOT_EXISTING_ID), CityTestUtil.getTestCityCreatorDto("8765", "Kaposvar", "34.98", "45.267"));
+                put(String.format(URL, NOT_EXISTING_ID), CityTestUtil.getTestCityDto("8765", "Kaposvar", "34.98", "45.267", "[5,7]"));
         //THEN
         isNotFound(resultActions);
     }
@@ -83,7 +82,7 @@ public class UpdateCityControllerIt extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, EXISTING_ID), CityTestUtil.getTestCityCreatorDto("8765", "Kaposvar", "34.98", "45.267"));
+                put(String.format(URL, EXISTING_ID), CityTestUtil.getTestCityDto("8765", "Kaposvar", "34.98", "45.267", "[5,7]"));
         //THEN
         hasNoAccess(resultActions);
     }

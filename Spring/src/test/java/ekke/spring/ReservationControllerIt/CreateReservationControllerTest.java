@@ -1,15 +1,13 @@
 package ekke.spring.ReservationControllerIt;
 
 import ekke.spring.TestUtils.ReservationTestUtil.ReservationTestUtil;
-import ekke.spring.dto.ReservationDto;
-import lombok.Data;
 import lombok.SneakyThrows;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Date;
 
-public class CreateReservationControllerIt extends ReservationIt {
+public class CreateReservationControllerTest extends ReservationIt {
 
     private static final String URL = "/reservations";
 
@@ -21,7 +19,7 @@ public class CreateReservationControllerIt extends ReservationIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                post(URL, ReservationTestUtil.getTestReservationCreatorDto("5", "10", "7", "7", "2022-01-04"));
+                post(URL, ReservationTestUtil.getTestReservationDto("5", "10", "7", "7", "2022-01-04"));
         //THEN
         isOk(resultActions);
     }
@@ -42,7 +40,7 @@ public class CreateReservationControllerIt extends ReservationIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                post(URL, ReservationTestUtil.getTestReservationCreatorDto(NOT_EXISTING_UID, "10", "7", "7", "2022-01-04"));
+                post(URL, ReservationTestUtil.getTestReservationDto(NOT_EXISTING_UID, "10", "7", "7", "2022-01-04"));
         //THEN
         isNotFound(resultActions);
     }
@@ -53,7 +51,7 @@ public class CreateReservationControllerIt extends ReservationIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                post(URL, ReservationTestUtil.getTestReservationCreatorDto("5", "10", "7", null, "2022-01-04"));
+                post(URL, ReservationTestUtil.getTestReservationDto("5", "10", "7", null, "2022-01-04"));
         //THEN
         isBadRequest(resultActions);
     }
@@ -64,7 +62,7 @@ public class CreateReservationControllerIt extends ReservationIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                post(URL, ReservationTestUtil.getTestReservationCreatorDto("5", null, "7", "7", "2022-01-04"));
+                post(URL, ReservationTestUtil.getTestReservationDto("5", null, "7", "7", "2022-01-04"));
         //THEN
         isBadRequest(resultActions);
     }

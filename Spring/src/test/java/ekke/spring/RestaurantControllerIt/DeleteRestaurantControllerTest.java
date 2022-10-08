@@ -4,10 +4,10 @@ import ekke.spring.TestUtils.TestUsers.TestUserAdam;
 import ekke.spring.TestUtils.TestUsers.TestUserAndras;
 import ekke.spring.TestUtils.WithTestUser;
 import lombok.SneakyThrows;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
-public class DeleteRestaurantControllerIt extends RestaurantIt {
+public class DeleteRestaurantControllerTest extends RestaurantIt {
 
     private static final String URL = "/restaurants/%d";
 

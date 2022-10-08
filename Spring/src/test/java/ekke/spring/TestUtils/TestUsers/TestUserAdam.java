@@ -20,5 +20,5 @@ public class TestUserAdam implements TestUser {
     public static final String password = "a";
 
     @Getter
-    public static final Collection<? extends GrantedAuthority> authorities = Arrays.asList(Authority.USER, Authority.NON_USER);
+    public static final Collection<? extends GrantedAuthority> authorities = Arrays.asList(Authority.USER);
 }

@@ -20,7 +20,7 @@ public class Reservation extends BaseEntity {
     @Column(nullable = false, name = "seatNumber")
     private Integer seatNumber;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "cityId", referencedColumnName = "id")
     private City city;
 

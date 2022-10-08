@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS city_link;
+DROP TABLE IF EXISTS reservation;
+DROP TABLE IF EXISTS restaurant;
+DROP TABLE IF EXISTS city;
+DROP TABLE IF EXISTS user_details;

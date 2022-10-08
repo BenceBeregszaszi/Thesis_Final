@@ -4,10 +4,10 @@ import ekke.spring.TestUtils.TestUsers.TestUserAndras;
 import ekke.spring.TestUtils.TestUsers.TestUserGuest;
 import ekke.spring.TestUtils.WithTestUser;
 import lombok.SneakyThrows;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
-public class GetUserByIdControllerIt extends UserIt {
+public class GetUserByIdControllerTest extends UserIt {
 
     private static final String URL = "/users/%d";
 

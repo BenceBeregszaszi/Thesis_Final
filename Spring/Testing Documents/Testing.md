@@ -8,15 +8,15 @@
 
 - [ ] preAuthorization
 
-- [x] getAll
-- [x] getById
-  - [x] 404 not found
-- [x] post
+- [ ] getAll
+- [ ] getById
+  - [ ] 404 not found
+- [ ] post
   - [ ] 409 conflict
 - [ ] put
   - [ ] 409 conflict
-- [x] delete
-  - [x] 404 not found
+- [ ] delete
+  - [ ] 404 not found
 - [ ] 400 bad request
 
 
@@ -26,15 +26,15 @@
 
 - [ ] preAuthorization
 
-- [x] getAll
-- [x] getById
-  - [x] 404 not found
-- [x] post
+- [ ] getAll
+- [ ] getById
+  - [ ] 404 not found
+- [ ] post
   - [ ] 409 conflict
 - [ ] put
   - [ ] 409 conflict
-- [x] delete
-  - [x] 404 not found
+- [ ] delete
+  - [ ] 404 not found
 - [ ] 400 bad request
 
 --------------------------
@@ -50,15 +50,15 @@
 
 - [ ] preAuthorization
 
-- [x] getAll
-- [x] getById
-  - [x] 404 not found
-- [x] post
+- [ ] getAll
+- [ ] getById
+  - [ ] 404 not found
+- [ ] post
   - [ ] 409 conflict
 - [ ] put
   - [ ] 409 conflict
-- [x] delete
-  - [x] 404 not found
+- [ ] delete
+  - [ ] 404 not found
 - [ ] 400 bad request
 
 
@@ -68,13 +68,12 @@
 
 - [ ] preAuthorization
 
-- [x] getAll
-- [x] getById
-  - [x] 404 not found
-- [x] post
+- [ ] getAll
+- [ ] getById
+  - [ ] 404 not found
+- [ ] post
   - [ ] 409 conflict
 - [ ] put
-  - [ ] 409 conflict
-- [x] delete
-  - [x] 404 not found
+- [ ] delete
+  - [ ] 404 not found
 - [ ] 400 bad request

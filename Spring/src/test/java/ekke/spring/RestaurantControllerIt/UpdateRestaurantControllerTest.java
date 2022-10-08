@@ -4,10 +4,10 @@ import ekke.spring.TestUtils.RestaurantTestUtil.RestaurantTestUtil;
 import ekke.spring.TestUtils.TestUsers.TestUserAndras;
 import ekke.spring.TestUtils.WithTestUser;
 import lombok.SneakyThrows;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
-public class UpdateRestaurantControllerIt extends RestaurantIt {
+public class UpdateRestaurantControllerTest extends RestaurantIt {
 
     private static final String URL = "/restaurants/%d";
 
@@ -22,7 +22,7 @@ public class UpdateRestaurantControllerIt extends RestaurantIt {
     public void updateRestaurantThenReceiveOk() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = put(String.format(URL, EXISTING_ID), RestaurantTestUtil.getTestRestaurantCreatorDto("Placc", "40", "[5,6]"));
+        ResultActions resultActions = put(String.format(URL, EXISTING_ID), RestaurantTestUtil.getTestRestaurantDto("Placc", "40", "[5,6]"));
         //THEN
         isOk(resultActions);
     }
@@ -33,7 +33,7 @@ public class UpdateRestaurantControllerIt extends RestaurantIt {
     public void updateRestaurantNullIdThenBadRequest() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = put(String.format(URL, null), RestaurantTestUtil.getTestRestaurantCreatorDto("Placc", "40", "[5,6]"));
+        ResultActions resultActions = put(String.format(URL, null), RestaurantTestUtil.getTestRestaurantDto("Placc", "40", "[5,6]"));
         //THEN
         isBadRequest(resultActions);
     }
@@ -55,7 +55,7 @@ public class UpdateRestaurantControllerIt extends RestaurantIt {
     public void updateRestaurantIdNotFoundThenNotFound() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = put(String.format(URL, NOT_EXISTING_ID), RestaurantTestUtil.getTestRestaurantCreatorDto("Placc", "40", "[5,6]"));
+        ResultActions resultActions = put(String.format(URL, NOT_EXISTING_ID), RestaurantTestUtil.getTestRestaurantDto("Placc", "40", "[5,6]"));
         //THEN
         isNotFound(resultActions);
     }

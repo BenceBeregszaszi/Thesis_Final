@@ -5,12 +5,12 @@ import ekke.spring.TestUtils.TestUsers.TestUserAndras;
 import ekke.spring.TestUtils.TestUsers.TestUserGuest;
 import ekke.spring.TestUtils.WithTestUser;
 import ekke.spring.TestUtils.UserTestUtil.UserTestUtil;
-import ekke.spring.dto.UserDto;
 import lombok.SneakyThrows;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
-public class CreateUserControllerIt extends UserIt {
+public class CreateUserControllerTest extends UserIt {
 
     private static final String URL = "/authentication/register";
 
@@ -20,7 +20,7 @@ public class CreateUserControllerIt extends UserIt {
     public void createUserThenReceiveOk(){
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, UserTestUtil.getTestUserCreatorDto("Aron", "aron", "aron@gmail.com", "user"));
+        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user"));
         //THEN
         isOk(resultActions);
     }
@@ -31,7 +31,7 @@ public class CreateUserControllerIt extends UserIt {
     public void createNewUserThenReceiveOk(){
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, UserTestUtil.getTestUserCreatorDto("Aron", "aron", "aron@gmail.com", "user"));
+        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user"));
         //THEN
         isOk(resultActions);
     }
@@ -42,7 +42,7 @@ public class CreateUserControllerIt extends UserIt {
     public void createUserWithWrongAuthorityThenHasNoAccess(){
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, UserTestUtil.getTestUserCreatorDto("Aron", "aron", "aron@gmail.com", "user"));
+        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user"));
         //THEN
         hasNoAccess(resultActions);
     }
@@ -64,7 +64,7 @@ public class CreateUserControllerIt extends UserIt {
     public void createUserWithAlreadyExistingThenConflict() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, UserTestUtil.getTestUserCreatorDto("user", "user", "aron@gmail.com", "user"));
+        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("user", "user", "aron@gmail.com", "user"));
         //THEN
         isConflict(resultActions);
     }

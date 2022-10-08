@@ -1,23 +1,24 @@
-package ekke.spring.CityControllerIt;
+package ekke.spring.UserControllerIt;
 
-import ekke.spring.TestUtils.TestUsers.TestUserAdam;
 import ekke.spring.TestUtils.TestUsers.TestUserAndras;
+import ekke.spring.TestUtils.TestUsers.TestUserGuest;
 import ekke.spring.TestUtils.WithTestUser;
 import lombok.SneakyThrows;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
-public class DeleteCityControllerIt extends CityIt {
+public class DeleteUserControllerTest extends UserIt {
 
-    private static final String URL = "/cities/%d";
+    private static final String URL = "/users/%d";
 
-    private static final int EXISTING_ID = 6;
+    private static final int EXISTING_ID = 5;
+
     private static final int NOT_EXISTING_ID = 100;
 
     @Test
     @SneakyThrows
     @WithTestUser(user = TestUserAndras.class)
-    public void deleteCityWithCorrectIdThenReceiveOk() {
+    public void deleteUserWithCorrectIdThenReceiveOk() {
         //GIVEN
         //WHEN
         ResultActions resultActions = delete(String.format(URL, EXISTING_ID));
@@ -28,7 +29,7 @@ public class DeleteCityControllerIt extends CityIt {
     @Test
     @SneakyThrows
     @WithTestUser(user = TestUserAndras.class)
-    public void deleteCityWithNoIdFoundThenNotFound() {
+    public void deleteUserWithNoIdFoundThenNotFound() {
         //GIVEN
         //WHEN
         ResultActions resultActions = delete(String.format(URL, NOT_EXISTING_ID));
@@ -39,7 +40,7 @@ public class DeleteCityControllerIt extends CityIt {
     @Test
     @SneakyThrows
     @WithTestUser(user = TestUserAndras.class)
-    public void deleteCityWithNullIdThenBadRequest() {
+    public void deleteUserWithNullIdThenBadRequest() {
         //GIVEN
         //WHEN
         ResultActions resultActions = delete(String.format(URL, null));
@@ -49,8 +50,8 @@ public class DeleteCityControllerIt extends CityIt {
 
     @Test
     @SneakyThrows
-    @WithTestUser(user = TestUserAdam.class)
-    public void deleteCityWithWrongAuthority() {
+    @WithTestUser(user = TestUserGuest.class)
+    public void deleteUserWithWrongAuthority() {
         //GIVEN
         //WHEN
         ResultActions resultActions = delete(String.format(URL, EXISTING_ID));

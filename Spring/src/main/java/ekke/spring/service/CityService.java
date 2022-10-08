@@ -70,6 +70,10 @@ public class CityService implements CrudServices<CityDto> {
 
     private City setCityForUpdate(final City oldCity, final City newCity){
         oldCity.setPostCode(newCity.getPostCode());
+        oldCity.setCityName(newCity.getCityName());
+        oldCity.setRestaurants(newCity.getRestaurants());
+        oldCity.setLatitude(newCity.getLatitude());
+        oldCity.setLongitude(newCity.getLongitude());
         return oldCity;
     }
 }
