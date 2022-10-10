@@ -1,7 +1,6 @@
 package ekke.spring.service;
 
 import ekke.spring.common.CrudServices;
-import ekke.spring.common.IdValidator;
 import ekke.spring.conversion.RestaurantConversionService;
 import ekke.spring.dao.entity.Restaurant;
 import ekke.spring.dao.repository.RestaurantRepository;
@@ -28,8 +27,6 @@ public class RestaurantService implements CrudServices<RestaurantDto> {
     @Autowired
     private RestaurantDtoValidator restaurantDtoValidator;
 
-    @Autowired
-    private IdValidator idValidator;
 
     @Override
     public RestaurantDto add(final RestaurantDto dto) {
@@ -46,7 +43,6 @@ public class RestaurantService implements CrudServices<RestaurantDto> {
 
     @Override
     public RestaurantDto getById(final Long id) {
-        idValidator.validateId(id);
         Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(()
                 -> new RestaurantNotFoundException(String.format("Restaurant with id %d not found", id)));
         return restaurantConversionService.RestaurantEntity2RestaurantDto(restaurant);
@@ -54,9 +50,7 @@ public class RestaurantService implements CrudServices<RestaurantDto> {
 
     @Override
     public RestaurantDto update(final Long id, final RestaurantDto dto) {
-        idValidator.validateId(id);
         restaurantDtoValidator.validate(dto);
-        restaurantDtoValidator.validateForUpdate(dto.getName(), dto.getMaxSeatsNumber());
         Restaurant oldRestaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(String.format("Restaurant with id %d not found", id)));
         Restaurant newRestaurant = setRestaurantForUpdate(oldRestaurant, restaurantConversionService.RestaurantDto2RestaurantEntity(dto));
@@ -66,7 +60,6 @@ public class RestaurantService implements CrudServices<RestaurantDto> {
 
     @Override
     public void delete(final Long id) {
-        idValidator.validateId(id);
         restaurantRepository.findById(id).orElseThrow(()
                 -> new RestaurantNotFoundException(String.format("Restaurant with id %d not found", id)));
         restaurantRepository.deleteById(id);
@@ -75,6 +68,7 @@ public class RestaurantService implements CrudServices<RestaurantDto> {
     private Restaurant setRestaurantForUpdate(final Restaurant oldRestaurant, final Restaurant newRestaurant){
         oldRestaurant.setName(newRestaurant.getName());
         oldRestaurant.setMaxSeatsNumber(newRestaurant.getMaxSeatsNumber());
+        oldRestaurant.setCities(newRestaurant.getCities());
         return oldRestaurant;
     }
 }

@@ -28,7 +28,6 @@ public class AuthenticationController extends ControllerBase {
     }
 
     @PostMapping("/authentication/register")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('NON_USER')")
     public ResponseEntity<Void> register(@RequestBody final UserDto userDto) {
         userService.add(userDto);
         return ResponseEntity.ok().build();

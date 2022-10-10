@@ -4,6 +4,7 @@ import ekke.spring.common.BaseValidator;
 import ekke.spring.dao.repository.RestaurantRepository;
 import ekke.spring.dto.RestaurantDto;
 import ekke.spring.service.exception.ReservationAlreadyExists;
+import ekke.spring.service.exception.RestaurantAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,15 +17,11 @@ public class RestaurantDtoValidator extends BaseValidator {
     public void validate(final RestaurantDto restaurantDto) {
         validateObject(restaurantDto);
         checkArgumentNotNull(restaurantDto.getName());
+        validateStringNotNullOrEmpty(restaurantDto.getName());
         checkArgumentNotNull(restaurantDto.getMaxSeatsNumber());
         if (restaurantRepository.
                 findByNameAndMaxSeatsNumber(restaurantDto.getName(), restaurantDto.getMaxSeatsNumber()).isPresent()){
-            throw new ReservationAlreadyExists(String.format("Restaurant with name %s is already exists", restaurantDto.getName()));
+            throw new RestaurantAlreadyExistsException(String.format("Restaurant with name %s is already exists", restaurantDto.getName()));
         }
-    }
-
-    public void validateForUpdate(final String name, final int maxSeatsNumber) {
-        if (restaurantRepository.findByNameAndMaxSeatsNumber(name, maxSeatsNumber).isPresent())
-            throw new ReservationAlreadyExists(String.format("Restaurant with name %s is already exists", name));
     }
 }

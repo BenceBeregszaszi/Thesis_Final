@@ -25,6 +25,6 @@ public class City extends BaseEntity {
     @Column(name = "latitude", nullable = false)
     private Double latitude;
 
-    @ManyToMany(mappedBy = "cities")
+    @ManyToMany(mappedBy = "cities", cascade = CascadeType.REMOVE)
     private Set<Restaurant> restaurants;
 }

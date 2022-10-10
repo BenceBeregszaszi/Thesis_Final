@@ -24,4 +24,7 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
+
+    @Column(nullable = false)
+    private Boolean isDisabled;
 }

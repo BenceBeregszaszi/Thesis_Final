@@ -13,14 +13,14 @@ import java.util.Date;
 @NoArgsConstructor
 public class Reservation extends BaseEntity {
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User person;
 
     @Column(nullable = false, name = "seatNumber")
     private Integer seatNumber;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne
     @JoinColumn(name = "cityId", referencedColumnName = "id")
     private City city;
 

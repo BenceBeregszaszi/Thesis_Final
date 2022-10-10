@@ -1,10 +1,5 @@
 package ekke.spring.TestUtils.RestaurantTestUtil;
 
-import ekke.spring.dto.RestaurantDto;
-
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
 
 public class RestaurantTestUtil {
 

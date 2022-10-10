@@ -1,8 +1,5 @@
 package ekke.spring.TestUtils.ReservationTestUtil;
 
-import ekke.spring.dto.ReservationDto;
-
-import java.util.Date;
 
 public class ReservationTestUtil {
 

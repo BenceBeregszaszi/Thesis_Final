@@ -76,4 +76,16 @@ public class UpdateReservationControllerTest extends ReservationIt {
         //THEN
         hasNoAccess(resultActions);
     }
+
+    @Test
+    @SneakyThrows
+    @WithTestUser(user = TestUserAdam.class)
+    public void testUpdateReservationSeatNumberThenReceivesConflict() {
+        //GIVEN
+        //WHEN
+        ResultActions resultActions =
+                put(String.format(URL, EXISTING_ID), ReservationTestUtil.getTestReservationDto("5", "100", "7", "8", "2020-10-01"));
+        //THEN
+        isAcceptable(resultActions);
+    }
 }

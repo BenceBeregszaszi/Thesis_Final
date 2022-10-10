@@ -71,4 +71,26 @@ public class CreateCityControllerTest extends CityIt {
         //THEN
         isBadRequest(resultActions);
     }
+
+    @Test
+    @SneakyThrows
+    @WithTestUser(user = TestUserAndras.class)
+    public void createCityWithLongitudeNullCodeEmptyThenBadRequest() {
+        //GIVEN
+        //WHEN
+        ResultActions resultActions = post(URL, CityTestUtil.getTestCityDto("", "Kaposvar", null, "45.267", "[5,7]"));
+        //THEN
+        isBadRequest(resultActions);
+    }
+
+    @Test
+    @SneakyThrows
+    @WithTestUser(user = TestUserAndras.class)
+    public void createCityWithLatitudeNullCodeEmptyThenBadRequest() {
+        //GIVEN
+        //WHEN
+        ResultActions resultActions = post(URL, CityTestUtil.getTestCityDto("", "Kaposvar", "34.98", null, "[5,7]"));
+        //THEN
+        isBadRequest(resultActions);
+    }
 }

@@ -59,10 +59,10 @@ public class CreateRestaurantControllerIt extends RestaurantIt {
     @Test
     @SneakyThrows
     @WithTestUser(user = TestUserAndras.class)
-    public void createRestaurantWitNameNullThenBadRequest() {
+    public void createRestaurantWithEmptyNameThenBadRequest() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, null);
+        ResultActions resultActions = post(URL, RestaurantTestUtil.getTestRestaurantDto("", "40", "[5,6]"));
         //THEN
         isBadRequest(resultActions);
     }

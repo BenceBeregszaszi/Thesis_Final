@@ -5,7 +5,6 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.Date;
 
 public class CreateReservationControllerTest extends ReservationIt {
 
@@ -65,5 +64,16 @@ public class CreateReservationControllerTest extends ReservationIt {
                 post(URL, ReservationTestUtil.getTestReservationDto("5", null, "7", "7", "2022-01-04"));
         //THEN
         isBadRequest(resultActions);
+    }
+
+    @Test
+    @SneakyThrows
+    public void testCreateReservationTooMuchSeatNumberThenReceivesNotAcceptable() {
+        //GIVEN
+        //WHEN
+        ResultActions resultActions =
+                post(URL, ReservationTestUtil.getTestReservationDto("5", "100", "7", "7", "2022-01-04"));
+        //THEN
+        isAcceptable(resultActions);
     }
 }

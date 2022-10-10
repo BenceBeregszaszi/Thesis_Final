@@ -1,6 +1,8 @@
 package ekke.spring.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import ekke.spring.common.Enum.Authority;
+import ekke.spring.conversion.AuthorityDeserializer;
 import lombok.*;
 
 import java.util.Date;
@@ -20,5 +22,8 @@ public class UserDto {
 
     private String email;
 
+    @JsonDeserialize(using = AuthorityDeserializer.class)
     private Authority authority;
+
+    private Boolean isDisabled;
 }

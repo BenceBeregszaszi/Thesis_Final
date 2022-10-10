@@ -1,12 +1,13 @@
 package ekke.spring.service;
 
 import ekke.spring.common.CrudServices;
-import ekke.spring.common.IdValidator;
 import ekke.spring.conversion.ReservationConversionService;
 import ekke.spring.dao.entity.Reservation;
 import ekke.spring.dao.repository.ReservationRepository;
+import ekke.spring.dao.repository.UserRepository;
 import ekke.spring.dto.ReservationDto;
 import ekke.spring.service.exception.ReservationNotFoundException;
+import ekke.spring.service.exception.UserNotFoundException;
 import ekke.spring.validators.ReservationDtoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,13 +30,15 @@ public class ReservationService implements CrudServices<ReservationDto> {
     private ReservationConversionService reservationConversionService;
 
     @Autowired
-    private IdValidator idValidator;
+    private UserRepository userRepository;
 
     @Override
     public ReservationDto add(final ReservationDto dto) {
         reservationDtoValidator.validate(dto);
         Reservation savedReservation = reservationRepository.save(reservationConversionService.ReservationDto2ReservationEntity(dto));
-        return reservationConversionService.ReservationEntity2ReservationDto(savedReservation);
+        ReservationDto savedDto = reservationConversionService.ReservationEntity2ReservationDto(savedReservation);
+        reservationDtoValidator.validateCreateReservation(savedDto.getId(), savedDto.getRestaurantId(), savedDto.getSeatNumber());
+        return savedDto;
     }
 
     @Override
@@ -46,17 +49,22 @@ public class ReservationService implements CrudServices<ReservationDto> {
 
     @Override
     public ReservationDto getById(final Long id) {
-        idValidator.validateId(id);
         Reservation reservation = reservationRepository.findById(id).orElseThrow(()
                 -> new ReservationNotFoundException(String.format("Reservation with id %d is not found", id)));
         return reservationConversionService.ReservationEntity2ReservationDto(reservation);
     }
 
+    public List<ReservationDto> getByUserId(final Long userId) {
+        userRepository.findById(userId).orElseThrow(() ->
+                new UserNotFoundException(String.format("User with id %d not found", userId)));
+        return reservationRepository.findByUser(userId).stream()
+                .map(reservation -> reservationConversionService.ReservationEntity2ReservationDto(reservation)).collect(Collectors.toList());
+    }
+
     @Override
     public ReservationDto update(final Long id, final ReservationDto dto) {
-        idValidator.validateId(id);
         reservationDtoValidator.validate(dto);
-        reservationDtoValidator.validateForUpdate(dto.getTime(), dto.getRestaurantId());
+        reservationDtoValidator.validateCreateReservation(id, dto.getRestaurantId(), dto.getSeatNumber());
         Reservation oldReservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ReservationNotFoundException(String.format("Reservation with id %d not found", id)));
         Reservation newReservation = setReservationForUpdate(oldReservation, reservationConversionService.ReservationDto2ReservationEntity(dto));
@@ -66,7 +74,6 @@ public class ReservationService implements CrudServices<ReservationDto> {
 
     @Override
     public void delete(final Long id) {
-        idValidator.validateId(id);
         reservationRepository.findById(id).orElseThrow(() -> new ReservationNotFoundException(String.format("Reservation with id %d not found", id)));
         reservationRepository.deleteById(id);
     }

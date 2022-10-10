@@ -33,4 +33,14 @@ public class ControllerBase {
     public ResponseEntity<String> handleValidationException(final ValidationException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
+
+    @ExceptionHandler({AuthenticationException.class})
+    public ResponseEntity<String> handleAuthenticationException(final AuthenticationException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exception.getMessage());
+    }
+
+    @ExceptionHandler({NoMoreFreeSpaceException.class})
+    public ResponseEntity<String> handleNoMoreFreeSpaceException(final NoMoreFreeSpaceException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(exception.getMessage());
+    }
 }

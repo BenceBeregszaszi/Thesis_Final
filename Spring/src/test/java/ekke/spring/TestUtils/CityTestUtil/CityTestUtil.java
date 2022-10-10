@@ -1,9 +1,5 @@
 package ekke.spring.TestUtils.CityTestUtil;
 
-import ekke.spring.dto.CityDto;
-
-import java.util.Collections;
-import java.util.Date;
 
 public class CityTestUtil {
 

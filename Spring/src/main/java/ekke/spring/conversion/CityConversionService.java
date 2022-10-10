@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -50,6 +51,7 @@ public class CityConversionService {
 
     private Set<Restaurant> mapLong2Restaurant(final Set<Long> restaurantIds) {
         Set<Restaurant> restaurants = new HashSet<>();
+        if (Objects.isNull(restaurantIds)) return restaurants;
         restaurantIds.forEach(id -> restaurants.add(restaurantRepository.findById(id).orElseThrow(()
                 -> new RestaurantNotFoundException(String.format("Restaurant with id %d not found", id)))));
         return restaurants;

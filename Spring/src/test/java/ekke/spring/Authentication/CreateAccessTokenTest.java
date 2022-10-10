@@ -14,8 +14,38 @@ public class CreateAccessTokenTest extends AuthenticationIt {
     public void testAuthenticateThenReceiveOk() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, AuthenticationTestUtil.getAuthenticationDto("user", "user"));
+        ResultActions resultActions = post(URL, AuthenticationTestUtil.getAuthenticationDto("bandi1", "bandi"));
         //THEN
         isOk(resultActions);
+    }
+
+    @Test
+    @SneakyThrows
+    public void testAuthenticateEmptyNameThenReceiveBadRequest() {
+        //GIVEN
+        //WHEN
+        ResultActions resultActions = post(URL, AuthenticationTestUtil.getAuthenticationDto("", "user"));
+        //THEN
+        isBadRequest(resultActions);
+    }
+
+    @Test
+    @SneakyThrows
+    public void testAuthenticateEmptyPasswordThenReceiveBadRequest() {
+        //GIVEN
+        //WHEN
+        ResultActions resultActions = post(URL, AuthenticationTestUtil.getAuthenticationDto("user", ""));
+        //THEN
+        isBadRequest(resultActions);
+    }
+
+    @Test
+    @SneakyThrows
+    public void testAuthenticateAuthenticationException() {
+        //GIVEN
+        //WHEN
+        ResultActions resultActions = post(URL, AuthenticationTestUtil.getAuthenticationDto("valaki", "valaki"));
+        //THEN
+        isUnauthorized(resultActions);
     }
 }

@@ -6,74 +6,74 @@
 
 ### City controller
 
-- [ ] preAuthorization
+- [x] preAuthorization
 
-- [ ] getAll
-- [ ] getById
-  - [ ] 404 not found
-- [ ] post
-  - [ ] 409 conflict
-- [ ] put
-  - [ ] 409 conflict
-- [ ] delete
-  - [ ] 404 not found
-- [ ] 400 bad request
+- [x] getAll
+- [x] getById
+  - [x] 404 not found
+- [x] post
+  - [x] 409 conflict
+- [x] put
+  - [x] 409 conflict
+- [x] delete
+  - [x] 404 not found
+- [x] 400 bad request
 
 
 --------------------------
 
 ### Reservation controller
 
-- [ ] preAuthorization
+- [x] preAuthorization
 
-- [ ] getAll
-- [ ] getById
-  - [ ] 404 not found
-- [ ] post
-  - [ ] 409 conflict
-- [ ] put
-  - [ ] 409 conflict
-- [ ] delete
-  - [ ] 404 not found
-- [ ] 400 bad request
+- [x] getAll
+- [x] getById
+  - [x] 404 not found
+- [x] post
+  - [x] 409 conflict
+  - [x] 406 not acceptable
+- [x] put // update seat validation - own id
+- [x] delete
+  - [x] 404 not found
+- [x] 400 bad request
 
 --------------------------
 
 ### Authentication controller
 
-- [ ] authentication
-- [ ] refresh token
+- [x] authentication
+- [x] refresh token
 
 --------------------------
 
 ### Restaurant Controller
 
-- [ ] preAuthorization
+- [x] preAuthorization
 
-- [ ] getAll
-- [ ] getById
-  - [ ] 404 not found
-- [ ] post
-  - [ ] 409 conflict
-- [ ] put
-  - [ ] 409 conflict
-- [ ] delete
-  - [ ] 404 not found
-- [ ] 400 bad request
+- [x] getAll
+- [x] getById
+  - [x] 404 not found
+- [x] post
+  - [x] 409 conflict
+- [x] put
+  - [x] 409 conflict
+- [x] delete
+  - [x] 404 not found
+- [x] 400 bad request
 
 
 --------------------------
 
 ### UserController
 
-- [ ] preAuthorization
+- [x] preAuthorization
 
-- [ ] getAll
-- [ ] getById
-  - [ ] 404 not found
-- [ ] post
-  - [ ] 409 conflict
-- [ ] put
-- [ ] delete
-  - [ ] 404 not found
-- [ ] 400 bad request
+- [x] getAll
+- [x] getById
+  - [x] 404 not found
+- [x] post
+  - [x] 409 conflict
+- [x] put
+- [x] delete
+  - [x] 404 not found
+- [x] 400 bad request

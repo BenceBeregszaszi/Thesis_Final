@@ -7,7 +7,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 
 public class WithTestUserSecurityContextFactory implements WithSecurityContextFactory<WithTestUser> {

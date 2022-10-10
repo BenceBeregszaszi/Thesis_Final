@@ -2,7 +2,6 @@ package ekke.spring;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Tag;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -87,5 +86,10 @@ public abstract class IntegrationTestBase {
     @SneakyThrows
     protected ResultActions isConflict(final ResultActions resultActions) {
         return resultActions.andExpect(status().isConflict());
+    }
+
+    @SneakyThrows
+    protected ResultActions isAcceptable(final ResultActions resultActions) {
+        return resultActions.andExpect(status().isNotAcceptable());
     }
 }

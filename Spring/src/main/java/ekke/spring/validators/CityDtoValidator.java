@@ -16,16 +16,13 @@ public class CityDtoValidator extends BaseValidator {
     public void validate(final CityDto cityDto) {
         validateObject(cityDto);
         checkArgumentNotNull(cityDto.getPostCode());
-        checkArgumentNotNull(cityDto.getCityName());
         validateStringNotNullOrEmpty(cityDto.getPostCode());
+        checkArgumentNotNull(cityDto.getCityName());
         validateStringNotNullOrEmpty(cityDto.getCityName());
+        checkArgumentNotNull(cityDto.getLatitude());
+        checkArgumentNotNull(cityDto.getLongitude());
         if (cityRepository.findCityByPostCode(cityDto.getPostCode()).isPresent()) {
             throw new CityAlreadyExistsException("City with this post code already exists");
         }
-    }
-
-    public void validateForUpdate(final String postCode) {
-        if (cityRepository.findCityByPostCode(postCode).isPresent())
-            throw new CityAlreadyExistsException("City with this post code already exists");
     }
 }

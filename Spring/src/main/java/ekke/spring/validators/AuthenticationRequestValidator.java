@@ -10,6 +10,8 @@ public class AuthenticationRequestValidator extends BaseValidator {
     public void validate(final AuthenticationRequestDto authenticationRequestDto) {
         validateObject(authenticationRequestDto);
         checkArgumentNotNull(authenticationRequestDto.getUsername());
+        validateStringNotNullOrEmpty(authenticationRequestDto.getUsername());
         checkArgumentNotNull(authenticationRequestDto.getPassword());
+        validateStringNotNullOrEmpty(authenticationRequestDto.getPassword());
     }
 }

@@ -32,6 +32,12 @@ public class ReservationController extends ControllerBase {
         return ResponseEntity.ok(reservationService.getById(id));
     }
 
+    @GetMapping("/{userId}/reservations")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    public ResponseEntity<List<ReservationDto>> readUserReservation(@PathVariable Long userId) {
+        return ResponseEntity.ok(reservationService.getByUserId(userId));
+    }
+
     @PutMapping("/reservations/{id}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<ReservationDto> updateReservation(@PathVariable final Long id, @RequestBody final ReservationDto reservationDto) {

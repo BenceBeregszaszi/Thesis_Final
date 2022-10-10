@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Component
 public class ReservationDtoValidator extends BaseValidator {
@@ -29,19 +30,13 @@ public class ReservationDtoValidator extends BaseValidator {
         checkArgumentNotNull(reservationDto.getUserId());
         checkArgumentNotNull(reservationDto.getRestaurantId());
         checkArgumentNotNull(reservationDto.getSeatNumber());
-        validateCreateReservation(reservationDto.getRestaurantId(), reservationDto.getSeatNumber());
-    }
+ }
 
-    public void validateForUpdate(final Date time, final long restaurantId) {
-        if (reservationRepository.findByRestaurantAndTime(restaurantId, time).isPresent())
-            throw new ReservationAlreadyExists(String.format("Reservation with this date %t with this restaurantId %d", time, restaurantId));
-    }
-
-    private void validateCreateReservation(final long restaurantId, final int seatNumber) {
+    public void validateCreateReservation(final long id, final long restaurantId, final int seatNumber) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() ->
                         new RestaurantAlreadyExistsException(String.format("Restaurant with id %d is already exists", restaurantId)));
-        int allReservedSeatNumber = seatNumber + reservationRepository.findAllByRestaurantId(restaurantId).orElse(0);
+        int allReservedSeatNumber = seatNumber + reservationRepository.findAllSeatNumberByRestaurantId(restaurantId, id).orElse(0);
         if (allReservedSeatNumber > restaurant.getMaxSeatsNumber())
             throw new NoMoreFreeSpaceException("Not enough free space in the restaurant");
     }
