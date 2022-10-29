@@ -1,8 +1,9 @@
 package com.restaurant.app.mobile.dto
 
 import com.restaurant.app.mobile.common.Authority
+import org.json.JSONObject
 
-class User {
+class User : JSONObject() {
 
     var id: Long? = null
 

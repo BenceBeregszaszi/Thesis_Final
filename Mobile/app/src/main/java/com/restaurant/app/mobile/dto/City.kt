@@ -1,6 +1,8 @@
 package com.restaurant.app.mobile.dto
 
-class City {
+import org.json.JSONObject
+
+class City : JSONObject() {
     var id: Long = 0
 
     var postCode: String? = null

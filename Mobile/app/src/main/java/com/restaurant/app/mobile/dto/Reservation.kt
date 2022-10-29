@@ -1,8 +1,9 @@
 package com.restaurant.app.mobile.dto
 
+import org.json.JSONObject
 import java.util.Date
 
-class Reservation {
+class Reservation : JSONObject() {
 
     var id: Long? = null
 

@@ -1,6 +1,8 @@
 package com.restaurant.app.mobile.dto
 
-class Restaurant {
+import org.json.JSONObject
+
+class Restaurant : JSONObject() {
     var id: Long? = null
 
     var name: String? = null
