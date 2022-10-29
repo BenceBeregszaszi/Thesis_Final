@@ -7,8 +7,6 @@ import ekke.spring.service.UserService;
 import ekke.spring.service.authentication.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +32,7 @@ public class AuthenticationController extends ControllerBase {
     }
 
 
-    @GetMapping("/authentication/refresh-token")
+    @PostMapping("/authentication/refresh-token")
     public ResponseEntity<TokenPairDto> refreshToken(@RequestBody final TokenPairDto tokenPairDto) {
         return ResponseEntity.ok(authenticationService.refreshToken(tokenPairDto.getRefreshToken()));
     }
