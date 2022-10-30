@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableAutoConfiguration
@@ -58,6 +59,9 @@ public class WebSecurityConfig extends GlobalMethodSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
         httpSecurity
                 .csrf().disable()
+                .cors()
+                .configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedExceptionHandler)
                 .accessDeniedHandler(accessDeniedExceptionHandler)
