@@ -27,18 +27,13 @@ class MainActivity : AppCompatActivity(), VolleyCallback<City> {
 
         CityService.getListHttpRequest(this,this)
 
-        try {
-            this.cityList?.setOnItemClickListener { parent, _, position, _ ->
-                Log.d("Main", parent.getItemAtPosition(position).toString())
-                val selectedCity = this.cityList?.adapter?.getItem(position) as City
-                val intent = Intent(this, RestaurantActivity::class.java)
-                intent.putExtra("restaurants", selectedCity.restaurants.toLongArray())
-                startActivity(intent)
-            }
-        } catch (e: java.lang.Exception) {
-            Log.d("MainActivity", e.toString())
+        this.cityList?.setOnItemClickListener { parent, _, position, _ ->
+            Log.d("Main", parent.getItemAtPosition(position).toString())
+            val selectedCity = this.cityList?.adapter?.getItem(position) as City
+            val intent = Intent(this, RestaurantActivity::class.java)
+            intent.putExtra("restaurants", selectedCity.restaurants.toLongArray())
+            startActivity(intent)
         }
-
     }
 
     override fun onSuccess(response: City) {
@@ -56,6 +51,7 @@ class MainActivity : AppCompatActivity(), VolleyCallback<City> {
 
     override fun onDeleteSuccess() {
         this.cities.removeAt(this.index)
+        renderCityList()
         Toast.makeText(this, SUCCESS_DELETE, Toast.LENGTH_SHORT)
     }
 
