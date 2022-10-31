@@ -1,43 +1,51 @@
 package com.restaurant.app.mobile.service
 
+import android.content.Context
 import android.util.Log
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
+import com.restaurant.app.mobile.common.CommonProperties
 import com.restaurant.app.mobile.common.MapResponseToObj
+import com.restaurant.app.mobile.common.VolleyCallback
 import com.restaurant.app.mobile.dto.AuthenticationRequest
 import com.restaurant.app.mobile.dto.TokenPair
+import com.restaurant.app.mobile.dto.User
 import org.json.JSONObject
 
 object Authentication : MapResponseToObj<TokenPair>{
 
     private const val authenticationUrl: String = "http://localhost:8080/authentication"
 
-    fun logIn(body: AuthenticationRequest) : TokenPair{
-        var tokens = TokenPair()
+    fun logIn(body: AuthenticationRequest){
         JsonObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", body,
             {
-                    response -> tokens = mapToObj(response)
+                    response -> val tokens = mapToObj(response)
+                                CommonProperties.accessToken = tokens.accessToken
+                                CommonProperties.refreshToken = tokens.refreshToken
             },
             {
                     error -> Log.d("TAG", "getListHttpRequest:".format(error.toString()))
             })
-        return tokens
     }
 
-    fun refreshTokens(body: TokenPair) : TokenPair {
-        var tokens = TokenPair()
+    fun refreshTokens(body: TokenPair) {
         JsonObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", body,
             {
-                    response -> tokens = mapToObj(response)
+                    response -> val tokens = mapToObj(response)
+                                    CommonProperties.accessToken = tokens.accessToken
+                                    CommonProperties.refreshToken = tokens.refreshToken
             },
             {
                     error -> Log.d("TAG", "getListHttpRequest:".format(error.toString()))
             })
-        return tokens
     }
 
     fun logOut () {
         //TODO: IMPLEMENT
+    }
+
+    fun register(body: User, context: Context, callback: VolleyCallback<User>) {
+        UserService.postHttpRequest(body, context, callback)
     }
 
 

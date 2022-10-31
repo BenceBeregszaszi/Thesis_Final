@@ -91,7 +91,7 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
         reservation.cityId = response.getLong("cityId")
         reservation.restaurantId = response.getLong("restaurantId")
         val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
-        reservation.time = formatter.parse(response.getString("time"))
+        reservation.time = formatter.parse(response.getString("time")) as Date
 
         return reservation
     }

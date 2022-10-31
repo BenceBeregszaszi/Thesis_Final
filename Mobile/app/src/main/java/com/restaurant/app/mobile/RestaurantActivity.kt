@@ -2,7 +2,6 @@ package com.restaurant.app.mobile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ListView
 import android.widget.Toast
 import com.restaurant.app.mobile.adapters.RestaurantAdapter
@@ -50,7 +49,7 @@ class RestaurantActivity : AppCompatActivity(), VolleyCallback<Restaurant> {
     }
 
     override fun onError(message: String) {
-        TODO("Not yet implemented")
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun renderRestaurantList() {

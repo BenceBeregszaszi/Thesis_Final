@@ -2,10 +2,16 @@ package com.restaurant.app.mobile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ListView
+import android.widget.Toast
 import com.restaurant.app.mobile.common.VolleyCallback
 import com.restaurant.app.mobile.dto.Reservation
+import com.restaurant.app.mobile.dto.Restaurant
 
 class ReservationActivity : AppCompatActivity(), VolleyCallback<Reservation> {
+
+    private val SUCCESS_DELETE: String = "Successful delete!"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation)
@@ -20,10 +26,12 @@ class ReservationActivity : AppCompatActivity(), VolleyCallback<Reservation> {
     }
 
     override fun onDeleteSuccess() {
-        TODO("Not yet implemented")
+        //this.restaurants.removeAt(this.index)
+        //renderRestaurantList()
+        Toast.makeText(this, SUCCESS_DELETE, Toast.LENGTH_SHORT)
     }
 
     override fun onError(message: String) {
-        TODO("Not yet implemented")
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
