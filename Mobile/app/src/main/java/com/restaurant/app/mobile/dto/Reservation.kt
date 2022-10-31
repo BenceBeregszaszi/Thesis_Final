@@ -15,5 +15,5 @@ class Reservation : JSONObject() {
 
     var restaurantId: Long? = null
 
-    var time: Date? = null
+    var time: Date = Date()
 }

@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Mobile</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="post_code">Post Code:</string>
+    <string name="city_name">City Name:</string>
+    <string name="restaurant_name">Restaurant name:</string>
+    <string name="restaurant_seat_number">Seats number:</string>
+    <string name="username">Username:</string>
+    <string name="email">Email:</string>
 </resources>
