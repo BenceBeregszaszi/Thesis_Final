@@ -1,83 +1,108 @@
 package com.restaurant.app.mobile.service
 
-import android.util.Log
+import android.content.Context
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.restaurant.app.mobile.common.MapResponseToObj
 import com.restaurant.app.mobile.common.ResponseToObjectList
 import com.restaurant.app.mobile.common.Service
+import com.restaurant.app.mobile.common.VolleyCallback
 import com.restaurant.app.mobile.dto.Reservation
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.Date
 
 object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation>, ResponseToObjectList<Reservation> {
 
     private val reservationUrl: String = "$baseUrl/reservations"
 
-    override fun getListHttpRequest(): List<Reservation> {
-        var reservations: List<Reservation> = mutableListOf()
+    override fun getListHttpRequest(context: Context, callback: VolleyCallback<Reservation>) {
         JsonArrayRequest(Request.Method.GET, reservationUrl, null,
             {
-                    response -> reservations = convertResponseToObjList(response)
+                    response -> val reservations = convertResponseToObjList(response)
+                                callback.onListSuccess(reservations)
             },
             {
-                    error -> Log.d("TAG", "getListHttpRequest:".format(error.toString()))
+                    error -> callback.onError(error.toString())
             })
-        return reservations
     }
 
-    override fun getHttpRequest(id: Long): Reservation {
-        var reservation = Reservation()
+    override fun getHttpRequest(id: Long, context: Context, callback: VolleyCallback<Reservation>) {
         JsonObjectRequest(Request.Method.GET, "$reservationUrl/$id", null,
             {
-                    response -> reservation = mapToObj(response)
+                    response -> val reservation = mapToObj(response)
+                                callback.onSuccess(reservation)
             },
             {
-                    error -> Log.d("TAG", "getListHttpRequest:".format(error.toString()))
+                    error -> callback.onError(error.toString())
             })
-        return reservation
     }
 
-    override fun postHttpRequest(body: Reservation): Reservation {
-        var reservation = Reservation()
+    override fun postHttpRequest(
+        body: Reservation,
+        context: Context,
+        callback: VolleyCallback<Reservation>
+    ) {
         JsonObjectRequest(Request.Method.POST, reservationUrl, body,
             {
-                    response -> reservation = mapToObj(response)
+                    response -> val reservation = mapToObj(response)
+                                callback.onSuccess(reservation)
             },
             {
-                    error -> Log.d("TAG", "getListHttpRequest:".format(error.toString()))
+                    error -> callback.onError(error.toString())
             })
-        return reservation
     }
 
-    override fun putHttpRequest(id: Long, body: Reservation): Reservation {
-        var reservation = Reservation()
+    override fun putHttpRequest(
+        id: Long,
+        body: Reservation,
+        context: Context,
+        callback: VolleyCallback<Reservation>
+    ) {
         JsonObjectRequest(Request.Method.PUT, "$reservationUrl/$id", body,
             {
-                    response -> reservation = mapToObj(response)
+                    response -> val reservation = mapToObj(response)
+                                callback.onSuccess(reservation)
             },
             {
-                    error -> Log.d("TAG", "getListHttpRequest:".format(error.toString()))
+                    error -> callback.onError(error.toString())
             })
-        return reservation
     }
 
-    override fun deleteHttpRequest(id: Long) {
-        var reservation = Reservation()
+    override fun deleteHttpRequest(
+        id: Long,
+        context: Context,
+        callback: VolleyCallback<Reservation>
+    ) {
         JsonObjectRequest(Request.Method.DELETE, "$reservationUrl/$id", null,
             {
+                    callback.onDeleteSuccess()
             },
             {
-                    error -> Log.d("TAG", "getListHttpRequest:".format(error.toString()))
+                    error -> callback.onError(error.toString())
             })
     }
 
     override fun mapToObj(response: JSONObject): Reservation {
-        TODO("Not yet implemented")
+        val reservation = Reservation()
+        reservation.id = response.getLong("id")
+        reservation.cityId = response.getLong("cityId")
+        reservation.restaurantId = response.getLong("restaurantId")
+        reservation.time = Date(response.getString("time"))
+
+        return reservation
     }
 
-    override fun convertResponseToObjList(response: JSONArray): List<Reservation> {
-        TODO("Not yet implemented")
+    override fun convertResponseToObjList(response: JSONArray): ArrayList<Reservation> {
+        val reservations: ArrayList<Reservation> = ArrayList()
+        for (i in 0 until response.length()) {
+            val responseObject = response.getJSONObject(i)
+            val reservation = mapToObj(responseObject)
+
+            reservations.add(reservation)
+        }
+
+        return reservations
     }
 }

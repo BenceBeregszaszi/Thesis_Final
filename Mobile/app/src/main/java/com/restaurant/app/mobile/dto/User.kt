@@ -2,8 +2,9 @@ package com.restaurant.app.mobile.dto
 
 import com.restaurant.app.mobile.common.Authority
 import org.json.JSONObject
+import  java.io.*
 
-class User : JSONObject() {
+class User : JSONObject(), Serializable {
 
     var id: Long? = null
 

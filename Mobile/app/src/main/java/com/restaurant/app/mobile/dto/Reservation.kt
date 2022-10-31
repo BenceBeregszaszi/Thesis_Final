@@ -2,8 +2,9 @@ package com.restaurant.app.mobile.dto
 
 import org.json.JSONObject
 import java.util.Date
+import  java.io.*
 
-class Reservation : JSONObject() {
+class Reservation : JSONObject(), Serializable {
 
     var id: Long? = null
 
@@ -15,5 +16,5 @@ class Reservation : JSONObject() {
 
     var restaurantId: Long? = null
 
-    var time: Date? = null
+    var time: Date = Date()
 }

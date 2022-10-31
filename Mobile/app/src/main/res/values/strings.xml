@@ -1,4 +1,16 @@
 <resources>
-    <string name="app_name">Mobile</string>
+    <string name="app_name">Restaurant</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="post_code">Post Code:</string>
+    <string name="city_name">City Name:</string>
+    <string name="restaurant_name">Restaurant name:</string>
+    <string name="restaurant_seat_number">Seats number:</string>
+    <string name="username">Username:</string>
+    <string name="email">Email:</string>
+    <string name="cities">Cities</string>
+    <string name="restaurants">Restaurants</string>
+    <string name="reservations">Reservations</string>
+    <string name="users">Users</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
 </resources>
