@@ -13,5 +13,5 @@ class City : JSONObject() {
 
     var latitude: Double? = null
 
-    var restaurants: Set<Long>? = null;
+    var restaurants: HashSet<Long> = HashSet()
 }

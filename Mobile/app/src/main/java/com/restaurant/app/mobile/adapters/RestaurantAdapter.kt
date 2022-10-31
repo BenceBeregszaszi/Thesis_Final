@@ -33,17 +33,17 @@ class RestaurantAdapter() : BaseAdapter() {
     }
 
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
-        var newView: View
+        val newView: View
         if (p1 == null){
-            var inflater: LayoutInflater = this.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater: LayoutInflater = this.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             newView = inflater.inflate(R.layout.restaurant_list, p2, false)
         } else {
             newView = p1
         }
-        var name: TextView = newView.findViewById(R.id.restaurant_name)
-        var seatsNumber: TextView = newView.findViewById(R.id.seats)
-        name.setText(this.restaurants[p0].name)
-        seatsNumber.setText(this.restaurants[p0].maxSeatsNumber.toString())
+        val name: TextView = newView.findViewById(R.id.restaurant_name)
+        val seatsNumber: TextView = newView.findViewById(R.id.seats)
+        name.text = this.restaurants[p0].name
+        seatsNumber.text = this.restaurants[p0].maxSeatsNumber.toString()
         return newView
     }
 }

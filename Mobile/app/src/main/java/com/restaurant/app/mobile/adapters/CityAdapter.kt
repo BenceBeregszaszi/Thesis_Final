@@ -12,7 +12,7 @@ import com.restaurant.app.mobile.dto.City
 class CityAdapter() : BaseAdapter() {
 
     private var cities : List<City> = mutableListOf()
-    private var context: Context? = null;
+    private var context: Context? = null
 
 
     constructor(cities: List<City>, context: Context) : this() {
@@ -25,7 +25,7 @@ class CityAdapter() : BaseAdapter() {
     }
 
     override fun getItem(p0: Int): Any {
-        return cities[p0];
+        return cities[p0]
     }
 
     override fun getItemId(p0: Int): Long {
@@ -33,17 +33,17 @@ class CityAdapter() : BaseAdapter() {
     }
 
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
-        var newView: View
+        val newView: View
         if (p1 == null){
-            var inflater: LayoutInflater = this.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater: LayoutInflater = this.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             newView = inflater.inflate(R.layout.city_list, p2, false)
         } else {
             newView = p1
         }
-        var postCode: TextView = newView.findViewById(R.id.post_code_text)
-        var cityName: TextView = newView.findViewById(R.id.city_name_text)
-        postCode.setText(this.cities[p0].postCode)
-        cityName.setText(this.cities[p0].cityName)
+        val postCode: TextView = newView.findViewById(R.id.post_code_text)
+        val cityName: TextView = newView.findViewById(R.id.city_name_text)
+        postCode.text = this.cities[p0].postCode
+        cityName.text = this.cities[p0].cityName
         return newView
     }
 }

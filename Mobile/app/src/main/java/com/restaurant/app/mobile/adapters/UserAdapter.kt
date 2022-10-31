@@ -33,17 +33,17 @@ class UserAdapter() : BaseAdapter() {
     }
 
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
-        var newView: View
+        val newView: View
         if (p1 == null){
-            var inflater: LayoutInflater = this.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val inflater: LayoutInflater = this.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             newView = inflater.inflate(R.layout.restaurant_list, p2, false)
         } else {
             newView = p1
         }
-        var username: TextView = newView.findViewById(R.id.username_text_list)
-        var email: TextView = newView.findViewById(R.id.email_text_list)
-        username.setText(this.users[p0].username)
-        email.setText(this.users[p0].email)
+        val username: TextView = newView.findViewById(R.id.username_text_list)
+        val email: TextView = newView.findViewById(R.id.email_text_list)
+        username.text = this.users[p0].username
+        email.text = this.users[p0].email
         return newView
     }
 }

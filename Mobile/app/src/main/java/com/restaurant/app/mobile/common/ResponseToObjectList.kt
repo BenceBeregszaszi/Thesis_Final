@@ -4,5 +4,5 @@ import org.json.JSONArray
 
 interface ResponseToObjectList<T> {
 
-    fun convertResponseToObjList(response: JSONArray) : List<T>
+    fun convertResponseToObjList(response: JSONArray) : ArrayList<T>
 }

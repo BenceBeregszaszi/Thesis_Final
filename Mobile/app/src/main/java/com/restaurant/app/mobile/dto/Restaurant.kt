@@ -9,5 +9,5 @@ class Restaurant : JSONObject() {
 
     var maxSeatsNumber: Int? = null
 
-    var cities: Set<Long>? = null
+    var cities: HashSet<Long> = HashSet()
 }
