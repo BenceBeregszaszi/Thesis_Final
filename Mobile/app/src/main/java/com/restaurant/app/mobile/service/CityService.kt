@@ -95,9 +95,9 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
         city.cityName = response.getString("cityName")
         city.latitude = response.getDouble("latitude")
         city.longitude = response.getDouble("longitude")
-        val set: List<String> = response.getString("restaurants").replace("[", "").replace("]", "").split(",")
-        for (item in set) {
-            city.restaurants.add(item.toLong())
+        val set: JSONArray = response.getJSONArray("restaurants")
+        for (i in 0 until set.length()) {
+            city.restaurants.add(set.get(i).toString().toLong())
         }
         return city
     }

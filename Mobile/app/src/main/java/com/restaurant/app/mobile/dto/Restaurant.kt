@@ -1,8 +1,9 @@
 package com.restaurant.app.mobile.dto
 
 import org.json.JSONObject
+import  java.io.*
 
-class Restaurant : JSONObject() {
+class Restaurant : JSONObject(), Serializable {
     var id: Long? = null
 
     var name: String? = null

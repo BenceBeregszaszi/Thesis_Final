@@ -1,7 +1,9 @@
 package com.restaurant.app.mobile
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ListView
 import android.widget.Toast
 import com.restaurant.app.mobile.adapters.CityAdapter
@@ -15,13 +17,27 @@ class MainActivity : AppCompatActivity(), VolleyCallback<City> {
 
     private var cities: ArrayList<City> = ArrayList()
     private var index: Int = -1
+    private var cityList: ListView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        cityList = findViewById(R.id.city_list)
 
 
         CityService.getListHttpRequest(this,this)
+
+        try {
+            this.cityList?.setOnItemClickListener { parent, _, position, _ ->
+                Log.d("Main", parent.getItemAtPosition(position).toString())
+                val selectedCity = this.cityList?.adapter?.getItem(position) as City
+                val intent = Intent(this, RestaurantActivity::class.java)
+                intent.putExtra("restaurants", selectedCity.restaurants.toLongArray())
+                startActivity(intent)
+            }
+        } catch (e: java.lang.Exception) {
+            Log.d("MainActivity", e.toString())
+        }
 
     }
 
@@ -46,7 +62,6 @@ class MainActivity : AppCompatActivity(), VolleyCallback<City> {
 
     private fun renderCityList() {
         val cityAdapter = CityAdapter(this.cities, this)
-        val cityList: ListView = findViewById(R.id.city_list)
-        cityList.adapter = cityAdapter
+        this.cityList?.adapter = cityAdapter
     }
 }
