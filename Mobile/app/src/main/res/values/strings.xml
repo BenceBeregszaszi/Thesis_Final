@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Restaurant</string>
-    <string name="title_activity_map">MapActivity</string>
     <string name="post_code">Post Code:</string>
     <string name="city_name">City Name:</string>
     <string name="restaurant_name">Restaurant name:</string>

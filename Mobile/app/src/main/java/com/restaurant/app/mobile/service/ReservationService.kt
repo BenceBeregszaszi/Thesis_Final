@@ -11,6 +11,7 @@ import com.restaurant.app.mobile.common.VolleyCallback
 import com.restaurant.app.mobile.dto.Reservation
 import org.json.JSONArray
 import org.json.JSONObject
+import java.text.SimpleDateFormat
 import java.util.Date
 
 object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation>, ResponseToObjectList<Reservation> {
@@ -89,7 +90,8 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
         reservation.id = response.getLong("id")
         reservation.cityId = response.getLong("cityId")
         reservation.restaurantId = response.getLong("restaurantId")
-        reservation.time = Date(response.getString("time"))
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
+        reservation.time = formatter.parse(response.getString("time"))
 
         return reservation
     }
