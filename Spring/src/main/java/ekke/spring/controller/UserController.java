@@ -1,5 +1,6 @@
 package ekke.spring.controller;
 
+import ekke.spring.dto.ForgetPasswordDto;
 import ekke.spring.dto.UserDto;
 import ekke.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,14 @@ public class UserController extends ControllerBase{
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<UserDto> updateUser(@PathVariable final Long id, @RequestBody final UserDto userDto) {
         return ResponseEntity.ok(userService.update(id, userDto));
+    }
+
+
+    @PutMapping("/users/forget-password/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    public ResponseEntity<Void> forgetPassword(@PathVariable final Long id, @RequestBody final ForgetPasswordDto forgetPasswordDto) {
+        userService.forgetPassword(id, forgetPasswordDto);
+        return ResponseEntity.ok().build();
     }
 
 

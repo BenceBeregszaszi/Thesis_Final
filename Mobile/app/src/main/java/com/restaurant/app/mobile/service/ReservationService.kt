@@ -48,7 +48,12 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
         context: Context,
         callback: VolleyCallback<Reservation>
     ) {
-        val request = JsonObjectRequest(Request.Method.POST, reservationUrl, body,
+        val newObj = JSONObject()
+        newObj.put("cityId", body.cityId)
+        newObj.put("restaurantId", body.restaurantId)
+        newObj.put("seatNumber", body.seatNumber)
+        newObj.put("time", body.time)
+        val request = JsonObjectRequest(Request.Method.POST, reservationUrl, newObj,
             {
                     response -> val reservation = mapToObj(response)
                                 callback.onSuccess(reservation)
@@ -65,7 +70,12 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
         context: Context,
         callback: VolleyCallback<Reservation>
     ) {
-        val request = JsonObjectRequest(Request.Method.PUT, "$reservationUrl/$id", body,
+        val newObj = JSONObject()
+        newObj.put("cityId", body.cityId)
+        newObj.put("restaurantId", body.restaurantId)
+        newObj.put("seatNumber", body.seatNumber)
+        newObj.put("time", body.time)
+        val request = JsonObjectRequest(Request.Method.PUT, "$reservationUrl/$id", newObj,
             {
                     response -> val reservation = mapToObj(response)
                                 callback.onSuccess(reservation)

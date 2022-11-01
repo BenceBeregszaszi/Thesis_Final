@@ -25,6 +25,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @Column(name = "reminder", nullable = false, length = 255)
+    private String reminder;
+
     @Column(nullable = false)
     private Boolean isDisabled;
 }

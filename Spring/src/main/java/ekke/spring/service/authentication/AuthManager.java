@@ -18,7 +18,7 @@ public class AuthManager implements AuthenticationManager {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
         Optional<User> user = userRepository.findByUsernameAndPassword(authentication.getPrincipal().toString(), authentication.getCredentials().toString());
-        if (user.isEmpty()) {
+        if (user.isEmpty() || user.get().getIsDisabled()) {
             throw new ekke.spring.service.exception.AuthenticationException("User cannot be found!");
         }
         return authentication;

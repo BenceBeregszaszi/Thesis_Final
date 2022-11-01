@@ -1,15 +1,11 @@
 package com.restaurant.app.mobile.dto
 
 import org.json.JSONObject
+import java.io.*
 
-class AuthenticationRequest() : JSONObject() {
+class AuthenticationRequest : JSONObject(), Serializable {
 
-    constructor(username: String, password: String) : this() {
-        this.username = username
-        this.password = password
-    }
+    var username: String = ""
 
-    var username: String? = null
-
-    var password: String? = null
+    var password: String = ""
 }

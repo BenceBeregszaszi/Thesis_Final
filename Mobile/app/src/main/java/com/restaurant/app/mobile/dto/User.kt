@@ -6,15 +6,17 @@ import  java.io.*
 
 class User : JSONObject(), Serializable {
 
-    var id: Long? = null
+    var id: Long = 0
 
-    var username: String? = null
+    var username: String = ""
 
-    var password: String? = null
+    var password: String = ""
 
-    var email: String? = null
+    var email: String = ""
 
-    var authority: Authority? = null
+    var authority: Authority = Authority.NON_USER
 
     var isDisabled: Boolean = false
+
+    var reminder: String = ""
 }

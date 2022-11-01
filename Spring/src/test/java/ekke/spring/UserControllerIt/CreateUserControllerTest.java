@@ -15,7 +15,7 @@ public class CreateUserControllerTest extends UserIt {
     public void createUserThenReceiveOk(){
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user"));
+        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user", "aron reminder"));
         //THEN
         isOk(resultActions);
     }
@@ -35,7 +35,7 @@ public class CreateUserControllerTest extends UserIt {
     public void createUserWithAlreadyExistingThenConflict() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("admin", "admin", "aron@gmail.com", "user"));
+        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("admin", "admin", "aron@gmail.com", "user", "admin reminder"));
         //THEN
         isConflict(resultActions);
     }
@@ -45,7 +45,7 @@ public class CreateUserControllerTest extends UserIt {
     public void createNewUserWithEmptyNameThenReceiveOk(){
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("", "aron", "aron@gmail.com", "user"));
+        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("", "aron", "aron@gmail.com", "user", "aron reminder"));
         //THEN
         isBadRequest(resultActions);
     }
@@ -56,7 +56,17 @@ public class CreateUserControllerTest extends UserIt {
     public void createNewUserWithEmptyPasswordThenReceiveOk(){
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("Aron", "", "aron@gmail.com", "user"));
+        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("Aron", "", "aron@gmail.com", "user", "aron reminder"));
+        //THEN
+        isBadRequest(resultActions);
+    }
+
+    @Test
+    @SneakyThrows
+    public void createNewUserWithEmptyReminderThenReceiveOk(){
+        //GIVEN
+        //WHEN
+        ResultActions resultActions = post(URL, UserTestUtil.getTestUserDto("Aron", "", "aron@gmail.com", "user", ""));
         //THEN
         isBadRequest(resultActions);
     }

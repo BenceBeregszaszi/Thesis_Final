@@ -25,6 +25,7 @@ public class UserDtoValidator extends BaseValidator {
         checkArgumentNotNull(userDto.getPassword());
         validateStringNotNullOrEmpty(userDto.getPassword());
         checkArgumentNotNull(userDto.getAuthority());
+        validateStringNotNullOrEmpty(userDto.getReminder());
         if (userRepository.findByUsernameAndPassword(userDto.getUsername(), userDto.getPassword()).isPresent())
             throw new UserAlreadyExistsException(String.format("This user %s name already occupied",
                     userDto.getUsername()));

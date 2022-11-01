@@ -16,6 +16,7 @@ public class UserConversionService {
         userDto.setPassword(user.getPassword());
         userDto.setEmail(user.getEmail());
         userDto.setAuthority(user.getAuthority());
+        userDto.setReminder(userDto.getReminder());
         userDto.setIsDisabled(user.getIsDisabled());
         return userDto;
     }
@@ -29,6 +30,7 @@ public class UserConversionService {
         user.setEmail(userDto.getEmail());
         user.setAuthority(userDto.getAuthority());
         user.setIsDisabled(userDto.getIsDisabled());
+        user.setReminder(userDto.getReminder());
         return user;
     }
 }

@@ -3,8 +3,10 @@ package com.restaurant.app.mobile
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.restaurant.app.mobile.common.CommonProperties
 import com.restaurant.app.mobile.common.VolleyCallback
 import com.restaurant.app.mobile.dto.AuthenticationRequest
@@ -25,8 +27,10 @@ class LoginActivity : AppCompatActivity(), VolleyCallback<TokenPair>{
         login.setOnClickListener {
             val username = findViewById<EditText>(R.id.text_username)
             val password = findViewById<EditText>(R.id.text_password)
-            val authRequest = AuthenticationRequest(username.text.toString(), password.text.toString())
-            Authentication.logIn(authRequest, this)
+            val authRequest = AuthenticationRequest()
+            authRequest.username = username.text.toString()
+            authRequest.password = password.text.toString()
+            Authentication.logIn(authRequest,this,this)
         }
 
         forget_btn.setOnClickListener {
@@ -39,6 +43,7 @@ class LoginActivity : AppCompatActivity(), VolleyCallback<TokenPair>{
         CommonProperties.accessToken = response.accessToken
         CommonProperties.refreshToken = response.refreshToken
         CommonProperties.loggedIn = true
+        finish()
     }
 
     override fun onListSuccess(response: ArrayList<TokenPair>) {
@@ -50,6 +55,6 @@ class LoginActivity : AppCompatActivity(), VolleyCallback<TokenPair>{
     }
 
     override fun onError(message: String) {
-        TODO("Not yet implemented")
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

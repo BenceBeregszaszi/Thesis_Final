@@ -42,7 +42,11 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
     }
 
     override fun postHttpRequest(body: City, context: Context, callback: VolleyCallback<City>) {
-        val request = JsonObjectRequest(Request.Method.POST, cityUrl, body,
+        val newObj = JSONObject()
+        newObj.put("postCode", body.postCode)
+        newObj.put("cityName", body.cityName)
+        newObj.put("restaurants", body.restaurants)
+        val request = JsonObjectRequest(Request.Method.POST, cityUrl, newObj,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)
@@ -59,7 +63,11 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
         context: Context,
         callback: VolleyCallback<City>
     ) {
-        val request = JsonObjectRequest(Request.Method.PUT, "$cityUrl/$id", body,
+        val newObj = JSONObject()
+        newObj.put("postCode", body.postCode)
+        newObj.put("cityName", body.cityName)
+        newObj.put("restaurants", body.restaurants)
+        val request = JsonObjectRequest(Request.Method.PUT, "$cityUrl/$id", newObj,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)

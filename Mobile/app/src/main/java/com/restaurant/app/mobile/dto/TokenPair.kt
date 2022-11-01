@@ -4,7 +4,7 @@ import org.json.JSONObject
 
 class TokenPair : JSONObject(){
 
-    var accessToken: String? = null
+    var accessToken: String = ""
 
-    var refreshToken: String? = null
+    var refreshToken: String = ""
 }

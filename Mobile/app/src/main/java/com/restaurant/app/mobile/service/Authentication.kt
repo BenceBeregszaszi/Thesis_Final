@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.restaurant.app.mobile.common.CommonProperties
 import com.restaurant.app.mobile.common.MapResponseToObj
 import com.restaurant.app.mobile.common.VolleyCallback
@@ -14,10 +15,13 @@ import org.json.JSONObject
 
 object Authentication : MapResponseToObj<TokenPair>{
 
-    private const val authenticationUrl: String = "http://localhost:8080/authentication"
+    private const val authenticationUrl: String = "http://10.0.2.2:8080/authentication"
 
-    fun logIn(body: AuthenticationRequest, callback: VolleyCallback<TokenPair>){
-        val request = JsonObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", body,
+    fun logIn(body: AuthenticationRequest, context: Context, callback: VolleyCallback<TokenPair>){
+        val newObj = JSONObject()
+        newObj.put("username", body.username)
+        newObj.put("password", body.password)
+        val request = JsonObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", newObj,
             {
                     response -> val tokens = mapToObj(response)
                                 callback.onSuccess(tokens)
@@ -25,10 +29,14 @@ object Authentication : MapResponseToObj<TokenPair>{
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
-    fun refreshTokens(body: TokenPair, callback: VolleyCallback<TokenPair>) {
-        val request = JsonObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", body,
+    fun refreshTokens(body: TokenPair, context: Context, callback: VolleyCallback<TokenPair>) {
+        val newObj = JSONObject()
+        newObj.put("refreshToken", body.refreshToken)
+        newObj.put("accessToken", body.accessToken)
+        val request = JsonObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", newObj,
             {
                     response -> val tokens = mapToObj(response)
                                     callback.onSuccess(tokens)
@@ -36,6 +44,7 @@ object Authentication : MapResponseToObj<TokenPair>{
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     fun logOut () {

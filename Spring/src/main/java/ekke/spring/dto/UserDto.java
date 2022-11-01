@@ -25,5 +25,7 @@ public class UserDto {
     @JsonDeserialize(using = AuthorityDeserializer.class)
     private Authority authority;
 
+    private String reminder;
+
     private Boolean isDisabled;
 }

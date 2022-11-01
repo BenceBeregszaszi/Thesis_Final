@@ -4,15 +4,15 @@ import java.util.Date
 
 class ReservationRepresentation {
 
-    var id: Long? = null
+    var id: Long = 0
 
-    var user: String? = null
+    var user: String = ""
 
-    var seatNumber : Int? = null
+    var seatNumber : Int = 0
 
-    var city: String? = null
+    var city: String = ""
 
-    var restaurant: String? = null;
+    var restaurant: String = ""
 
     var time: Date = Date()
 }

@@ -1,14 +1,14 @@
 package com.restaurant.app.mobile.dto
 
 import org.json.JSONObject
-import  java.io.*
+import java.io.*
 
 class City : JSONObject(), Serializable {
     var id: Long = 0
 
-    var postCode: String? = null
+    var postCode: String = ""
 
-    var cityName: String? = null
+    var cityName: String = ""
 
     var restaurants: HashSet<Long> = HashSet()
 }

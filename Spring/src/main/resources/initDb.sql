@@ -2,7 +2,7 @@ create table city (id bigint not null auto_increment, version datetime(6), city_
 create table city_link (restaurant_id bigint not null, city_id bigint not null, primary key (restaurant_id, city_id)) engine=InnoDB;
 create table reservation (id bigint not null auto_increment, version datetime(6), seat_number integer not null, time datetime(6) not null, city_id bigint, user_id bigint, restaurant_id bigint, primary key (id)) engine=InnoDB;
 create table restaurant (id bigint not null auto_increment, version datetime(6), max_seats_number integer not null, name varchar(250) not null, address varchar(200) not null, primary key (id)) engine=InnoDB;
-create table user_details (id bigint not null auto_increment, version datetime(6), authority varchar(255), email varchar(200) not null, is_disabled bit not null, password varchar(255) not null, username varchar(200) not null, primary key (id)) engine=InnoDB;
+create table user_details (id bigint not null auto_increment, version datetime(6), authority varchar(255), email varchar(200) not null, is_disabled bit not null, password varchar(255) not null, username varchar(200) not null, reminder varchar(255) not null, primary key (id)) engine=InnoDB;
 
 INSERT INTO `city`(id, version, post_code, city_name) VALUES (6,'2020-09-17 14:02:14.000000','3300','Eger');
 INSERT INTO `city`(id, version, post_code, city_name) VALUES (7,'2020-09-17 14:03:03.000000','5400','Mezotur');
@@ -14,9 +14,9 @@ INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (
 INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (8,'2020-09-17 14:08:28.000000',20,'Boomerang', 'Kiss Péter utca 34');
 INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (9,'2020-09-17 14:08:30.000000',40,'Corner', 'Nagy Kázmér 45 3.em 4');
 
-INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled) VALUES (3,'2020-09-17 14:05:42.000000','ADMIN','admin@gmail.com','admin','admin', false);
-INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled) VALUES (4,'2020-09-17 14:06:08.000000','USER','user@gmail.com','user','user', true);
-INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled) VALUES (5,'2020-09-17 14:06:27.000000','USER','bandi@gamil.com','bandi1','bandi', false);
+INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled, reminder) VALUES (3,'2020-09-17 14:05:42.000000','ADMIN','admin@gmail.com','admin','admin', false, 'admin reminder');
+INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled, reminder) VALUES (4,'2020-09-17 14:06:08.000000','USER','user@gmail.com','user','user', true, 'user reminder');
+INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled, reminder) VALUES (5,'2020-09-17 14:06:27.000000','USER','bandi@gamil.com','bandi1','bandi', false, 'bandi reminder');
 
 INSERT INTO `city_link` (restaurant_id, city_id) VALUES (7,7),(6,9);
 

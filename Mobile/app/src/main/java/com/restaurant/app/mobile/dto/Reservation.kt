@@ -6,15 +6,15 @@ import  java.io.*
 
 class Reservation : JSONObject(), Serializable {
 
-    var id: Long? = null
+    var id: Long = 0
 
-    var userId: Long? = null
+    var userId: Long = 0
 
-    var seatNumber: Int? = null
+    var seatNumber: Int = 0
 
-    var cityId: Long? = null
+    var cityId: Long = 0
 
-    var restaurantId: Long? = null
+    var restaurantId: Long = 0
 
     var time: Date = Date()
 }

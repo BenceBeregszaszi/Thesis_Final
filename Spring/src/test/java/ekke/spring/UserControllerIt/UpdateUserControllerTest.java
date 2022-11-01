@@ -23,7 +23,7 @@ public class UpdateUserControllerTest extends UserIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, EXISTING_ID), UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user"));
+                put(String.format(URL, EXISTING_ID), UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user", "aron reminder"));
         //THEN
         isOk(resultActions);
     }
@@ -35,7 +35,7 @@ public class UpdateUserControllerTest extends UserIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, null), UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user"));
+                put(String.format(URL, null), UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user", "aron_reminder"));
         //THEN
         isBadRequest(resultActions);
     }
@@ -58,7 +58,7 @@ public class UpdateUserControllerTest extends UserIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, NOT_EXISTING_ID), UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user"));
+                put(String.format(URL, NOT_EXISTING_ID), UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user", "aron_reminder"));
         //THEN
         isNotFound(resultActions);
     }
@@ -70,7 +70,7 @@ public class UpdateUserControllerTest extends UserIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, EXISTING_ID), UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user"));
+                put(String.format(URL, EXISTING_ID), UserTestUtil.getTestUserDto("Aron", "aron", "aron@gmail.com", "user", "aronReminder"));
         //THEN
         hasNoAccess(resultActions);
     }
