@@ -71,8 +71,6 @@ public class CityService implements CrudServices<CityDto> {
         oldCity.setPostCode(newCity.getPostCode());
         oldCity.setCityName(newCity.getCityName());
         oldCity.setRestaurants(newCity.getRestaurants());
-        oldCity.setLatitude(newCity.getLatitude());
-        oldCity.setLongitude(newCity.getLongitude());
         return oldCity;
     }
 }

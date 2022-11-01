@@ -10,9 +10,5 @@ class City : JSONObject(), Serializable {
 
     var cityName: String? = null
 
-    var longitude: Double? = null
-
-    var latitude: Double? = null
-
     var restaurants: HashSet<Long> = HashSet()
 }

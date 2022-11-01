@@ -18,7 +18,7 @@ public class CreateRestaurantControllerIt extends RestaurantIt {
     public void createRestaurantThenReceiveOk(){
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, RestaurantTestUtil.getTestRestaurantDto("Horgasz palota", "20", "[5,6]"));
+        ResultActions resultActions = post(URL, RestaurantTestUtil.getTestRestaurantDto("Horgasz palota", "20", "[5,6]", "Kiss Endre utca 34"));
         //THEN
         isOk(resultActions);
     }
@@ -29,7 +29,7 @@ public class CreateRestaurantControllerIt extends RestaurantIt {
     public void createRestaurantWithWrongAuthorityThenHasNoAccess(){
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, RestaurantTestUtil.getTestRestaurantDto("Placc", "40", "[5,6]"));
+        ResultActions resultActions = post(URL, RestaurantTestUtil.getTestRestaurantDto("Placc", "40", "[5,6]", "Kiss Endre utca 34"));
         //THEN
         hasNoAccess(resultActions);
     }
@@ -51,7 +51,7 @@ public class CreateRestaurantControllerIt extends RestaurantIt {
     public void createRestaurantWithAlreadyExistingThenConflict() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, RestaurantTestUtil.getTestRestaurantDto("Heaven", "40", "[5,6]"));
+        ResultActions resultActions = post(URL, RestaurantTestUtil.getTestRestaurantDto("Heaven", "40", "[5,6]", "Kiss Endre utca 34"));
         //THEN
         isConflict(resultActions);
     }
@@ -62,7 +62,18 @@ public class CreateRestaurantControllerIt extends RestaurantIt {
     public void createRestaurantWithEmptyNameThenBadRequest() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, RestaurantTestUtil.getTestRestaurantDto("", "40", "[5,6]"));
+        ResultActions resultActions = post(URL, RestaurantTestUtil.getTestRestaurantDto("", "40", "[5,6]", "Kiss Endre utca 34"));
+        //THEN
+        isBadRequest(resultActions);
+    }
+
+    @Test
+    @SneakyThrows
+    @WithTestUser(user = TestUserAndras.class)
+    public void createRestaurantWithEmptyAddressThenBadRequest() {
+        //GIVEN
+        //WHEN
+        ResultActions resultActions = post(URL, RestaurantTestUtil.getTestRestaurantDto("", "40", "[5,6]", ""));
         //THEN
         isBadRequest(resultActions);
     }

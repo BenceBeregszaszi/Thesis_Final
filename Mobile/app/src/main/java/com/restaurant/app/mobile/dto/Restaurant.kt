@@ -10,5 +10,7 @@ class Restaurant : JSONObject(), Serializable {
 
     var maxSeatsNumber: Int? = null
 
+    var address: String? = null
+
     var cities: HashSet<Long> = HashSet()
 }

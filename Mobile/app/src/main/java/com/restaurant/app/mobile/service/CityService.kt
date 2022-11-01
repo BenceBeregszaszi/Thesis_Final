@@ -30,7 +30,7 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
     }
 
     override fun getHttpRequest(id: Long, context: Context, callback: VolleyCallback<City>) {
-        JsonObjectRequest(Request.Method.GET, "$cityUrl/$id", null,
+        val request = JsonObjectRequest(Request.Method.GET, "$cityUrl/$id", null,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)
@@ -38,10 +38,11 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun postHttpRequest(body: City, context: Context, callback: VolleyCallback<City>) {
-        JsonObjectRequest(Request.Method.POST, cityUrl, body,
+        val request = JsonObjectRequest(Request.Method.POST, cityUrl, body,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)
@@ -49,6 +50,7 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun putHttpRequest(
@@ -57,7 +59,7 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
         context: Context,
         callback: VolleyCallback<City>
     ) {
-        JsonObjectRequest(Request.Method.PUT, "$cityUrl/$id", body,
+        val request = JsonObjectRequest(Request.Method.PUT, "$cityUrl/$id", body,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)
@@ -65,16 +67,18 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun deleteHttpRequest(id: Long, context: Context, callback: VolleyCallback<City>) {
-        JsonObjectRequest(Request.Method.DELETE, "$cityUrl/$id", null,
+        val request = JsonObjectRequest(Request.Method.DELETE, "$cityUrl/$id", null,
             {
                     callback.onDeleteSuccess()
             },
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun convertResponseToObjList(response: JSONArray): ArrayList<City> {
@@ -93,8 +97,6 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
         city.id = response.getLong("id")
         city.postCode = response.getString("postCode")
         city.cityName = response.getString("cityName")
-        city.latitude = response.getDouble("latitude")
-        city.longitude = response.getDouble("longitude")
         val set: JSONArray = response.getJSONArray("restaurants")
         for (i in 0 until set.length()) {
             city.restaurants.add(set.get(i).toString().toLong())

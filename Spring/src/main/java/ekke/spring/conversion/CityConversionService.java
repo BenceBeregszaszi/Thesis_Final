@@ -26,8 +26,6 @@ public class CityConversionService {
         cityDto.setPostCode(city.getPostCode());
         cityDto.setCityName(city.getCityName());
         cityDto.setRestaurants(mapRestaurant2Long(city.getRestaurants()));
-        cityDto.setLongitude(city.getLongitude());
-        cityDto.setLatitude(city.getLatitude());
         return cityDto;
     }
 
@@ -38,8 +36,6 @@ public class CityConversionService {
         city.setPostCode(cityDto.getPostCode());
         city.setCityName(cityDto.getCityName());
         city.setRestaurants(mapLong2Restaurant(cityDto.getRestaurants()));
-        city.setLongitude(cityDto.getLongitude());
-        city.setLatitude(cityDto.getLatitude());
         return  city;
     }
 

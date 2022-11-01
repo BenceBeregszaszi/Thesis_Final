@@ -21,7 +21,7 @@ public class CreateCityControllerTest extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                post(URL, CityTestUtil.getTestCityDto("8765", "Kaposvar", "34.98", "45.267", "[5,7]"));
+                post(URL, CityTestUtil.getTestCityDto("8765", "Kaposvar", "[5,7]"));
         //THEN
         isOk(resultActions);
     }
@@ -33,7 +33,7 @@ public class CreateCityControllerTest extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                post(URL, CityTestUtil.getTestCityDto("8765", "Kaposvar", "34.98", "45.267", "[5,7]"));
+                post(URL, CityTestUtil.getTestCityDto("8765", "Kaposvar", "[5,7]"));
         //THEN
         hasNoAccess(resultActions);
     }
@@ -56,7 +56,7 @@ public class CreateCityControllerTest extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                post(URL, CityTestUtil.getTestCityDto("3300", "Kaposvar", "34.98", "45.267", "[5,7]"));
+                post(URL, CityTestUtil.getTestCityDto("3300", "Kaposvar", "[5,7]"));
         //THEN
         isConflict(resultActions);
     }
@@ -67,29 +67,7 @@ public class CreateCityControllerTest extends CityIt {
     public void createCityWithPostCodeEmptyThenBadRequest() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = post(URL, CityTestUtil.getTestCityDto("", "Kaposvar", "34.98", "45.267", "[5,7]"));
-        //THEN
-        isBadRequest(resultActions);
-    }
-
-    @Test
-    @SneakyThrows
-    @WithTestUser(user = TestUserAndras.class)
-    public void createCityWithLongitudeNullCodeEmptyThenBadRequest() {
-        //GIVEN
-        //WHEN
-        ResultActions resultActions = post(URL, CityTestUtil.getTestCityDto("", "Kaposvar", null, "45.267", "[5,7]"));
-        //THEN
-        isBadRequest(resultActions);
-    }
-
-    @Test
-    @SneakyThrows
-    @WithTestUser(user = TestUserAndras.class)
-    public void createCityWithLatitudeNullCodeEmptyThenBadRequest() {
-        //GIVEN
-        //WHEN
-        ResultActions resultActions = post(URL, CityTestUtil.getTestCityDto("", "Kaposvar", "34.98", null, "[5,7]"));
+        ResultActions resultActions = post(URL, CityTestUtil.getTestCityDto("", "Kaposvar",  "[5,7]"));
         //THEN
         isBadRequest(resultActions);
     }

@@ -19,8 +19,6 @@ public class CityDtoValidator extends BaseValidator {
         validateStringNotNullOrEmpty(cityDto.getPostCode());
         checkArgumentNotNull(cityDto.getCityName());
         validateStringNotNullOrEmpty(cityDto.getCityName());
-        checkArgumentNotNull(cityDto.getLatitude());
-        checkArgumentNotNull(cityDto.getLongitude());
         if (cityRepository.findCityByPostCode(cityDto.getPostCode()).isPresent()) {
             throw new CityAlreadyExistsException("City with this post code already exists");
         }

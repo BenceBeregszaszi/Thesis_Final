@@ -4,6 +4,7 @@ import android.content.Context
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.restaurant.app.mobile.common.*
 import com.restaurant.app.mobile.dto.User
 import org.json.JSONArray
@@ -15,7 +16,7 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
     private val userUrl: String = "$baseUrl/users"
 
     override fun getListHttpRequest(context: Context, callback: VolleyCallback<User>) {
-        JsonArrayRequest(Request.Method.GET, userUrl, null,
+        val request = JsonArrayRequest(Request.Method.GET, userUrl, null,
             {
                     response -> val users = convertResponseToObjList(response)
                                 callback.onListSuccess(users)
@@ -23,10 +24,11 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun getHttpRequest(id: Long, context: Context, callback: VolleyCallback<User>) {
-        JsonObjectRequest(Request.Method.GET, "$userUrl/$id", null,
+        val request = JsonObjectRequest(Request.Method.GET, "$userUrl/$id", null,
             {
                     response -> val user = mapToObj(response)
                                 callback.onSuccess(user)
@@ -34,10 +36,11 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun postHttpRequest(body: User, context: Context, callback: VolleyCallback<User>) {
-        JsonObjectRequest(Request.Method.GET, userUrl, body,
+        val request = JsonObjectRequest(Request.Method.GET, userUrl, body,
             {
                     response -> val user = mapToObj(response)
                                 callback.onSuccess(user)
@@ -45,6 +48,7 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun putHttpRequest(
@@ -53,7 +57,7 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
         context: Context,
         callback: VolleyCallback<User>
     ) {
-        JsonObjectRequest(Request.Method.GET, "$userUrl/$id", body,
+        val request = JsonObjectRequest(Request.Method.GET, "$userUrl/$id", body,
             {
                     response -> val user = mapToObj(response)
                                 callback.onSuccess(user)
@@ -61,16 +65,18 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun deleteHttpRequest(id: Long, context: Context, callback: VolleyCallback<User>) {
-        JsonObjectRequest(Request.Method.GET, "$userUrl/$id", null,
+        val request = JsonObjectRequest(Request.Method.GET, "$userUrl/$id", null,
             {
                     callback.onDeleteSuccess()
             },
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun convertResponseToObjList(response: JSONArray): ArrayList<User> {

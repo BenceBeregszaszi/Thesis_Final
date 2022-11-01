@@ -23,7 +23,7 @@ public class UpdateCityControllerTest extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, EXISTING_ID), CityTestUtil.getTestCityDto("8765", "Kaposvar", "34.98", "45.267", "[5,7]"));
+                put(String.format(URL, EXISTING_ID), CityTestUtil.getTestCityDto("8765", "Kaposvar", "[5,7]"));
         //THEN
         isOk(resultActions);
     }
@@ -35,7 +35,7 @@ public class UpdateCityControllerTest extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, null), CityTestUtil.getTestCityDto("8765", "Kaposvar", "34.98", "45.267", "[5,7]"));
+                put(String.format(URL, null), CityTestUtil.getTestCityDto("8765", "Kaposvar", "[5,7]"));
         //THEN
         isBadRequest(resultActions);
     }
@@ -58,7 +58,7 @@ public class UpdateCityControllerTest extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, EXISTING_ID), CityTestUtil.getTestCityDto("3300", "Kaposvar", "34.98", "45.267", "[5,7]"));
+                put(String.format(URL, EXISTING_ID), CityTestUtil.getTestCityDto("3300", "Kaposvar",  "[5,7]"));
         //THEN
         isConflict(resultActions);
     }
@@ -70,7 +70,7 @@ public class UpdateCityControllerTest extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, NOT_EXISTING_ID), CityTestUtil.getTestCityDto("8765", "Kaposvar", "34.98", "45.267", "[5,7]"));
+                put(String.format(URL, NOT_EXISTING_ID), CityTestUtil.getTestCityDto("8765", "Kaposvar", "[5,7]"));
         //THEN
         isNotFound(resultActions);
     }
@@ -82,7 +82,7 @@ public class UpdateCityControllerTest extends CityIt {
         //GIVEN
         //WHEN
         ResultActions resultActions =
-                put(String.format(URL, EXISTING_ID), CityTestUtil.getTestCityDto("8765", "Kaposvar", "34.98", "45.267", "[5,7]"));
+                put(String.format(URL, EXISTING_ID), CityTestUtil.getTestCityDto("8765", "Kaposvar",  "[5,7]"));
         //THEN
         hasNoAccess(resultActions);
     }

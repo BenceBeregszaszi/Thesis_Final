@@ -19,6 +19,7 @@ public class RestaurantDtoValidator extends BaseValidator {
         checkArgumentNotNull(restaurantDto.getName());
         validateStringNotNullOrEmpty(restaurantDto.getName());
         checkArgumentNotNull(restaurantDto.getMaxSeatsNumber());
+        validateStringNotNullOrEmpty(restaurantDto.getAddress());
         if (restaurantRepository.
                 findByNameAndMaxSeatsNumber(restaurantDto.getName(), restaurantDto.getMaxSeatsNumber()).isPresent()){
             throw new RestaurantAlreadyExistsException(String.format("Restaurant with name %s is already exists", restaurantDto.getName()));

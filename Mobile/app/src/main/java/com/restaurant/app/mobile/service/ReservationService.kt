@@ -4,6 +4,7 @@ import android.content.Context
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.restaurant.app.mobile.common.MapResponseToObj
 import com.restaurant.app.mobile.common.ResponseToObjectList
 import com.restaurant.app.mobile.common.Service
@@ -19,7 +20,7 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
     private val reservationUrl: String = "$baseUrl/reservations"
 
     override fun getListHttpRequest(context: Context, callback: VolleyCallback<Reservation>) {
-        JsonArrayRequest(Request.Method.GET, reservationUrl, null,
+        val request = JsonArrayRequest(Request.Method.GET, reservationUrl, null,
             {
                     response -> val reservations = convertResponseToObjList(response)
                                 callback.onListSuccess(reservations)
@@ -27,10 +28,11 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun getHttpRequest(id: Long, context: Context, callback: VolleyCallback<Reservation>) {
-        JsonObjectRequest(Request.Method.GET, "$reservationUrl/$id", null,
+        val request = JsonObjectRequest(Request.Method.GET, "$reservationUrl/$id", null,
             {
                     response -> val reservation = mapToObj(response)
                                 callback.onSuccess(reservation)
@@ -38,6 +40,7 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun postHttpRequest(
@@ -45,7 +48,7 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
         context: Context,
         callback: VolleyCallback<Reservation>
     ) {
-        JsonObjectRequest(Request.Method.POST, reservationUrl, body,
+        val request = JsonObjectRequest(Request.Method.POST, reservationUrl, body,
             {
                     response -> val reservation = mapToObj(response)
                                 callback.onSuccess(reservation)
@@ -53,6 +56,7 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun putHttpRequest(
@@ -61,7 +65,7 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
         context: Context,
         callback: VolleyCallback<Reservation>
     ) {
-        JsonObjectRequest(Request.Method.PUT, "$reservationUrl/$id", body,
+        val request = JsonObjectRequest(Request.Method.PUT, "$reservationUrl/$id", body,
             {
                     response -> val reservation = mapToObj(response)
                                 callback.onSuccess(reservation)
@@ -69,6 +73,7 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun deleteHttpRequest(
@@ -76,13 +81,14 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
         context: Context,
         callback: VolleyCallback<Reservation>
     ) {
-        JsonObjectRequest(Request.Method.DELETE, "$reservationUrl/$id", null,
+        val request = JsonObjectRequest(Request.Method.DELETE, "$reservationUrl/$id", null,
             {
                     callback.onDeleteSuccess()
             },
             {
                     error -> callback.onError(error.toString())
             })
+        Volley.newRequestQueue(context).add(request)
     }
 
     override fun mapToObj(response: JSONObject): Reservation {

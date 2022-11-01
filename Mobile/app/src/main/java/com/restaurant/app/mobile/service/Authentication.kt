@@ -16,32 +16,33 @@ object Authentication : MapResponseToObj<TokenPair>{
 
     private const val authenticationUrl: String = "http://localhost:8080/authentication"
 
-    fun logIn(body: AuthenticationRequest){
-        JsonObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", body,
+    fun logIn(body: AuthenticationRequest, callback: VolleyCallback<TokenPair>){
+        val request = JsonObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", body,
             {
                     response -> val tokens = mapToObj(response)
-                                CommonProperties.accessToken = tokens.accessToken
-                                CommonProperties.refreshToken = tokens.refreshToken
+                                callback.onSuccess(tokens)
             },
             {
-                    error -> Log.d("TAG", "getListHttpRequest:".format(error.toString()))
+                    error -> callback.onError(error.toString())
             })
     }
 
-    fun refreshTokens(body: TokenPair) {
-        JsonObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", body,
+    fun refreshTokens(body: TokenPair, callback: VolleyCallback<TokenPair>) {
+        val request = JsonObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", body,
             {
                     response -> val tokens = mapToObj(response)
-                                    CommonProperties.accessToken = tokens.accessToken
-                                    CommonProperties.refreshToken = tokens.refreshToken
+                                    callback.onSuccess(tokens)
             },
             {
-                    error -> Log.d("TAG", "getListHttpRequest:".format(error.toString()))
+                    error -> callback.onError(error.toString())
             })
     }
 
     fun logOut () {
-        //TODO: IMPLEMENT
+        CommonProperties.accessToken = null
+        CommonProperties.refreshToken = null
+        CommonProperties.loggedIn = false
+        CommonProperties.tabIndex = 1
     }
 
     fun register(body: User, context: Context, callback: VolleyCallback<User>) {

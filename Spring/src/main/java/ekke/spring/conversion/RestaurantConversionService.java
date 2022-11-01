@@ -26,6 +26,7 @@ public class RestaurantConversionService {
         restaurantDto.setName(restaurant.getName());
         restaurantDto.setCities(cityEntity2Long(restaurant.getCities()));
         restaurantDto.setMaxSeatsNumber(restaurant.getMaxSeatsNumber());
+        restaurantDto.setAddress(restaurant.getAddress());
         return restaurantDto;
     }
 
@@ -36,6 +37,7 @@ public class RestaurantConversionService {
         restaurant.setName(restaurantDto.getName());
         restaurant.setCities(long2CityEntity(restaurantDto.getCities()));
         restaurant.setMaxSeatsNumber(restaurantDto.getMaxSeatsNumber());
+        restaurant.setAddress(restaurantDto.getAddress());
         return restaurant;
     }
 

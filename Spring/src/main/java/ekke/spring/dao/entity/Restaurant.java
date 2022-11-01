@@ -19,6 +19,9 @@ public class Restaurant extends BaseEntity {
     @Column(name = "maxSeatsNumber", nullable = false)
     private Integer maxSeatsNumber;
 
+    @Column(name = "address", nullable = false)
+    private String address;
+
     @ManyToMany
     @JoinTable(
             name = "cityLink",

@@ -20,10 +20,6 @@ public class CityDto {
 
     private String cityName;
 
-    private Double longitude;
-
-    private Double latitude;
-
     @JsonDeserialize(using = SetDeserializer.class)
     private Set<Long> restaurants;
 }

@@ -22,7 +22,7 @@ public class UpdateRestaurantControllerTest extends RestaurantIt {
     public void updateRestaurantThenReceiveOk() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = put(String.format(URL, EXISTING_ID), RestaurantTestUtil.getTestRestaurantDto("Placc", "40", "[5,6]"));
+        ResultActions resultActions = put(String.format(URL, EXISTING_ID), RestaurantTestUtil.getTestRestaurantDto("Placc", "40", "[5,6]", "Kiss Endre utca 34"));
         //THEN
         isOk(resultActions);
     }
@@ -33,7 +33,7 @@ public class UpdateRestaurantControllerTest extends RestaurantIt {
     public void updateRestaurantNullIdThenBadRequest() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = put(String.format(URL, null), RestaurantTestUtil.getTestRestaurantDto("Placc", "40", "[5,6]"));
+        ResultActions resultActions = put(String.format(URL, null), RestaurantTestUtil.getTestRestaurantDto("Placc", "40", "[5,6]", "Kiss Endre utca 34"));
         //THEN
         isBadRequest(resultActions);
     }
@@ -55,7 +55,7 @@ public class UpdateRestaurantControllerTest extends RestaurantIt {
     public void updateRestaurantIdNotFoundThenNotFound() {
         //GIVEN
         //WHEN
-        ResultActions resultActions = put(String.format(URL, NOT_EXISTING_ID), RestaurantTestUtil.getTestRestaurantDto("Placc", "40", "[5,6]"));
+        ResultActions resultActions = put(String.format(URL, NOT_EXISTING_ID), RestaurantTestUtil.getTestRestaurantDto("Placc", "40", "[5,6]", "Kiss Endre utca 34"));
         //THEN
         isNotFound(resultActions);
     }

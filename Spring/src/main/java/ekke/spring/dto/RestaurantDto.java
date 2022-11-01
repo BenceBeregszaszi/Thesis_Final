@@ -21,6 +21,8 @@ public class RestaurantDto {
 
     private Integer maxSeatsNumber;
 
+    private String address;
+
     @JsonDeserialize(using = SetDeserializer.class)
     private Set<Long> cities;
 }

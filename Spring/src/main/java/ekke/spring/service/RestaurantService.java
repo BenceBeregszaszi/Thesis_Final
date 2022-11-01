@@ -68,6 +68,7 @@ public class RestaurantService implements CrudServices<RestaurantDto> {
     private Restaurant setRestaurantForUpdate(final Restaurant oldRestaurant, final Restaurant newRestaurant){
         oldRestaurant.setName(newRestaurant.getName());
         oldRestaurant.setMaxSeatsNumber(newRestaurant.getMaxSeatsNumber());
+        oldRestaurant.setAddress(newRestaurant.getAddress());
         oldRestaurant.setCities(newRestaurant.getCities());
         return oldRestaurant;
     }
