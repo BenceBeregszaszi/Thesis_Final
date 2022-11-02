@@ -13,40 +13,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/cities_tab_reservation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cities" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/restaurant_tab_reservation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/restaurants" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/reservation_tab_reservation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/reservations" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/users_tab_reservation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/users" />
-    </com.google.android.material.tabs.TabLayout>
+        app:layout_constraintTop_toBottomOf="@+id/btn_logout_reservation" />
 
     <Button
         android:id="@+id/btn_logout_reservation"
@@ -54,18 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text="@string/logout"
-        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_settings_reservation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="@string/settings"
-        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
-        app:layout_constraintStart_toEndOf="@+id/btn_logout_reservation"
         app:layout_constraintTop_toTopOf="parent" />
 
 

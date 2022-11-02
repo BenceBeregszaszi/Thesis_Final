@@ -3,6 +3,7 @@ package com.restaurant.app.mobile.dto
 import org.json.JSONObject
 import java.util.Date
 import  java.io.*
+import java.time.LocalDate
 
 class Reservation : JSONObject(), Serializable {
 
@@ -16,5 +17,5 @@ class Reservation : JSONObject(), Serializable {
 
     var restaurantId: Long = 0
 
-    var time: Date = Date()
+    var time: LocalDate = LocalDate.now()
 }

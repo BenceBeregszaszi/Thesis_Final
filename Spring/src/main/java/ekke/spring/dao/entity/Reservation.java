@@ -4,6 +4,7 @@ import ekke.spring.common.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity(name = "reservation")
@@ -29,5 +30,5 @@ public class Reservation extends BaseEntity {
     private Restaurant restaurant;
 
     @Column(nullable = false, name = "time")
-    private Date time;
+    private LocalDate time;
 }

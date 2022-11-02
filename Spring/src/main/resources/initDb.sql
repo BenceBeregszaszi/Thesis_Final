@@ -1,6 +1,6 @@
 create table city (id bigint not null auto_increment, version datetime(6), city_name varchar(200) not null, post_code varchar(4) not null, primary key (id)) engine=InnoDB;
 create table city_link (restaurant_id bigint not null, city_id bigint not null, primary key (restaurant_id, city_id)) engine=InnoDB;
-create table reservation (id bigint not null auto_increment, version datetime(6), seat_number integer not null, time datetime(6) not null, city_id bigint, user_id bigint, restaurant_id bigint, primary key (id)) engine=InnoDB;
+create table reservation (id bigint not null auto_increment, version datetime(6), seat_number integer not null, time date not null, city_id bigint, user_id bigint, restaurant_id bigint, primary key (id)) engine=InnoDB;
 create table restaurant (id bigint not null auto_increment, version datetime(6), max_seats_number integer not null, name varchar(250) not null, address varchar(200) not null, primary key (id)) engine=InnoDB;
 create table user_details (id bigint not null auto_increment, version datetime(6), authority varchar(255), email varchar(200) not null, is_disabled bit not null, password varchar(255) not null, username varchar(200) not null, reminder varchar(255) not null, primary key (id)) engine=InnoDB;
 

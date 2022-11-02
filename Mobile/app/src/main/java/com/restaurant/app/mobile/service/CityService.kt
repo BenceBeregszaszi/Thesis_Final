@@ -5,10 +5,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.restaurant.app.mobile.common.MapResponseToObj
-import com.restaurant.app.mobile.common.ResponseToObjectList
-import com.restaurant.app.mobile.common.Service
-import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.common.*
 import com.restaurant.app.mobile.dto.City
 import org.json.JSONArray
 import org.json.JSONObject
@@ -79,7 +76,7 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
     }
 
     override fun deleteHttpRequest(id: Long, context: Context, callback: VolleyCallback<City>) {
-        val request = JsonObjectRequest(Request.Method.DELETE, "$cityUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.DELETE, "$cityUrl/$id", null,
             {
                     callback.onDeleteSuccess()
             },

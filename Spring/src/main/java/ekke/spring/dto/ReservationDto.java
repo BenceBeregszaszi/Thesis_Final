@@ -2,6 +2,7 @@ package ekke.spring.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -21,5 +22,5 @@ public class ReservationDto {
 
     private Long restaurantId;
 
-    private Date time;
+    private LocalDate time;
 }

@@ -6,10 +6,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.restaurant.app.mobile.common.MapResponseToObj
-import com.restaurant.app.mobile.common.ResponseToObjectList
-import com.restaurant.app.mobile.common.Service
-import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.common.*
 import com.restaurant.app.mobile.dto.Restaurant
 import org.json.JSONArray
 import org.json.JSONObject
@@ -90,7 +87,7 @@ object RestaurantService : Service<Restaurant>(), MapResponseToObj<Restaurant>, 
         context: Context,
         callback: VolleyCallback<Restaurant>
     ) {
-        val request = JsonObjectRequest(Request.Method.DELETE, "$restaurantUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.DELETE, "$restaurantUrl/$id", null,
             {
                     callback.onDeleteSuccess()
             },

@@ -47,15 +47,15 @@ class RestaurantActivity : AppCompatActivity(), VolleyCallback<Restaurant> {
                 RestaurantService.getHttpRequest(this.city.restaurants.elementAt(i), this, this)
             }
         } else {
-            this.city.id = -1
             RestaurantService.getListHttpRequest(this, this)
         }
 
         this.restaurantList?.setOnItemClickListener { _, _, position, _ ->
             val selectedRestaurant = this.restaurantList?.adapter?.getItem(position) as Restaurant
             val intent = Intent(this, Summary::class.java)
-            if (this.city.id != (-1).toLong()) {
+            if (this.city.id != (0).toLong()) {
                 intent.putExtra("city", this.city)
+                this.city = City()
             }
             intent.putExtra("restaurant", selectedRestaurant)
             startActivity(intent)

@@ -5,14 +5,12 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.restaurant.app.mobile.common.MapResponseToObj
-import com.restaurant.app.mobile.common.ResponseToObjectList
-import com.restaurant.app.mobile.common.Service
-import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.common.*
 import com.restaurant.app.mobile.dto.Reservation
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Date
 
 object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation>, ResponseToObjectList<Reservation> {
@@ -50,6 +48,7 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
     ) {
         val newObj = JSONObject()
         newObj.put("cityId", body.cityId)
+        newObj.put("userId", body.userId)
         newObj.put("restaurantId", body.restaurantId)
         newObj.put("seatNumber", body.seatNumber)
         newObj.put("time", body.time)
@@ -91,7 +90,7 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
         context: Context,
         callback: VolleyCallback<Reservation>
     ) {
-        val request = JsonObjectRequest(Request.Method.DELETE, "$reservationUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.DELETE, "$reservationUrl/$id", null,
             {
                     callback.onDeleteSuccess()
             },
@@ -106,8 +105,7 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
         reservation.id = response.getLong("id")
         reservation.cityId = response.getLong("cityId")
         reservation.restaurantId = response.getLong("restaurantId")
-        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
-        reservation.time = formatter.parse(response.getString("time")) as Date
+        reservation.time = LocalDate.parse(response.getString("time"))
 
         return reservation
     }

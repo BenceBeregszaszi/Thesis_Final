@@ -49,7 +49,7 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
         newObj.put("authority", Authority.USER)
         newObj.put("isDisabled", body.isDisabled)
         newObj.put("reminder", body.reminder)
-        val request = JsonObjectRequest(Request.Method.POST, "$baseUrl/authentication/register", newObj,
+        val request = CustomJSONObjectRequest(Request.Method.POST, "$baseUrl/authentication/register", newObj,
             {
                     callback.onSuccess(User())
             },
@@ -87,7 +87,7 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
         newObj.put("email", body.email)
         newObj.put("newPassword", body.newPassword)
         newObj.put("reminder", body.reminder)
-        val request = JsonObjectRequest(Request.Method.PUT, "$userUrl/forget-password/$id", newObj,
+        val request = CustomJSONObjectRequest(Request.Method.PUT, "$userUrl/forget-password/$id", newObj,
             {
                     callback.onSuccess(User())
             },
@@ -98,7 +98,7 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
     }
 
     override fun deleteHttpRequest(id: Long, context: Context, callback: VolleyCallback<User>) {
-        val request = JsonObjectRequest(Request.Method.GET, "$userUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$id", null,
             {
                     callback.onDeleteSuccess()
             },
