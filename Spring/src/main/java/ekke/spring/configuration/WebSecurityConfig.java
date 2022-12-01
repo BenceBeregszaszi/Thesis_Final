@@ -59,9 +59,6 @@ public class WebSecurityConfig extends GlobalMethodSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
         httpSecurity
                 .csrf().disable()
-                .cors()
-                .configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
-                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedExceptionHandler)
                 .accessDeniedHandler(accessDeniedExceptionHandler)

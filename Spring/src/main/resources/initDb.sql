@@ -1,3 +1,5 @@
+ALTER DATABASE schedule CHARACTER SET utf8mb3 collate = utf8mb3_hungarian_ci ;
+
 create table city (id bigint not null auto_increment, version datetime(6), city_name varchar(200) not null, post_code varchar(4) not null, primary key (id)) engine=InnoDB;
 create table city_link (restaurant_id bigint not null, city_id bigint not null, primary key (restaurant_id, city_id)) engine=InnoDB;
 create table reservation (id bigint not null auto_increment, version datetime(6), seat_number integer not null, time date not null, city_id bigint, user_id bigint, restaurant_id bigint, primary key (id)) engine=InnoDB;
