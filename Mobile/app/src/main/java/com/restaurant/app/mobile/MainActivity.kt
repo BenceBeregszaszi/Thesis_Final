@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.restaurant.app.mobile.adapters.CityAdapter
 import com.restaurant.app.mobile.common.CommonProperties
 import com.restaurant.app.mobile.common.VolleyCallback
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity(), VolleyCallback<City> {
     private var btn_register: Button? = null
     private var btn_logout: Button? = null
     private var btn_settings: Button? = null
+    private var btn_add_city: FloatingActionButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,16 @@ class MainActivity : AppCompatActivity(), VolleyCallback<City> {
             val intent = Intent(this, RestaurantActivity::class.java)
             intent.putExtra("city", selectedCity)
             startActivity(intent)
+        }
+
+        this.cityList?.setOnItemLongClickListener { _, _, position, _ ->
+            val selectedCity = this.cityList?.adapter?.getItem(position) as City
+            val intent = Intent(this, MakeCity::class.java)
+            intent.putExtra("city", selectedCity)
+            startActivity(intent)
+            renderCityList()
+            CityService.getListHttpRequest(this,this)
+            return@setOnItemLongClickListener(true)
         }
 
         btn_login?.setOnClickListener {
@@ -66,6 +78,12 @@ class MainActivity : AppCompatActivity(), VolleyCallback<City> {
         btn_settings?.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
+        }
+
+        btn_add_city?.setOnClickListener{
+            val intent = Intent(this, MakeCity::class.java)
+            startActivity(intent)
+            CityService.getListHttpRequest(this,this)
         }
     }
 
@@ -123,5 +141,6 @@ class MainActivity : AppCompatActivity(), VolleyCallback<City> {
         btn_register = findViewById(R.id.btn_register_main)
         btn_logout = findViewById(R.id.btn_logout_main)
         btn_settings = findViewById(R.id.btn_settings_main)
+        btn_add_city = findViewById(R.id.float_btn_addCity)
     }
 }

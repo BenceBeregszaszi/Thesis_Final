@@ -9,11 +9,11 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 
-class CustomJSONObjectRequest(method: Int,
-                              url: String,
-                              body: JSONObject?,
-                              responseListener: Response.Listener<JSONObject>,
-                              errorListener: Response.ErrorListener)
+open class CustomJSONObjectRequest(method: Int,
+                                   url: String,
+                                   body: JSONObject?,
+                                   responseListener: Response.Listener<JSONObject>,
+                                   errorListener: Response.ErrorListener)
     : JsonObjectRequest(method, url, body, responseListener, errorListener) {
 
 

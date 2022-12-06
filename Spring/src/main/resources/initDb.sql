@@ -11,10 +11,10 @@ INSERT INTO `city`(id, version, post_code, city_name) VALUES (7,'2020-09-17 14:0
 INSERT INTO `city`(id, version, post_code, city_name) VALUES (8,'2020-09-17 14:03:15.000000','5000','Szolnok');
 INSERT INTO `city`(id, version, post_code, city_name) VALUES (9,'2020-09-17 14:03:49.000000','8621','Zamardi');
 
-INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (6,'2020-09-17 14:07:29.000000',40,'Heaven', 'Erős út 13');
-INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (7,'2020-09-17 14:08:24.000000',20,'Erod Klub', 'Nagy István útca 56');
-INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (8,'2020-09-17 14:08:28.000000',20,'Boomerang', 'Kiss Péter utca 34');
-INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (9,'2020-09-17 14:08:30.000000',40,'Corner', 'Nagy Kázmér 45 3.em 4');
+INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (6,'2020-09-17 14:07:29.000000',40,'Heaven', 'Eros ut 13');
+INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (7,'2020-09-17 14:08:24.000000',20,'Erod Klub', 'Nagy Istvan utca 56');
+INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (8,'2020-09-17 14:08:28.000000',20,'Boomerang', 'Kiss Peter utca 34');
+INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (9,'2020-09-17 14:08:30.000000',40,'Corner', 'Nagy Kazmer 45 3.em 4');
 
 INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled, reminder) VALUES (3,'2020-09-17 14:05:42.000000','ADMIN','admin@gmail.com','admin','admin', false, 'admin reminder');
 INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled, reminder) VALUES (4,'2020-09-17 14:06:08.000000','USER','user@gmail.com','user','user', true, 'user reminder');

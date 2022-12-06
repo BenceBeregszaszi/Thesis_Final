@@ -59,6 +59,7 @@ class RestaurantActivity : AppCompatActivity(), VolleyCallback<Restaurant> {
             }
             intent.putExtra("restaurant", selectedRestaurant)
             startActivity(intent)
+            finish()
         }
 
         btn_login?.setOnClickListener {

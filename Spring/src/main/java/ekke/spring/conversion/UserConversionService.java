@@ -16,7 +16,7 @@ public class UserConversionService {
         userDto.setPassword(user.getPassword());
         userDto.setEmail(user.getEmail());
         userDto.setAuthority(user.getAuthority());
-        userDto.setReminder(userDto.getReminder());
+        userDto.setReminder(user.getReminder());
         userDto.setIsDisabled(user.getIsDisabled());
         return userDto;
     }

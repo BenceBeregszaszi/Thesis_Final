@@ -22,7 +22,7 @@ class LoginActivity : AppCompatActivity(), VolleyCallback<TokenPair>{
 
         val login: Button = findViewById(R.id.login_btn)
 
-        val forget_btn: Button = findViewById(R.id.forget_btn)
+        val forgetbtn: Button = findViewById(R.id.forget_btn)
 
         login.setOnClickListener {
             val username = findViewById<EditText>(R.id.text_username)
@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity(), VolleyCallback<TokenPair>{
             Authentication.logIn(authRequest,this,this)
         }
 
-        forget_btn.setOnClickListener {
+        forgetbtn.setOnClickListener {
             val intent = Intent(this, ForgetPassword::class.java)
             startActivity(intent)
         }

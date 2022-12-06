@@ -42,8 +42,12 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
         val newObj = JSONObject()
         newObj.put("postCode", body.postCode)
         newObj.put("cityName", body.cityName)
-        newObj.put("restaurants", body.restaurants)
-        val request = JsonObjectRequest(Request.Method.POST, cityUrl, newObj,
+        if(body.restaurants.isEmpty()) {
+            newObj.put("restaurants", "[6]")
+        } else {
+            newObj.put("restaurants", body.restaurants)
+        }
+        val request = object : JsonObjectRequest(Request.Method.POST, cityUrl, newObj,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)
@@ -51,6 +55,14 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
             {
                     error -> callback.onError(error.toString())
             })
+        {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Content-Type"] = "application/json"
+                headers["Authorization"] = "Bearer " + CommonProperties.accessToken
+                return headers
+            }
+        }
         Volley.newRequestQueue(context).add(request)
     }
 
@@ -63,8 +75,12 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
         val newObj = JSONObject()
         newObj.put("postCode", body.postCode)
         newObj.put("cityName", body.cityName)
-        newObj.put("restaurants", body.restaurants)
-        val request = JsonObjectRequest(Request.Method.PUT, "$cityUrl/$id", newObj,
+        if(body.restaurants.isEmpty()) {
+            newObj.put("restaurants", "[]")
+        } else {
+            newObj.put("restaurants", body.restaurants)
+        }
+        val request = object : JsonObjectRequest(Request.Method.PUT, "$cityUrl/$id", newObj,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)
@@ -72,17 +88,33 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
             {
                     error -> callback.onError(error.toString())
             })
+        {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Content-Type"] = "application/json"
+                headers["Authorization"] = "Bearer " + CommonProperties.accessToken
+                return headers
+            }
+        }
         Volley.newRequestQueue(context).add(request)
     }
 
     override fun deleteHttpRequest(id: Long, context: Context, callback: VolleyCallback<City>) {
-        val request = CustomJSONObjectRequest(Request.Method.DELETE, "$cityUrl/$id", null,
+        val request = object : CustomJSONObjectRequest(Request.Method.DELETE, "$cityUrl/$id", null,
             {
                     callback.onDeleteSuccess()
             },
             {
                     error -> callback.onError(error.toString())
             })
+        {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Content-Type"] = "application/json"
+                headers["Authorization"] = "Bearer " + CommonProperties.accessToken
+                return headers
+            }
+        }
         Volley.newRequestQueue(context).add(request)
     }
 

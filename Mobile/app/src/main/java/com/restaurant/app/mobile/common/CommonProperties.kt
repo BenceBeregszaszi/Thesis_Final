@@ -1,5 +1,7 @@
 package com.restaurant.app.mobile.common
 
+import com.restaurant.app.mobile.dto.TokenPair
+
 object CommonProperties {
 
     var accessToken: String? = null
@@ -9,4 +11,8 @@ object CommonProperties {
     var tabIndex: Int = -1
 
     var loggedIn: Boolean = false
+
+    fun setTokens(tokens: TokenPair) {
+
+    }
 }
