@@ -1,6 +1,7 @@
 package com.restaurant.app.mobile
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.Button
 import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.restaurant.app.mobile.common.CommonProperties
 import com.restaurant.app.mobile.common.VolleyCallback
 import com.restaurant.app.mobile.dto.City
@@ -32,6 +34,7 @@ class Summary : AppCompatActivity(), VolleyCallback<Reservation> {
     var city: City = City()
     var restaurant: Restaurant = Restaurant()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_summary)
@@ -49,27 +52,6 @@ class Summary : AppCompatActivity(), VolleyCallback<Reservation> {
             Toast.makeText(this, "No city or restaurant chosen", Toast.LENGTH_LONG)
         }
 
-
-        btn_login?.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-        }
-
-        btn_register?.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
-        }
-
-        btn_logout?.setOnClickListener {
-            Authentication.logOut()
-            if (!CommonProperties.loggedIn) {
-                renderLogoutHeader()
-            }
-        }
-        btn_settings?.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
-        }
 
         findViewById<Button>(R.id.btn_save_summary).setOnClickListener {
             if (this.city.id == (0).toLong() || this.restaurant.id == (0).toLong()){

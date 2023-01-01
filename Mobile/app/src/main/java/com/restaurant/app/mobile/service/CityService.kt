@@ -2,6 +2,7 @@ package com.restaurant.app.mobile.service
 
 import android.content.Context
 import com.android.volley.Request
+import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley

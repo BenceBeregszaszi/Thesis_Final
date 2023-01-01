@@ -61,27 +61,6 @@ class RestaurantActivity : AppCompatActivity(), VolleyCallback<Restaurant> {
             startActivity(intent)
             finish()
         }
-
-        btn_login?.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-        }
-
-        btn_register?.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
-        }
-
-        btn_logout?.setOnClickListener {
-            Authentication.logOut()
-            if (!CommonProperties.loggedIn) {
-                renderLogoutHeader()
-            }
-        }
-        btn_settings?.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     override fun onResume() {
