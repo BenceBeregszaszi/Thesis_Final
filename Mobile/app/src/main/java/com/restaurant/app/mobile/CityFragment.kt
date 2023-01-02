@@ -1,28 +1,29 @@
 package com.restaurant.app.mobile
 
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListView
+import android.widget.Toast
+import com.android.volley.VolleyError
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.restaurant.app.mobile.adapters.CityAdapter
+import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.dto.City
+import com.restaurant.app.mobile.service.CityService
 
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class CityFragment : Fragment(), VolleyCallback<City> {
+    private var cityList: ListView? = null
+    private var add_city_flbtn: FloatingActionButton? = null
+    private val SUCCESS_MESSAGE: String = "Successful operation!"
 
-
-class CityFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var cities: ArrayList<City> = ArrayList()
+    private var index: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,14 +32,62 @@ class CityFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_city, container, false)
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CityFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        this.add_city_flbtn = view.findViewById(R.id.float_btn_add)
+        this.cityList = view.findViewById(R.id.city_list)
+
+        CityService.getListHttpRequest(this.requireContext(),this)
+
+        this.cityList?.setOnItemClickListener { _, _, position, _ ->
+            val selectedCity = this.cityList?.adapter?.getItem(position) as City
+            val  intent = Intent(this.requireContext(), Summary::class.java)
+            intent.putExtra("city", selectedCity)
+            startActivity(intent)
+        }
+
+        this.cityList?.setOnItemLongClickListener { _, _, position, _ ->
+            val selectedCity = this.cityList?.adapter?.getItem(position) as City
+            val intent = Intent(this.requireContext(), MakeCity::class.java)
+            intent.putExtra("city", selectedCity)
+            startActivity(intent)
+            CityService.getListHttpRequest(this.requireContext(),this)
+            return@setOnItemLongClickListener(true)
+        }
+        this.add_city_flbtn?.setOnClickListener {
+            val intent = Intent(this.requireContext(), MakeCity::class.java)
+            startActivity(intent)
+            CityService.getListHttpRequest(this.requireContext(), this)
+        }
+    }
+
+    override fun onSuccess(response: City) {
+        this.cities.add(response)
+        renderCityList()
+        makeToastMessage(SUCCESS_MESSAGE)
+    }
+
+    override fun onListSuccess(response: ArrayList<City>) {
+        this.cities = response
+        renderCityList()
+    }
+
+    override fun onError(error: VolleyError) {
+        error.message?.let { makeToastMessage(it) }
+    }
+
+    override fun onDeleteSuccess() {
+        this.cities.removeAt(this.index)
+        renderCityList()
+        makeToastMessage(SUCCESS_MESSAGE)
+    }
+
+    private fun renderCityList() {
+        val cityAdapter = CityAdapter(this.cities, this.requireContext())
+        this.cityList?.adapter = cityAdapter
+    }
+
+    private fun makeToastMessage(message: String) {
+        Toast.makeText(this.requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

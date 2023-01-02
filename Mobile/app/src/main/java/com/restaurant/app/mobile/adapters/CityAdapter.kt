@@ -11,7 +11,7 @@ import com.restaurant.app.mobile.dto.City
 
 class CityAdapter() : BaseAdapter() {
 
-    private var cities : List<City> = mutableListOf()
+    private var cities : List<City> = ArrayList()
     private var context: Context? = null
 
 

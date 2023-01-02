@@ -1,5 +1,7 @@
 package com.restaurant.app.mobile.common
 
+import com.android.volley.VolleyError
+
 interface VolleyCallback<T> {
 
     fun onSuccess(response: T)
@@ -8,5 +10,5 @@ interface VolleyCallback<T> {
 
     fun onDeleteSuccess()
 
-    fun onError(message: String)
+    fun onError(error: VolleyError)
 }

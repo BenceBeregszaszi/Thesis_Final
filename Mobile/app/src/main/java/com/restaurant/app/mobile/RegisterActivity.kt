@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.android.volley.VolleyError
 import com.restaurant.app.mobile.common.VolleyCallback
 import com.restaurant.app.mobile.dto.User
 import com.restaurant.app.mobile.service.Authentication
@@ -47,14 +48,14 @@ class RegisterActivity : AppCompatActivity(), VolleyCallback<User> {
     }
 
     override fun onListSuccess(response: ArrayList<User>) {
-        TODO("Not yet implemented")
+        return
     }
 
     override fun onDeleteSuccess() {
-        TODO("Not yet implemented")
+        return
     }
 
-    override fun onError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    override fun onError(error: VolleyError) {
+        Toast.makeText(this, error.message, Toast.LENGTH_LONG).show()
     }
 }

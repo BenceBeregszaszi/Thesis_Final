@@ -28,6 +28,12 @@ public class UserController extends ControllerBase{
         return ResponseEntity.ok(userService.getById(id));
     }
 
+    @GetMapping("/users/{username}")
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public ResponseEntity<UserDto> getUserByUsername(@PathVariable final String username) {
+        return ResponseEntity.ok(userService.getByUsername(username));
+    }
+
     @PutMapping("/users/{id}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<UserDto> updateUser(@PathVariable final Long id, @RequestBody final UserDto userDto) {
@@ -35,10 +41,10 @@ public class UserController extends ControllerBase{
     }
 
 
-    @PutMapping("/users/forget-password/{id}")
+    @PutMapping("/users/forget-password")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
-    public ResponseEntity<Void> forgetPassword(@PathVariable final Long id, @RequestBody final ForgetPasswordDto forgetPasswordDto) {
-        userService.forgetPassword(id, forgetPasswordDto);
+    public ResponseEntity<Void> forgetPassword(@RequestBody final ForgetPasswordDto forgetPasswordDto) {
+        userService.forgetPassword(forgetPasswordDto);
         return ResponseEntity.ok().build();
     }
 

@@ -34,4 +34,11 @@ open class CustomJSONObjectRequest(method: Int,
         }
     }
 
+    override fun getHeaders(): MutableMap<String, String> {
+        val headers = HashMap<String, String>()
+        headers["Content-Type"] = "application/json"
+        headers["Authorization"] = "Bearer " + Common.accessToken
+        return headers
+    }
+
 }

@@ -11,7 +11,7 @@ import com.restaurant.app.mobile.dto.Restaurant
 
 class RestaurantAdapter() : BaseAdapter() {
 
-    private var restaurants: List<Restaurant> = mutableListOf()
+    private var restaurants: List<Restaurant> = ArrayList()
 
     private var context: Context? = null
 

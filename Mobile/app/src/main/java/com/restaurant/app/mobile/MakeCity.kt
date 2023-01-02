@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.android.volley.VolleyError
 import com.restaurant.app.mobile.common.VolleyCallback
 import com.restaurant.app.mobile.dto.City
 import com.restaurant.app.mobile.service.CityService
@@ -59,14 +60,14 @@ class MakeCity : AppCompatActivity(), VolleyCallback<City> {
     }
 
     override fun onListSuccess(response: ArrayList<City>) {
-        TODO("Not yet implemented")
+        return
     }
 
     override fun onDeleteSuccess() {
         finish()
     }
 
-    override fun onError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    override fun onError(error: VolleyError) {
+        Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
     }
 }

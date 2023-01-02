@@ -16,7 +16,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM user_details u WHERE u.email = :email AND u.isDisabled = TRUE")
     Optional<User> findByEmail(final String email);
 
+    Optional<User> findByUsername(final String username);
+
     Optional<User> findByIdAndIsDisabledFalse(final Long id);
 
-    Optional<User> findByIdAndAndEmailAndReminder(final Long id, final String email, final String reminder);
+    Optional<User> findByEmailAndReminder(final String email, final String reminder);
 }

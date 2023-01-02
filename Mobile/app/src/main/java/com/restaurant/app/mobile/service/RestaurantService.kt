@@ -22,19 +22,19 @@ object RestaurantService : Service<Restaurant>(), MapResponseToObj<Restaurant>, 
                                 callback.onListSuccess(restaurants)
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
     override fun getHttpRequest(id: Long, context: Context, callback: VolleyCallback<Restaurant>) {
-        val request = JsonObjectRequest(Request.Method.GET, "$restaurantUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.GET, "$restaurantUrl/$id", null,
             {
                     response -> val restaurant = mapToObj(response)
                                 callback.onSuccess(restaurant)
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }
@@ -49,13 +49,13 @@ object RestaurantService : Service<Restaurant>(), MapResponseToObj<Restaurant>, 
         newObj.put("maySeatsNumber", body.maxSeatsNumber)
         newObj.put("address", body.address)
         newObj.put("cities", body.cities)
-        val request = JsonObjectRequest(Request.Method.POST, restaurantUrl, newObj,
+        val request = CustomJSONObjectRequest(Request.Method.POST, restaurantUrl, newObj,
             {
                     response -> val restaurant = mapToObj(response)
                                 callback.onSuccess(restaurant)
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }
@@ -71,13 +71,13 @@ object RestaurantService : Service<Restaurant>(), MapResponseToObj<Restaurant>, 
         newObj.put("maySeatsNumber", body.maxSeatsNumber)
         newObj.put("address", body.address)
         newObj.put("cities", body.cities)
-        val request = JsonObjectRequest(Request.Method.PUT, "$restaurantUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.PUT, "$restaurantUrl/$id", null,
             {
                     response -> val restaurant = mapToObj(response)
                                 callback.onSuccess(restaurant)
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }
@@ -92,7 +92,7 @@ object RestaurantService : Service<Restaurant>(), MapResponseToObj<Restaurant>, 
                     callback.onDeleteSuccess()
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }

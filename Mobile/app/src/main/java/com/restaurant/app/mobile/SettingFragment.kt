@@ -5,55 +5,77 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.widget.SwitchCompat
+import com.android.volley.VolleyError
+import com.restaurant.app.mobile.common.Common
+import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.dto.User
+import com.restaurant.app.mobile.service.UserService
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SettingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class SettingFragment : Fragment(), VolleyCallback<User> {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    var user: User? = null
+    var save: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_setting, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SettingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SettingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        UserService.getUserByUsername(Common.username, this.requireContext(), this)
+        val tb_username : EditText = view.findViewById(R.id.settings_tb_username)
+        val tb_password : EditText = view.findViewById(R.id.settings_tb_password)
+        val tb_email : EditText = view.findViewById(R.id.settings_tb_email)
+        val tb_reminder : EditText = view.findViewById(R.id.settings_tb_reminder)
+        val sw_disabled : SwitchCompat = view.findViewById(R.id.sw_disabled)
+        val btn_logout : Button = view.findViewById(R.id.btn_logout)
+        val btn_save : Button = view.findViewById(R.id.btn_save)
+
+        btn_logout.setOnClickListener {
+            UserService.logout(this.requireContext())
+        }
+
+        btn_save.setOnClickListener {
+            val user = User()
+            user.username = tb_username.text.toString()
+            user.password = tb_password.text.toString()
+            user.email = tb_email.text.toString()
+            user.isDisabled = sw_disabled.isChecked
+            user.reminder = tb_reminder.text.toString()
+            UserService.putHttpRequest(user.id, user, this.requireContext(), this)
+        }
+    }
+
+    override fun onSuccess(response: User) {
+        this.user = response
+        render(this.requireView(), user!!)
+    }
+
+    override fun onListSuccess(response: ArrayList<User>) {
+        return
+    }
+
+    override fun onDeleteSuccess() {
+        return
+    }
+
+    override fun onError(error: VolleyError) {
+        Toast.makeText(this.requireContext(), error.message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun render(view: View, user: User) {
+        view.findViewById<EditText>(R.id.settings_tb_username).setText(user.username)
+        view.findViewById<EditText>(R.id.settings_tb_password).setText(user.password)
+        view.findViewById<EditText>(R.id.settings_tb_email).setText(user.email)
+        view.findViewById<EditText>(R.id.settings_tb_reminder).setText(user.reminder)
+        view.findViewById<SwitchCompat>(R.id.sw_disabled).isChecked = user.isDisabled
     }
 }

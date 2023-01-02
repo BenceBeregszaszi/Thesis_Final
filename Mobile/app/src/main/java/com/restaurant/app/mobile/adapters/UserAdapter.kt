@@ -11,7 +11,7 @@ import com.restaurant.app.mobile.dto.User
 
 class UserAdapter() : BaseAdapter() {
 
-    private var users: List<User> = mutableListOf()
+    private var users: List<User> = ArrayList()
 
     private var context: Context? = null
 

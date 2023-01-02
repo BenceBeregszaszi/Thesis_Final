@@ -24,19 +24,31 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
                                 callback.onListSuccess(users)
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
     override fun getHttpRequest(id: Long, context: Context, callback: VolleyCallback<User>) {
-        val request = JsonObjectRequest(Request.Method.GET, "$userUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$id", null,
             {
                     response -> val user = mapToObj(response)
                                 callback.onSuccess(user)
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
+            })
+        Volley.newRequestQueue(context).add(request)
+    }
+
+    fun getUserByUsername(username: String, context: Context, callback: VolleyCallback<User>) {
+        val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$username", null,
+            {
+                    response -> val user = mapToObj(response)
+                                callback.onSuccess(user)
+            },
+            {
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }
@@ -54,7 +66,7 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
                     callback.onSuccess(User())
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }
@@ -71,28 +83,28 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
         newObj.put("email", body.email)
         newObj.put("authority", body.authority)
         newObj.put("isDisabled", body.isDisabled)
-        val request = JsonObjectRequest(Request.Method.GET, "$userUrl/$id", newObj,
+        val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$id", newObj,
             {
                     response -> val user = mapToObj(response)
                                 callback.onSuccess(user)
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    fun forgetPassword(id: Long, body: ForgetPassword, context: Context, callback: VolleyCallback<User>) {
+    fun forgetPassword(body: ForgetPassword, context: Context, callback: VolleyCallback<User>) {
         val newObj = JSONObject()
         newObj.put("email", body.email)
         newObj.put("newPassword", body.newPassword)
         newObj.put("reminder", body.reminder)
-        val request = CustomJSONObjectRequest(Request.Method.PUT, "$userUrl/forget-password/$id", newObj,
+        val request = CustomJSONObjectRequest(Request.Method.PUT, "$userUrl/forget-password", newObj,
             {
                     callback.onSuccess(User())
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }
@@ -103,7 +115,7 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
                     callback.onDeleteSuccess()
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }
@@ -117,6 +129,10 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
         }
 
         return users
+    }
+
+    fun logout(context: Context) {
+
     }
 
     override fun mapToObj(response: JSONObject): User {

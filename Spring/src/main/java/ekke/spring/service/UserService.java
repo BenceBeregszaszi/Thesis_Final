@@ -66,6 +66,11 @@ public class UserService implements CrudServices<UserDto> {
         return userConversionService.UserEntity2UserDto(user);
     }
 
+    public UserDto getByUsername(final String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(String.format("User not found with this username %s", username)));
+        return userConversionService.UserEntity2UserDto(user);
+    }
+
     @Override
     public UserDto update(final Long id, final UserDto dto) {
         userDtoValidator.validate(dto);
@@ -75,9 +80,9 @@ public class UserService implements CrudServices<UserDto> {
         return userConversionService.UserEntity2UserDto(newUser);
     }
 
-    public void forgetPassword(final Long id, final ForgetPasswordDto forgetPasswordDto) {
+    public void forgetPassword(final ForgetPasswordDto forgetPasswordDto) {
         forgetPasswordValidator.validate(forgetPasswordDto);
-        Optional<User> user = userRepository.findByIdAndAndEmailAndReminder(id, forgetPasswordDto.getEmail(), forgetPasswordDto.getReminder());
+        Optional<User> user = userRepository.findByEmailAndReminder(forgetPasswordDto.getEmail(), forgetPasswordDto.getReminder());
         if (user.isEmpty()) {
             throw new UserNotFoundException("User with these data not found");
         }

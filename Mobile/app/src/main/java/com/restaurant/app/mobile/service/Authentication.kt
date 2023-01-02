@@ -1,11 +1,10 @@
 package com.restaurant.app.mobile.service
 
 import android.content.Context
-import android.util.Log
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.restaurant.app.mobile.common.CommonProperties
+import com.restaurant.app.mobile.common.CustomJSONObjectRequest
 import com.restaurant.app.mobile.common.MapResponseToObj
 import com.restaurant.app.mobile.common.VolleyCallback
 import com.restaurant.app.mobile.dto.AuthenticationRequest
@@ -21,13 +20,13 @@ object Authentication : MapResponseToObj<TokenPair>{
         val newObj = JSONObject()
         newObj.put("username", body.username)
         newObj.put("password", body.password)
-        val request = JsonObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", newObj,
+        val request = CustomJSONObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", newObj,
             {
                     response -> val tokens = mapToObj(response)
                                 callback.onSuccess(tokens)
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }
@@ -42,16 +41,12 @@ object Authentication : MapResponseToObj<TokenPair>{
                                     callback.onSuccess(tokens)
             },
             {
-                    error -> callback.onError(error.toString())
+                    error -> callback.onError(error)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
     fun logOut () {
-        CommonProperties.accessToken = null
-        CommonProperties.refreshToken = null
-        CommonProperties.loggedIn = false
-        CommonProperties.tabIndex = 1
     }
 
     fun register(body: User, context: Context, callback: VolleyCallback<User>) {
