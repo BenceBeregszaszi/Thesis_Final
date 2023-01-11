@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 public class ForgetPasswordUserControllerTest extends UserIt {
 
-    private static final String URL = "/users/forget-password/%d";
+    private static final String URL = "/users/forget-password";
 
     private static final Long EXISTING_ID = 5L;
     private static final Long NOT_EXISTING_ID = 100L;
@@ -23,7 +23,7 @@ public class ForgetPasswordUserControllerTest extends UserIt {
     public void testUserForgetPasswordOk(){
         //GIVEN
         //WHEN
-        ResultActions resultActions = put(String.format(URL, EXISTING_ID), ForgetPasswordTestUtil.getForgetPasswordDto("admin reminder", "admin123", "admin@gmail.com"));
+        ResultActions resultActions = put(URL, ForgetPasswordTestUtil.getForgetPasswordDto("admin reminder", "admin123", "admin@gmail.com"));
         //THEN
         isOk(resultActions);
     }

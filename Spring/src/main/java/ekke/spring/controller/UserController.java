@@ -28,7 +28,7 @@ public class UserController extends ControllerBase{
         return ResponseEntity.ok(userService.getById(id));
     }
 
-    @GetMapping("/users/{username}")
+    @GetMapping("/users/user/{username}")
     @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity<UserDto> getUserByUsername(@PathVariable final String username) {
         return ResponseEntity.ok(userService.getByUsername(username));
