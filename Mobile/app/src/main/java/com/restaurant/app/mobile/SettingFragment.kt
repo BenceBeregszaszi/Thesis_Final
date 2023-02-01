@@ -1,5 +1,6 @@
 package com.restaurant.app.mobile
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,16 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.widget.SwitchCompat
 import com.android.volley.VolleyError
 import com.restaurant.app.mobile.common.Common
-import com.restaurant.app.mobile.common.VolleyCallback
 import com.restaurant.app.mobile.dto.User
+import com.restaurant.app.mobile.interfaces.Success
+import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.UserService
 
 
-class SettingFragment : Fragment(), VolleyCallback<User> {
+class SettingFragment : Fragment(), Success<User>, Error {
 
     var user: User? = null
     var save: Boolean = false
@@ -30,7 +31,7 @@ class SettingFragment : Fragment(), VolleyCallback<User> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        UserService.getUserByUsername(Common.username, this.requireContext(), this)
+        UserService.getUserByUsername(Common.username, this.requireContext(), this, this)
         val tb_username : EditText = view.findViewById(R.id.settings_tb_username)
         val tb_password : EditText = view.findViewById(R.id.settings_tb_password)
         val tb_email : EditText = view.findViewById(R.id.settings_tb_email)
@@ -50,25 +51,22 @@ class SettingFragment : Fragment(), VolleyCallback<User> {
             user.email = tb_email.text.toString()
             user.isDisabled = sw_disabled.isChecked
             user.reminder = tb_reminder.text.toString()
-            UserService.putHttpRequest(user.id, user, this.requireContext(), this)
+            UserService.putHttpRequest(user.id, user, this.requireContext(), this, this)
         }
     }
 
-    override fun onSuccess(response: User) {
-        this.user = response
+    override fun onSuccess(result: User) {
+        this.user = result
         render(this.requireView(), user!!)
     }
 
-    override fun onListSuccess(response: ArrayList<User>) {
-        return
-    }
-
-    override fun onDeleteSuccess() {
-        return
-    }
-
-    override fun onError(error: VolleyError) {
-        Toast.makeText(this.requireContext(), error.message, Toast.LENGTH_SHORT).show()
+    override fun error(error: VolleyError) {
+        if (error.networkResponse.statusCode == 401) {
+            val intent = Intent(this.requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+        } else {
+            Common.makeToastMessage(this.requireContext(), error.message!!)
+        }
     }
 
     private fun render(view: View, user: User) {

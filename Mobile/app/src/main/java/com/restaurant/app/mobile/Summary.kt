@@ -1,5 +1,6 @@
 package com.restaurant.app.mobile
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -7,15 +8,17 @@ import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Toast
 import com.android.volley.VolleyError
-import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.City
 import com.restaurant.app.mobile.dto.Reservation
 import com.restaurant.app.mobile.dto.Restaurant
+import com.restaurant.app.mobile.interfaces.Success
+import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.ReservationService
 import java.time.LocalDate
 import java.util.Calendar
 
-class Summary : AppCompatActivity(), VolleyCallback<Reservation> {
+class Summary : AppCompatActivity(), Success<Reservation>, Error {
 
     var city: City = City()
     var restaurant: Restaurant = Restaurant()
@@ -54,26 +57,23 @@ class Summary : AppCompatActivity(), VolleyCallback<Reservation> {
                     reservation.restaurantId = this.restaurant.id
                     reservation.time = date
                     reservation.seatNumber = count
-                    ReservationService.postHttpRequest(reservation, this, this)
+                    ReservationService.postHttpRequest(reservation, this, this, this)
                 }
             }
         }
     }
 
-    override fun onSuccess(response: Reservation) {
+    override fun onSuccess(result: Reservation) {
         Toast.makeText(this, "Success reservation!", Toast.LENGTH_LONG).show()
         finish()
     }
 
-    override fun onListSuccess(response: ArrayList<Reservation>) {
-        return
-    }
-
-    override fun onDeleteSuccess() {
-        return
-    }
-
-    override fun onError(error: VolleyError) {
-        Toast.makeText(this, error.message, Toast.LENGTH_LONG).show()
+    override fun error(error: VolleyError) {
+        if (error.networkResponse.statusCode == 401) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        } else {
+            Common.makeToastMessage(this,error.message!!)
+        }
     }
 }

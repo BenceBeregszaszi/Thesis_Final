@@ -2,20 +2,19 @@ package com.restaurant.app.mobile
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.android.volley.VolleyError
 import com.restaurant.app.mobile.common.Common
-import com.restaurant.app.mobile.common.VolleyCallback
 import com.restaurant.app.mobile.dto.AuthenticationRequest
 import com.restaurant.app.mobile.dto.TokenPair
+import com.restaurant.app.mobile.interfaces.Success
+import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.Authentication
 
-class LoginActivity : AppCompatActivity(), VolleyCallback<TokenPair>{
+class LoginActivity : AppCompatActivity(), Success<TokenPair>, Error{
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +31,7 @@ class LoginActivity : AppCompatActivity(), VolleyCallback<TokenPair>{
             val authRequest = AuthenticationRequest()
             authRequest.username = username.text.toString()
             authRequest.password = password.text.toString()
-            Authentication.logIn(authRequest,this,this)
+            Authentication.logIn(authRequest,this,this, this)
         }
 
         forgetBtn.setOnClickListener {
@@ -41,27 +40,19 @@ class LoginActivity : AppCompatActivity(), VolleyCallback<TokenPair>{
         }
     }
 
-    override fun onSuccess(response: TokenPair) {
+    override fun onSuccess(result: TokenPair) {
         val sharedPref = getSharedPreferences("Login data", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
-        editor.putString("accessToken", response.accessToken)
-        editor.putString("refreshToken", response.refreshToken)
+        editor.putString("accessToken", result.accessToken)
+        editor.putString("refreshToken", result.refreshToken)
         editor.apply()
         Common.username = findViewById<EditText>(R.id.text_username).text.toString()
-        Common.accessToken = response.accessToken
-        Common.refreshToken = response.refreshToken
+        Common.accessToken = result.accessToken
+        Common.refreshToken = result.refreshToken
         finish()
     }
 
-    override fun onListSuccess(response: ArrayList<TokenPair>) {
-        return
-    }
-
-    override fun onDeleteSuccess() {
-        return
-    }
-
-    override fun onError(error: VolleyError) {
-        Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
+    override fun error(error: VolleyError) {
+        Common.makeToastMessage(this,error.message!!)
     }
 }

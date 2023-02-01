@@ -1,4 +1,4 @@
-package com.restaurant.app.mobile.common
+package com.restaurant.app.mobile.interfaces
 
 import org.json.JSONObject
 

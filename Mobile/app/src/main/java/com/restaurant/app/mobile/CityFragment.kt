@@ -8,16 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import android.widget.Toast
 import com.android.volley.VolleyError
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.restaurant.app.mobile.adapters.CityAdapter
-import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.City
+import com.restaurant.app.mobile.interfaces.Delete
+import com.restaurant.app.mobile.interfaces.ListSuccess
+import com.restaurant.app.mobile.interfaces.Success
+import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.CityService
 
 
-class CityFragment : Fragment(), VolleyCallback<City> {
+class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error {
     private var cityList: ListView? = null
     private var add_city_flbtn: FloatingActionButton? = null
     private val SUCCESS_MESSAGE: String = "Successful operation!"
@@ -37,7 +40,7 @@ class CityFragment : Fragment(), VolleyCallback<City> {
         this.add_city_flbtn = view.findViewById(R.id.float_btn_add)
         this.cityList = view.findViewById(R.id.city_list)
 
-        CityService.getListHttpRequest(this.requireContext(),this)
+        CityService.getListHttpRequest(this.requireContext(),this, this)
 
         this.cityList?.setOnItemClickListener { _, _, position, _ ->
             val selectedCity = this.cityList?.adapter?.getItem(position) as City
@@ -51,43 +54,45 @@ class CityFragment : Fragment(), VolleyCallback<City> {
             val intent = Intent(this.requireContext(), MakeCity::class.java)
             intent.putExtra("city", selectedCity)
             startActivity(intent)
-            CityService.getListHttpRequest(this.requireContext(),this)
+            CityService.getListHttpRequest(this.requireContext(),this, this)
             return@setOnItemLongClickListener(true)
         }
         this.add_city_flbtn?.setOnClickListener {
             val intent = Intent(this.requireContext(), MakeCity::class.java)
             startActivity(intent)
-            CityService.getListHttpRequest(this.requireContext(), this)
+            CityService.getListHttpRequest(this.requireContext(), this, this)
         }
     }
 
-    override fun onSuccess(response: City) {
-        this.cities.add(response)
+    override fun onSuccess(result: City) {
+        this.cities.add(result)
         renderCityList()
-        makeToastMessage(SUCCESS_MESSAGE)
+        Common.makeToastMessage(this.requireContext(), SUCCESS_MESSAGE)
     }
 
-    override fun onListSuccess(response: ArrayList<City>) {
-        this.cities = response
+    override fun onListSuccess(result: ArrayList<City>) {
+        this.cities = result
         renderCityList()
     }
 
-    override fun onError(error: VolleyError) {
-        error.message?.let { makeToastMessage(it) }
+    override fun error(error: VolleyError) {
+        if (error.networkResponse.statusCode == 401) {
+            val intent = Intent(this.requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+            CityService.getListHttpRequest(this.requireContext(),this, this)
+        } else {
+            Common.makeToastMessage(this.requireContext(),"Something went wrong!")
+        }
     }
 
-    override fun onDeleteSuccess() {
+    override fun deleteSuccess() {
         this.cities.removeAt(this.index)
         renderCityList()
-        makeToastMessage(SUCCESS_MESSAGE)
+        Common.makeToastMessage(this.requireContext(), SUCCESS_MESSAGE)
     }
 
     private fun renderCityList() {
         val cityAdapter = CityAdapter(this.cities, this.requireContext())
         this.cityList?.adapter = cityAdapter
-    }
-
-    private fun makeToastMessage(message: String) {
-        Toast.makeText(this.requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

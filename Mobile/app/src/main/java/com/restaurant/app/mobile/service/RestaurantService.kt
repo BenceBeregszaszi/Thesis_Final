@@ -1,48 +1,63 @@
 package com.restaurant.app.mobile.service
 
 import android.content.Context
-import android.util.Log
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.restaurant.app.mobile.common.*
+import com.restaurant.app.mobile.dto.City
 import com.restaurant.app.mobile.dto.Restaurant
+import com.restaurant.app.mobile.dto.User
+import com.restaurant.app.mobile.interfaces.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-object RestaurantService : Service<Restaurant>(), MapResponseToObj<Restaurant>, ResponseToObjectList<Restaurant> {
+object RestaurantService : MapResponseToObj<Restaurant>,
+    ResponseToObjectList<Restaurant> {
 
-    private val restaurantUrl: String = "$baseUrl/restaurants"
+    private val restaurantUrl: String = "${Common.baseUrl}/restaurants"
 
-    override fun getListHttpRequest(context: Context, callback: VolleyCallback<Restaurant>) {
+    fun getListHttpRequest(context: Context, callback: ListSuccess<Restaurant>, error: Error) {
         val request = JsonArrayRequest(Request.Method.GET, restaurantUrl, null,
             {
                     response -> val restaurants = convertResponseToObjList(response)
                                 callback.onListSuccess(restaurants)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun getHttpRequest(id: Long, context: Context, callback: VolleyCallback<Restaurant>) {
+    fun getListHttpRequest(context: Context, callback: MultipleRequestCallback<User, City, Restaurant>, error: Error) {
+        val request = JsonArrayRequest(Request.Method.GET, restaurantUrl, null,
+            {
+                    response -> val restaurants = convertResponseToObjList(response)
+                callback.onSuccessListThird(restaurants)
+            },
+            {
+                    volleyError -> error.error(volleyError)
+            })
+        Volley.newRequestQueue(context).add(request)
+    }
+
+    fun getHttpRequest(id: Long, context: Context, callback: Success<Restaurant>, error: Error) {
         val request = CustomJSONObjectRequest(Request.Method.GET, "$restaurantUrl/$id", null,
             {
                     response -> val restaurant = mapToObj(response)
                                 callback.onSuccess(restaurant)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun postHttpRequest(
+    fun postHttpRequest(
         body: Restaurant,
         context: Context,
-        callback: VolleyCallback<Restaurant>
+        callback: Success<Restaurant>,
+        error: Error
     ) {
         val newObj = JSONObject()
         newObj.put("name", body.name)
@@ -55,16 +70,17 @@ object RestaurantService : Service<Restaurant>(), MapResponseToObj<Restaurant>, 
                                 callback.onSuccess(restaurant)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun putHttpRequest(
+    fun putHttpRequest(
         id: Long,
         body: Restaurant,
         context: Context,
-        callback: VolleyCallback<Restaurant>
+        callback: Success<Restaurant>,
+        error: Error
     ) {
         val newObj = JSONObject()
         newObj.put("name", body.name)
@@ -77,22 +93,23 @@ object RestaurantService : Service<Restaurant>(), MapResponseToObj<Restaurant>, 
                                 callback.onSuccess(restaurant)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun deleteHttpRequest(
+    fun deleteHttpRequest(
         id: Long,
         context: Context,
-        callback: VolleyCallback<Restaurant>
+        callback: Delete,
+        error: Error
     ) {
         val request = CustomJSONObjectRequest(Request.Method.DELETE, "$restaurantUrl/$id", null,
             {
-                    callback.onDeleteSuccess()
+                    callback.deleteSuccess()
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }

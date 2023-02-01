@@ -5,18 +5,19 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.restaurant.app.mobile.common.CustomJSONObjectRequest
-import com.restaurant.app.mobile.common.MapResponseToObj
-import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.interfaces.MapResponseToObj
 import com.restaurant.app.mobile.dto.AuthenticationRequest
 import com.restaurant.app.mobile.dto.TokenPair
 import com.restaurant.app.mobile.dto.User
+import com.restaurant.app.mobile.interfaces.Success
+import com.restaurant.app.mobile.interfaces.Error
 import org.json.JSONObject
 
-object Authentication : MapResponseToObj<TokenPair>{
+object Authentication : MapResponseToObj<TokenPair> {
 
     private const val authenticationUrl: String = "http://10.0.2.2:8080/authentication"
 
-    fun logIn(body: AuthenticationRequest, context: Context, callback: VolleyCallback<TokenPair>){
+    fun logIn(body: AuthenticationRequest, context: Context, callback: Success<TokenPair>, error: Error){
         val newObj = JSONObject()
         newObj.put("username", body.username)
         newObj.put("password", body.password)
@@ -26,12 +27,12 @@ object Authentication : MapResponseToObj<TokenPair>{
                                 callback.onSuccess(tokens)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    fun refreshTokens(body: TokenPair, context: Context, callback: VolleyCallback<TokenPair>) {
+    fun refreshTokens(body: TokenPair, context: Context, callback: Success<TokenPair>, error: Error) {
         val newObj = JSONObject()
         newObj.put("refreshToken", body.refreshToken)
         newObj.put("accessToken", body.accessToken)
@@ -41,16 +42,13 @@ object Authentication : MapResponseToObj<TokenPair>{
                                     callback.onSuccess(tokens)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    fun logOut () {
-    }
-
-    fun register(body: User, context: Context, callback: VolleyCallback<User>) {
-        UserService.postHttpRequest(body, context, callback)
+    fun register(body: User, context: Context, callback: Success<User>, error: Error) {
+        UserService.postHttpRequest(body, context, callback, error)
     }
 
 

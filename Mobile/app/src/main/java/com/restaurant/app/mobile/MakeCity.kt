@@ -1,18 +1,20 @@
 package com.restaurant.app.mobile
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
 import com.android.volley.VolleyError
-import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.City
+import com.restaurant.app.mobile.interfaces.Delete
+import com.restaurant.app.mobile.interfaces.Success
+import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.CityService
 
-class MakeCity : AppCompatActivity(), VolleyCallback<City> {
+class MakeCity : AppCompatActivity(), Success<City>, Delete, Error{
 
     private var city: City = City()
 
@@ -41,33 +43,34 @@ class MakeCity : AppCompatActivity(), VolleyCallback<City> {
         makeCity.setOnClickListener {
             this.city.postCode = findViewById<EditText>(R.id.tb_postCode).text.toString()
             this.city.cityName = findViewById<EditText>(R.id.tb_cityName).text.toString()
-            CityService.postHttpRequest(this.city, this, this)
+            CityService.postHttpRequest(this.city, this, this, this)
         }
 
         editCity.setOnClickListener {
             this.city.postCode = findViewById<EditText>(R.id.tb_postCode).text.toString()
             this.city.cityName = findViewById<EditText>(R.id.tb_cityName).text.toString()
-            CityService.putHttpRequest(this.city.id, this.city, this, this)
+            CityService.putHttpRequest(this.city.id, this.city, this, this, this)
         }
 
         deleteCity.setOnClickListener {
-            CityService.deleteHttpRequest(this.city.id, this, this)
+            CityService.deleteHttpRequest(this.city.id, this, this, this)
         }
     }
 
-    override fun onSuccess(response: City) {
+    override fun onSuccess(result: City) {
         finish()
     }
 
-    override fun onListSuccess(response: ArrayList<City>) {
-        return
-    }
-
-    override fun onDeleteSuccess() {
+    override fun deleteSuccess() {
         finish()
     }
 
-    override fun onError(error: VolleyError) {
-        Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
+    override fun error(error: VolleyError) {
+        if (error.networkResponse.statusCode == 401) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        } else {
+            Common.makeToastMessage(this,error.message!!)
+        }
     }
 }

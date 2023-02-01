@@ -8,13 +8,14 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import com.restaurant.app.mobile.R
 import com.restaurant.app.mobile.dto.Reservation
+import com.restaurant.app.mobile.dto.ReservationRepresentation
 
 class ReservationAdapter() : BaseAdapter() {
 
-    private var reservations: List<Reservation> = ArrayList()
+    private var reservations: List<ReservationRepresentation> = ArrayList()
     private var context: Context? = null
 
-    constructor(reservations: List<Reservation>, context: Context): this() {
+    constructor(reservations: List<ReservationRepresentation>, context: Context): this() {
         this.reservations = reservations
         this.context = context
     }

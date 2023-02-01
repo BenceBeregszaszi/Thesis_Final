@@ -5,12 +5,14 @@ import ekke.spring.common.exception.ValidationException;
 import ekke.spring.conversion.UserConversionService;
 import ekke.spring.dao.entity.User;
 import ekke.spring.dao.repository.UserRepository;
+import ekke.spring.dao.specification.UserSpecification;
 import ekke.spring.dto.ForgetPasswordDto;
 import ekke.spring.dto.UserDto;
 import ekke.spring.service.exception.UserNotFoundException;
 import ekke.spring.validators.ForgetPasswordValidator;
 import ekke.spring.validators.UserDtoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +41,10 @@ public class UserService implements CrudServices<UserDto> {
     public UserDto add(final UserDto dto) {
         userDtoValidator.validate(dto);
         dto.setIsDisabled(false);
-        Optional<User> disabledUser = userRepository.findByEmail(dto.getEmail());
+        UserSpecification specification = new UserSpecification();
+        specification.setEmail(dto.getEmail());
+        specification.setIsDisabled(true);
+        Optional<User> disabledUser = userRepository.findAll(specification).stream().findFirst();
         User newUser;
         if (disabledUser.isPresent()){
             newUser = disabledUser.get();

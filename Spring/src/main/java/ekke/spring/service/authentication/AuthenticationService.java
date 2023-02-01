@@ -3,6 +3,7 @@ package ekke.spring.service.authentication;
 import ekke.spring.common.exception.ValidationException;
 import ekke.spring.dao.entity.User;
 import ekke.spring.dao.repository.UserRepository;
+import ekke.spring.dao.specification.UserSpecification;
 import ekke.spring.dto.AuthenticationRequestDto;
 import ekke.spring.dto.TokenPairDto;
 import ekke.spring.service.exception.AuthenticationException;
@@ -40,7 +41,11 @@ public class AuthenticationService {
     public TokenPairDto authenticate(final AuthenticationRequestDto requestDto){
         authenticationRequestValidator.validate(requestDto);
         Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDto.getUsername(), requestDto.getPassword()));
-        User databaseUser = userRepository.findByUsernameAndPassword(auth.getPrincipal().toString(), auth.getCredentials().toString()).get();
+        UserSpecification specification = new UserSpecification();
+        specification.setUsername(auth.getPrincipal().toString());
+        specification.setPassword(auth.getCredentials().toString());
+        specification.setIsDisabled(false);
+        User databaseUser = userRepository.findAll(specification).stream().findFirst().get();
         AuthenticatedUser authenticatedUser = buildAuthenticatedUser(databaseUser, auth);
         final String accessToken = jwtService.generateUserToken(JwtService.TokenType.ACCESS, authenticatedUser);
         final String refreshToken = jwtService.generateUserToken(JwtService.TokenType.REFRESH, authenticatedUser);

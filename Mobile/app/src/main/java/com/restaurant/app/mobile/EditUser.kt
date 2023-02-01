@@ -1,17 +1,20 @@
 package com.restaurant.app.mobile
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Switch
-import android.widget.Toast
 import com.android.volley.VolleyError
-import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.User
+import com.restaurant.app.mobile.interfaces.Delete
+import com.restaurant.app.mobile.interfaces.Success
+import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.UserService
 
-class EditUser : AppCompatActivity(), VolleyCallback<User> {
+class EditUser : AppCompatActivity(), Success<User>, Delete, Error {
 
     var user: User? = null
     var save: Boolean = false
@@ -47,33 +50,30 @@ class EditUser : AppCompatActivity(), VolleyCallback<User> {
             this.user?.email = tb_email?.text.toString()
             this.user?.reminder = tb_reminder?.text.toString()
             this.user?.isDisabled = sw_disabled!!.isChecked
-            UserService.putHttpRequest(this.user!!.id, this.user!!, this, this)
+            UserService.putHttpRequest(this.user!!.id, this.user!!, this, this, this)
         }
 
         btn_delete?.setOnClickListener {
-            UserService.deleteHttpRequest(user!!.id, this, this)
+            UserService.deleteHttpRequest(user!!.id, this, this, this)
         }
     }
 
-    override fun onSuccess(response: User) {
-        makeToastMessage(SUCCESS_MESSAGE)
+    override fun onSuccess(result: User) {
+        Common.makeToastMessage(this, SUCCESS_MESSAGE)
         finish()
     }
 
-    override fun onListSuccess(response: ArrayList<User>) {
-        return
-    }
-
-    override fun onDeleteSuccess() {
-        makeToastMessage(SUCCESS_MESSAGE)
+    override fun deleteSuccess() {
+        Common.makeToastMessage(this, SUCCESS_MESSAGE)
         finish()
     }
 
-    override fun onError(error: VolleyError) {
-        error.message?.let { makeToastMessage(it) }
-    }
-
-    private fun makeToastMessage(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    override fun error(error: VolleyError) {
+        if (error.networkResponse.statusCode == 401) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        } else {
+            Common.makeToastMessage(this,"Something went wrong!")
+        }
     }
 }

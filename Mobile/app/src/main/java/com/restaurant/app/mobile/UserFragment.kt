@@ -9,15 +9,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 import com.android.volley.VolleyError
 import com.restaurant.app.mobile.adapters.UserAdapter
 import com.restaurant.app.mobile.common.Common
-import com.restaurant.app.mobile.common.VolleyCallback
 import com.restaurant.app.mobile.dto.User
+import com.restaurant.app.mobile.interfaces.Delete
+import com.restaurant.app.mobile.interfaces.ListSuccess
+import com.restaurant.app.mobile.interfaces.Success
+import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.UserService
 
-class UserFragment : Fragment(), VolleyCallback<User> {
+class UserFragment : Fragment(), Success<User>, Delete, ListSuccess<User>, Error {
 
     private var userList: ListView? = null
     private var userText: TextView? = null
@@ -48,7 +50,7 @@ class UserFragment : Fragment(), VolleyCallback<User> {
             userText?.visibility = View.GONE
             btnLogin?.visibility = View.GONE
             userList?.visibility = View.VISIBLE
-            UserService.getListHttpRequest(this.requireContext(), this)
+            UserService.getListHttpRequest(this.requireContext(), this, this)
         }
 
         this.userList?.setOnItemClickListener { _, _, position, _ ->
@@ -74,37 +76,38 @@ class UserFragment : Fragment(), VolleyCallback<User> {
             userText?.visibility = View.GONE
             btnLogin?.visibility = View.GONE
             userList?.visibility = View.VISIBLE
-            UserService.getListHttpRequest(this.requireContext(), this)
+            UserService.getListHttpRequest(this.requireContext(), this, this)
         }
     }
 
-    override fun onSuccess(response: User) {
-        this.users.add(response)
+    override fun onSuccess(result: User) {
+        this.users.add(result)
         renderUsersList()
-        makeToastMessage(SUCCESS_MESSAGE)
+        Common.makeToastMessage(this.requireContext(), SUCCESS_MESSAGE)
     }
 
-    override fun onListSuccess(response: ArrayList<User>) {
-        this.users = response
+    override fun onListSuccess(result: ArrayList<User>) {
+        this.users = result
         renderUsersList()
     }
 
-    override fun onDeleteSuccess() {
+    override fun deleteSuccess() {
         this.users.removeAt(index)
         renderUsersList()
-        makeToastMessage(SUCCESS_MESSAGE)
+        Common.makeToastMessage(this.requireContext(), SUCCESS_MESSAGE)
     }
 
-    override fun onError(error: VolleyError) {
-        error.message?.let { makeToastMessage(it) }
+    override fun error(error: VolleyError) {
+        if (error.networkResponse.statusCode == 401) {
+            val intent = Intent(this.requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+        } else {
+            Common.makeToastMessage(this.requireContext(), error.message!!)
+        }
     }
 
     private fun renderUsersList() {
         val usersAdapter = UserAdapter(users, this.requireContext())
         this.userList?.adapter = usersAdapter
-    }
-
-    private fun makeToastMessage(message: String) {
-        Toast.makeText(this.requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

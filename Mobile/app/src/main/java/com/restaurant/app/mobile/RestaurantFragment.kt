@@ -7,18 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import android.widget.Toast
-import androidx.core.view.get
 import com.android.volley.VolleyError
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.restaurant.app.mobile.adapters.RestaurantAdapter
-import com.restaurant.app.mobile.common.VolleyCallback
-import com.restaurant.app.mobile.dto.City
+import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.Restaurant
+import com.restaurant.app.mobile.interfaces.Delete
+import com.restaurant.app.mobile.interfaces.ListSuccess
+import com.restaurant.app.mobile.interfaces.Success
+import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.RestaurantService
 
 
-class RestaurantFragment : Fragment(), VolleyCallback<Restaurant> {
+class RestaurantFragment : Fragment(), Success<Restaurant>, ListSuccess<Restaurant>, Delete, Error {
     private val SUCCESS_MESSAGE: String = "Successful operation!"
 
     private var restaurants: ArrayList<Restaurant> = ArrayList()
@@ -39,7 +40,7 @@ class RestaurantFragment : Fragment(), VolleyCallback<Restaurant> {
         this.restaurantList = view.findViewById(R.id.restaurant_list)
         this.add_restaurant_flbtn = view.findViewById(R.id.float_btn_add)
 
-        RestaurantService.getListHttpRequest(this.requireContext(), this)
+        RestaurantService.getListHttpRequest(this.requireContext(), this, this)
 
         this.restaurantList?.setOnItemClickListener { _, _, position, _ ->
             val selectedRestaurant = this.restaurantList?.adapter?.getItem(position) as Restaurant
@@ -53,7 +54,7 @@ class RestaurantFragment : Fragment(), VolleyCallback<Restaurant> {
             val intent = Intent(this.requireContext(), MakeRestaurant::class.java)
             intent.putExtra("restaurant", selectedRestaurant)
             startActivity(intent)
-            RestaurantService.getListHttpRequest(this.requireContext(), this)
+            RestaurantService.getListHttpRequest(this.requireContext(), this, this)
             return@setOnItemLongClickListener(true)
         }
 
@@ -63,33 +64,34 @@ class RestaurantFragment : Fragment(), VolleyCallback<Restaurant> {
         }
     }
 
-    override fun onSuccess(response: Restaurant) {
-        this.restaurants.add(response)
+    override fun onSuccess(result: Restaurant) {
+        this.restaurants.add(result)
         this.renderRestaurantList()
-        makeToastMessage(SUCCESS_MESSAGE)
+        Common.makeToastMessage(this.requireContext(), SUCCESS_MESSAGE)
     }
 
-    override fun onListSuccess(response: ArrayList<Restaurant>) {
-        this.restaurants = response
+    override fun onListSuccess(result: ArrayList<Restaurant>) {
+        this.restaurants = result
         this.renderRestaurantList()
     }
 
-    override fun onDeleteSuccess() {
+    override fun deleteSuccess() {
         this.restaurants.removeAt(this.index)
         renderRestaurantList()
-        makeToastMessage(SUCCESS_MESSAGE)
+        Common.makeToastMessage(this.requireContext(), SUCCESS_MESSAGE)
     }
 
-    override fun onError(error: VolleyError) {
-        error.message?.let { makeToastMessage(it) }
+    override fun error(error: VolleyError) {
+        if (error.networkResponse.statusCode == 401) {
+            val intent = Intent(this.requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+        } else {
+            Common.makeToastMessage(this.requireContext(), error.message!!)
+        }
     }
 
     private fun renderRestaurantList() {
         val restaurantAdapter = RestaurantAdapter(this.restaurants, this.requireContext())
         this.restaurantList?.adapter = restaurantAdapter
-    }
-
-    private fun makeToastMessage(message: String) {
-        Toast.makeText(this.requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

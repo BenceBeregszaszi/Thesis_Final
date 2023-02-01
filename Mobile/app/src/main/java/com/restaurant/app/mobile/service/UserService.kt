@@ -1,59 +1,73 @@
 package com.restaurant.app.mobile.service
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.JsonRequest
 import com.android.volley.toolbox.Volley
 import com.restaurant.app.mobile.common.*
+import com.restaurant.app.mobile.dto.City
 import com.restaurant.app.mobile.dto.ForgetPassword
+import com.restaurant.app.mobile.dto.Restaurant
 import com.restaurant.app.mobile.dto.User
+import com.restaurant.app.mobile.interfaces.*
 import org.json.JSONArray
 import org.json.JSONObject
 
 
-object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToObj<User> {
+object UserService : ResponseToObjectList<User>, MapResponseToObj<User> {
 
-    private val userUrl: String = "$baseUrl/users"
+    private val userUrl: String = "${Common.baseUrl}/users"
 
-    override fun getListHttpRequest(context: Context, callback: VolleyCallback<User>) {
+    fun getListHttpRequest(context: Context, callback: ListSuccess<User>, error: Error) {
         val request = JsonArrayRequest(Request.Method.GET, userUrl, null,
             {
                     response -> val users = convertResponseToObjList(response)
                                 callback.onListSuccess(users)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun getHttpRequest(id: Long, context: Context, callback: VolleyCallback<User>) {
+    fun getListHttpRequest(context: Context, callback: MultipleRequestCallback<User, City, Restaurant>, error: Error) {
+        val request = JsonArrayRequest(Request.Method.GET, userUrl, null,
+            {
+                    response -> val users = convertResponseToObjList(response)
+                callback.onSuccessList(users)
+            },
+            {
+                    volleyError -> error.error(volleyError)
+            })
+        Volley.newRequestQueue(context).add(request)
+    }
+
+    fun getHttpRequest(id: Long, context: Context, callback: Success<User> , error: Error) {
         val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$id", null,
             {
                     response -> val user = mapToObj(response)
                                 callback.onSuccess(user)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    fun getUserByUsername(username: String, context: Context, callback: VolleyCallback<User>) {
+    fun getUserByUsername(username: String, context: Context, callback: Success<User> , error: Error) {
         val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$username", null,
             {
                     response -> val user = mapToObj(response)
                                 callback.onSuccess(user)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun postHttpRequest(body: User, context: Context, callback: VolleyCallback<User>) {
+    fun postHttpRequest(body: User, context: Context, callback: Success<User> , error: Error) {
         val newObj = JSONObject()
         newObj.put("username", body.username)
         newObj.put("password", body.password)
@@ -61,21 +75,22 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
         newObj.put("authority", Authority.USER)
         newObj.put("isDisabled", body.isDisabled)
         newObj.put("reminder", body.reminder)
-        val request = CustomJSONObjectRequest(Request.Method.POST, "$baseUrl/authentication/register", newObj,
+        val request = CustomJSONObjectRequest(Request.Method.POST, "${Common.baseUrl}/authentication/register", newObj,
             {
                     callback.onSuccess(User())
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun putHttpRequest(
+    fun putHttpRequest(
         id: Long,
         body: User,
         context: Context,
-        callback: VolleyCallback<User>
+        callback: Success<User>,
+        error: Error
     ) {
         val newObj = JSONObject()
         newObj.put("username", body.username)
@@ -89,12 +104,12 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
                                 callback.onSuccess(user)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    fun forgetPassword(body: ForgetPassword, context: Context, callback: VolleyCallback<User>) {
+    fun forgetPassword(body: ForgetPassword, context: Context, callback: Success<User> , error: Error) {
         val newObj = JSONObject()
         newObj.put("email", body.email)
         newObj.put("newPassword", body.newPassword)
@@ -104,18 +119,18 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
                     callback.onSuccess(User())
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun deleteHttpRequest(id: Long, context: Context, callback: VolleyCallback<User>) {
+    fun deleteHttpRequest(id: Long, context: Context, callback: Delete, error: Error) {
         val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$id", null,
             {
-                    callback.onDeleteSuccess()
+                    callback.deleteSuccess()
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
@@ -132,7 +147,11 @@ object UserService : Service<User>(), ResponseToObjectList<User>, MapResponseToO
     }
 
     fun logout(context: Context) {
-
+        val sharedPreferences = context.getSharedPreferences("MainData", AppCompatActivity.MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
+        Common.accessToken = ""
+        Common.refreshToken = ""
+        Common.username = ""
     }
 
     override fun mapToObj(response: JSONObject): User {

@@ -2,44 +2,57 @@ package com.restaurant.app.mobile.service
 
 import android.content.Context
 import com.android.volley.Request
-import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.restaurant.app.mobile.common.*
 import com.restaurant.app.mobile.dto.City
+import com.restaurant.app.mobile.dto.Restaurant
+import com.restaurant.app.mobile.dto.User
+import com.restaurant.app.mobile.interfaces.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToObj<City>{
+object CityService :  ResponseToObjectList<City>, MapResponseToObj<City> {
 
-    private val cityUrl: String = "$baseUrl/cities"
+    private val cityUrl: String = "${Common.baseUrl}/cities"
 
-    override fun getListHttpRequest(context: Context, callback: VolleyCallback<City>) {
+    fun getListHttpRequest(context: Context, callback: ListSuccess<City>, error: Error) {
         val request = JsonArrayRequest(Request.Method.GET, cityUrl, null,
             {
                     response -> val cities = convertResponseToObjList(response)
                                 callback.onListSuccess(cities)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun getHttpRequest(id: Long, context: Context, callback: VolleyCallback<City>) {
+    fun getListHttpRequest(context: Context, callback: MultipleRequestCallback<User, City, Restaurant>,error: Error) {
+        val request = JsonArrayRequest(Request.Method.GET, cityUrl, null,
+            {
+                    response -> val cities = convertResponseToObjList(response)
+                callback.onSuccessListSecond(cities)
+            },
+            {
+                    volleyError -> error.error(volleyError)
+            })
+        Volley.newRequestQueue(context).add(request)
+    }
+
+    fun getHttpRequest(id: Long, context: Context, callback: Success<City>, error: Error) {
         val request = CustomJSONObjectRequest(Request.Method.GET, "$cityUrl/$id", null,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun postHttpRequest(body: City, context: Context, callback: VolleyCallback<City>) {
+    fun postHttpRequest(body: City, context: Context, callback: Success<City>, error: Error) {
         val newObj = JSONObject()
         newObj.put("postCode", body.postCode)
         newObj.put("cityName", body.cityName)
@@ -48,24 +61,24 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
         } else {
             newObj.put("restaurants", body.restaurants)
         }
-        val request = object : CustomJSONObjectRequest(Request.Method.POST, cityUrl, newObj,
+        val request = object : CustomJSONObjectRequest(Method.POST, cityUrl, newObj,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         {
         }
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun putHttpRequest(
+    fun putHttpRequest(
         id: Long,
         body: City,
         context: Context,
-        callback: VolleyCallback<City>
+        callback: Success<City>, error: Error
     ) {
         val newObj = JSONObject()
         newObj.put("postCode", body.postCode)
@@ -81,20 +94,20 @@ object CityService : Service<City>(), ResponseToObjectList<City>, MapResponseToO
                                 callback.onSuccess(city)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         {
         }
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun deleteHttpRequest(id: Long, context: Context, callback: VolleyCallback<City>) {
+    fun deleteHttpRequest(id: Long, context: Context, callback: Delete, error: Error) {
         val request = object : CustomJSONObjectRequest(Request.Method.DELETE, "$cityUrl/$id", null,
             {
-                    callback.onDeleteSuccess()
+                    callback.deleteSuccess()
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         {
         }

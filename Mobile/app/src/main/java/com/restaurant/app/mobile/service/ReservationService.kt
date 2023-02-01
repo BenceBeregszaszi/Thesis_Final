@@ -3,48 +3,48 @@ package com.restaurant.app.mobile.service
 import android.content.Context
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.restaurant.app.mobile.common.*
 import com.restaurant.app.mobile.dto.Reservation
+import com.restaurant.app.mobile.interfaces.*
 import org.json.JSONArray
 import org.json.JSONObject
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.util.Date
 
-object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation>, ResponseToObjectList<Reservation> {
+object ReservationService : MapResponseToObj<Reservation>,
+    ResponseToObjectList<Reservation> {
 
-    private val reservationUrl: String = "$baseUrl/reservations"
+    private val reservationUrl: String = "${Common.baseUrl}/reservations"
 
-    override fun getListHttpRequest(context: Context, callback: VolleyCallback<Reservation>) {
+    fun getListHttpRequest(context: Context, callback: ListSuccess<Reservation>, error: Error) {
         val request = JsonArrayRequest(Request.Method.GET, reservationUrl, null,
             {
                     response -> val reservations = convertResponseToObjList(response)
                                 callback.onListSuccess(reservations)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun getHttpRequest(id: Long, context: Context, callback: VolleyCallback<Reservation>) {
+    fun getHttpRequest(id: Long, context: Context, callback: Success<Reservation>, error: Error) {
         val request = CustomJSONObjectRequest(Request.Method.GET, "$reservationUrl/$id", null,
             {
                     response -> val reservation = mapToObj(response)
                                 callback.onSuccess(reservation)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun postHttpRequest(
+    fun postHttpRequest(
         body: Reservation,
         context: Context,
-        callback: VolleyCallback<Reservation>
+        callback: Success<Reservation>,
+        error: Error
     ) {
         val newObj = JSONObject()
         newObj.put("cityId", body.cityId)
@@ -58,16 +58,17 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
                                 callback.onSuccess(reservation)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun putHttpRequest(
+    fun putHttpRequest(
         id: Long,
         body: Reservation,
         context: Context,
-        callback: VolleyCallback<Reservation>
+        callback: Success<Reservation>,
+        error: Error
     ) {
         val newObj = JSONObject()
         newObj.put("cityId", body.cityId)
@@ -80,22 +81,23 @@ object ReservationService : Service<Reservation>(), MapResponseToObj<Reservation
                                 callback.onSuccess(reservation)
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }
 
-    override fun deleteHttpRequest(
+    fun deleteHttpRequest(
         id: Long,
         context: Context,
-        callback: VolleyCallback<Reservation>
+        callback: Delete,
+        error: Error
     ) {
         val request = CustomJSONObjectRequest(Request.Method.DELETE, "$reservationUrl/$id", null,
             {
-                    callback.onDeleteSuccess()
+                    callback.deleteSuccess()
             },
             {
-                    error -> callback.onError(error)
+                    volleyError -> error.error(volleyError)
             })
         Volley.newRequestQueue(context).add(request)
     }

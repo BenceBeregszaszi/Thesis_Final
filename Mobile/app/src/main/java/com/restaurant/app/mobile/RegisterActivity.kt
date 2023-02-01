@@ -5,13 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.android.volley.VolleyError
-import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.User
+import com.restaurant.app.mobile.interfaces.Success
+import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.Authentication
 
-class RegisterActivity : AppCompatActivity(), VolleyCallback<User> {
+class RegisterActivity : AppCompatActivity(), Success<User>, Error {
 
     private var register: Button? = null
     private var login: Button? = null
@@ -39,23 +40,15 @@ class RegisterActivity : AppCompatActivity(), VolleyCallback<User> {
             user.email = email
             user.isDisabled = false
             user.reminder = reminder
-            Authentication.register(user, this, this)
+            Authentication.register(user, this, this, this)
         }
     }
 
-    override fun onSuccess(response: User) {
+    override fun onSuccess(result: User) {
         finish()
     }
 
-    override fun onListSuccess(response: ArrayList<User>) {
-        return
-    }
-
-    override fun onDeleteSuccess() {
-        return
-    }
-
-    override fun onError(error: VolleyError) {
-        Toast.makeText(this, error.message, Toast.LENGTH_LONG).show()
+    override fun error(error: VolleyError) {
+        Common.makeToastMessage(this,error.message!!)
     }
 }

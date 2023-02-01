@@ -2,12 +2,10 @@ package ekke.spring.dao.repository;
 
 import ekke.spring.dao.entity.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 
 @Repository
-public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
-
-    Optional<Restaurant> findByNameAndMaxSeatsNumber(final String name, final int maxSeatsNumber);
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long>, JpaSpecificationExecutor<Restaurant> {
 }

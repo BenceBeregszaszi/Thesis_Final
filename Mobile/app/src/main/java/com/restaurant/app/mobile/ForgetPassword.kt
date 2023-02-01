@@ -4,14 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.android.volley.VolleyError
-import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.ForgetPassword
 import com.restaurant.app.mobile.dto.User
+import com.restaurant.app.mobile.interfaces.Success
+import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.UserService
 
-class ForgetPassword : AppCompatActivity(), VolleyCallback<User> {
+class ForgetPassword : AppCompatActivity(), Success<User>, Error {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,24 +31,16 @@ class ForgetPassword : AppCompatActivity(), VolleyCallback<User> {
                 forgetPasswordDto.newPassword = password.text.toString()
                 forgetPasswordDto.email = email.text.toString()
 
-                UserService.forgetPassword(forgetPasswordDto, this, this)
+                UserService.forgetPassword(forgetPasswordDto, this, this, this)
             }
         }
     }
 
-    override fun onSuccess(response: User) {
+    override fun onSuccess(result: User) {
         finish()
     }
 
-    override fun onListSuccess(response: ArrayList<User>) {
-        return
-    }
-
-    override fun onDeleteSuccess() {
-        return
-    }
-
-    override fun onError(error: VolleyError) {
-        Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
+    override fun error(error: VolleyError) {
+        Common.makeToastMessage(this,error.message!!)
     }
 }

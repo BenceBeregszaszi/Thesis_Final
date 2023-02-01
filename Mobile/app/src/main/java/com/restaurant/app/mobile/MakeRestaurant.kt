@@ -1,17 +1,20 @@
 package com.restaurant.app.mobile
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.android.volley.VolleyError
-import com.restaurant.app.mobile.common.VolleyCallback
+import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.Restaurant
+import com.restaurant.app.mobile.interfaces.Delete
+import com.restaurant.app.mobile.interfaces.Success
+import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.RestaurantService
 
-class MakeRestaurant : AppCompatActivity(), VolleyCallback<Restaurant> {
+class MakeRestaurant : AppCompatActivity(), Success<Restaurant>, Delete,  Error{
 
     private var restaurant = Restaurant()
 
@@ -41,34 +44,35 @@ class MakeRestaurant : AppCompatActivity(), VolleyCallback<Restaurant> {
             this.restaurant.name = findViewById<EditText>(R.id.resta_tb_name).text.toString()
             this.restaurant.maxSeatsNumber = findViewById<EditText>(R.id.resta_tb_seat_number).text.toString().toInt()
             this.restaurant.address = findViewById<EditText>(R.id.resta_tb_address).text.toString()
-            RestaurantService.postHttpRequest(this.restaurant, this, this)
+            RestaurantService.postHttpRequest(this.restaurant, this, this, this)
         }
 
         editRestaurant.setOnClickListener {
             this.restaurant.name = findViewById<EditText>(R.id.resta_tb_name).text.toString()
             this.restaurant.maxSeatsNumber = findViewById<EditText>(R.id.resta_tb_seat_number).text.toString().toInt()
             this.restaurant.address = findViewById<EditText>(R.id.resta_tb_address).text.toString()
-            RestaurantService.putHttpRequest(this.restaurant.id, this.restaurant, this, this)
+            RestaurantService.putHttpRequest(this.restaurant.id, this.restaurant, this, this, this)
         }
 
         deleteRestaurant.setOnClickListener {
-            RestaurantService.deleteHttpRequest(this.restaurant.id, this, this)
+            RestaurantService.deleteHttpRequest(this.restaurant.id, this, this, this)
         }
     }
 
-    override fun onSuccess(response: Restaurant) {
+    override fun onSuccess(result: Restaurant) {
         finish()
     }
 
-    override fun onListSuccess(response: ArrayList<Restaurant>) {
-        return
-    }
-
-    override fun onDeleteSuccess() {
+    override fun deleteSuccess() {
         finish()
     }
 
-    override fun onError(error: VolleyError) {
-        Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
+    override fun error(error: VolleyError) {
+        if (error.networkResponse.statusCode == 401) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        } else {
+            Common.makeToastMessage(this,error.message!!)
+        }
     }
 }
