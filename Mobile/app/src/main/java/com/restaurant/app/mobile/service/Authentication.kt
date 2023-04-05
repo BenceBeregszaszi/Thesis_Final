@@ -12,6 +12,8 @@ import com.restaurant.app.mobile.dto.User
 import com.restaurant.app.mobile.interfaces.Success
 import com.restaurant.app.mobile.interfaces.Error
 import org.json.JSONObject
+import java.math.BigInteger
+import java.security.MessageDigest
 
 object Authentication : MapResponseToObj<TokenPair> {
 
@@ -20,7 +22,7 @@ object Authentication : MapResponseToObj<TokenPair> {
     fun logIn(body: AuthenticationRequest, context: Context, callback: Success<TokenPair>, error: Error){
         val newObj = JSONObject()
         newObj.put("username", body.username)
-        newObj.put("password", body.password)
+        newObj.put("password", hashPassword(body.password))
         val request = CustomJSONObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", newObj,
             {
                     response -> val tokens = mapToObj(response)
@@ -57,5 +59,10 @@ object Authentication : MapResponseToObj<TokenPair> {
         tokens.accessToken = response.getString("accessToken")
         tokens.refreshToken = response.getString("refreshToken")
         return tokens
+    }
+
+    private fun hashPassword(password: String): String {
+        val md5 = MessageDigest.getInstance("MD5")
+        return BigInteger(1, md5.digest(password.toByteArray())).toString(16);
     }
 }

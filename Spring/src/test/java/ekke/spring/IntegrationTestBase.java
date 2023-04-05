@@ -28,8 +28,6 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected ObjectMapper objectMapper;
 
-    private static final String emptyJson = "[]";
-
     @SneakyThrows
     protected ResultActions get(final String url){
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(url);

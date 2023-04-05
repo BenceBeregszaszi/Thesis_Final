@@ -23,26 +23,26 @@ public class UserController extends ControllerBase{
     }
 
     @GetMapping("/users/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<UserDto> readUserById(@PathVariable final Long id) {
         return ResponseEntity.ok(userService.getById(id));
     }
 
     @GetMapping("/users/user/{username}")
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<UserDto> getUserByUsername(@PathVariable final String username) {
         return ResponseEntity.ok(userService.getByUsername(username));
     }
 
     @PutMapping("/users/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<UserDto> updateUser(@PathVariable final Long id, @RequestBody final UserDto userDto) {
         return ResponseEntity.ok(userService.update(id, userDto));
     }
 
 
     @PutMapping("/users/forget-password")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<Void> forgetPassword(@RequestBody final ForgetPasswordDto forgetPasswordDto) {
         userService.forgetPassword(forgetPasswordDto);
         return ResponseEntity.ok().build();
@@ -50,7 +50,7 @@ public class UserController extends ControllerBase{
 
 
     @DeleteMapping("/users/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<Void> deleteUser(@PathVariable final Long id) {
         userService.delete(id);
         return ResponseEntity.ok().build();

@@ -6,7 +6,7 @@ import ekke.spring.dao.specification.UserSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
+import ekke.spring.service.exception.AuthenticationException;
 
 import java.util.Optional;
 
@@ -16,7 +16,7 @@ public class AuthManager implements AuthenticationManager {
     private UserRepository userRepository;
 
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication) {
 
         UserSpecification specification = new UserSpecification();
         specification.setUsername(authentication.getPrincipal().toString());
@@ -24,7 +24,7 @@ public class AuthManager implements AuthenticationManager {
         specification.setIsDisabled(false);
         Optional<User> user = userRepository.findAll(specification).stream().findFirst();
         if (user.isEmpty() || user.get().getIsDisabled()) {
-            throw new ekke.spring.service.exception.AuthenticationException("User cannot be found!");
+            throw new AuthenticationException("User cannot be found!");
         }
         return authentication;
     }

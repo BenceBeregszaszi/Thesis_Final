@@ -16,9 +16,9 @@ INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (
 INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (8,'2020-09-17 14:08:28.000000',20,'Boomerang', 'Kiss Peter utca 34');
 INSERT INTO `restaurant` (id, version, max_seats_number, name, address) VALUES (9,'2020-09-17 14:08:30.000000',40,'Corner', 'Nagy Kazmer 45 3.em 4');
 
-INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled, reminder) VALUES (3,'2020-09-17 14:05:42.000000','ADMIN','admin@gmail.com','admin','admin', false, 'admin reminder');
-INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled, reminder) VALUES (4,'2020-09-17 14:06:08.000000','USER','user@gmail.com','user','user', true, 'user reminder');
-INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled, reminder) VALUES (5,'2020-09-17 14:06:27.000000','USER','bandi@gamil.com','bandi1','bandi', false, 'bandi reminder');
+INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled, reminder) VALUES (3,'2020-09-17 14:05:42.000000','ADMIN','admin@gmail.com', MD5('admin'),'admin', false, 'admin reminder');
+INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled, reminder) VALUES (4,'2020-09-17 14:06:08.000000','USER','user@gmail.com', MD5('user'),'user', true, 'user reminder');
+INSERT INTO `user_details` (id, version, authority, email, password, username, is_disabled, reminder) VALUES (5,'2020-09-17 14:06:27.000000','USER','bandi@gamil.com', MD5('bandi1'),'bandi', false, 'bandi reminder');
 
 INSERT INTO `city_link` (restaurant_id, city_id) VALUES (7,7),(6,9);
 
