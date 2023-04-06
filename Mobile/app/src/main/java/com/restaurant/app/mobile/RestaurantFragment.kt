@@ -10,6 +10,7 @@ import android.widget.ListView
 import com.android.volley.VolleyError
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.restaurant.app.mobile.adapters.RestaurantAdapter
+import com.restaurant.app.mobile.common.Authority
 import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.Restaurant
 import com.restaurant.app.mobile.interfaces.Delete
@@ -39,6 +40,9 @@ class RestaurantFragment : Fragment(), Success<Restaurant>, ListSuccess<Restaura
         super.onViewCreated(view, savedInstanceState)
         this.restaurantList = view.findViewById(R.id.restaurant_list)
         this.add_restaurant_flbtn = view.findViewById(R.id.float_btn_add)
+        if(Common.user?.authority != Authority.ADMIN) {
+            add_restaurant_flbtn?.visibility = View.GONE
+        }
 
         RestaurantService.getListHttpRequest(this.requireContext(), this, this)
 

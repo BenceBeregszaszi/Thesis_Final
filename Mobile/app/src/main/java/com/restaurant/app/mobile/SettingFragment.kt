@@ -31,7 +31,7 @@ class SettingFragment : Fragment(), Success<User>, Error {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        UserService.getUserByUsername(Common.username, this.requireContext(), this, this)
+        Common.user?.let { UserService.getUserByUsername(it.username, this.requireContext(), this, this) }
         val tb_username : EditText = view.findViewById(R.id.settings_tb_username)
         val tb_password : EditText = view.findViewById(R.id.settings_tb_password)
         val tb_email : EditText = view.findViewById(R.id.settings_tb_email)

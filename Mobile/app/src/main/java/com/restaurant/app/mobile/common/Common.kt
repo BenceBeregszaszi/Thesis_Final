@@ -2,9 +2,11 @@ package com.restaurant.app.mobile.common
 
 import android.content.Context
 import android.widget.Toast
+import com.restaurant.app.mobile.dto.User
 
 object Common {
-    var username: String = ""
+
+    var user: User? = null
 
     var accessToken: String = ""
     var refreshToken: String = ""

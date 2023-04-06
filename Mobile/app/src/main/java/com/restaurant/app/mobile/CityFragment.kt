@@ -2,6 +2,7 @@ package com.restaurant.app.mobile
 
 
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.ListView
 import com.android.volley.VolleyError
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.restaurant.app.mobile.adapters.CityAdapter
+import com.restaurant.app.mobile.common.Authority
 import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.City
 import com.restaurant.app.mobile.interfaces.Delete
@@ -38,6 +40,9 @@ class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.add_city_flbtn = view.findViewById(R.id.float_btn_add)
+        if(Common.user?.authority != Authority.ADMIN) {
+            add_city_flbtn?.visibility = View.GONE
+        }
         this.cityList = view.findViewById(R.id.city_list)
 
         CityService.getListHttpRequest(this.requireContext(),this, this)

@@ -151,7 +151,7 @@ object UserService : ResponseToObjectList<User>, MapResponseToObj<User> {
         sharedPreferences.edit().clear().apply()
         Common.accessToken = ""
         Common.refreshToken = ""
-        Common.username = ""
+        Common.user = null
     }
 
     override fun mapToObj(response: JSONObject): User {

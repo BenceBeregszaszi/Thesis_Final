@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import com.android.volley.VolleyError
+import com.auth0.android.jwt.JWT
 import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.AuthenticationRequest
 import com.restaurant.app.mobile.dto.TokenPair
+import com.restaurant.app.mobile.dto.User
 import com.restaurant.app.mobile.interfaces.Success
 import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.Authentication
@@ -46,7 +48,8 @@ class LoginActivity : AppCompatActivity(), Success<TokenPair>, Error{
         editor.putString("accessToken", result.accessToken)
         editor.putString("refreshToken", result.refreshToken)
         editor.apply()
-        Common.username = findViewById<EditText>(R.id.text_username).text.toString()
+        val jwt = JWT(result.accessToken)
+        Common.user = jwt.getClaim("user").asObject(User().javaClass)
         Common.accessToken = result.accessToken
         Common.refreshToken = result.refreshToken
         finish()
