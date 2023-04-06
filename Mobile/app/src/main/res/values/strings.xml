@@ -31,4 +31,5 @@
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="admin">Log in as Admin to see the Users!</string>
+    <string name="date">Date:</string>
 </resources>

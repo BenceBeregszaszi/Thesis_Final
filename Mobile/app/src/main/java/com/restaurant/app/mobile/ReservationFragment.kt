@@ -11,6 +11,7 @@ import android.widget.ListView
 import com.android.volley.VolleyError
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.restaurant.app.mobile.adapters.ReservationAdapter
+import com.restaurant.app.mobile.common.Authority
 import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.*
 import com.restaurant.app.mobile.interfaces.*
@@ -23,6 +24,7 @@ class ReservationFragment : Fragment(), Success<Reservation>, ListSuccess<Reserv
 
     private val SUCCESS_MESSAGE = "Success operation!"
     private var reservation_list: ListView? = null
+    private var add_reservation_flbtn : FloatingActionButton? = null
     private var reservations: ArrayList<Reservation> = ArrayList()
     private var index = -1
 
@@ -36,10 +38,14 @@ class ReservationFragment : Fragment(), Success<Reservation>, ListSuccess<Reserv
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.reservation_list = view.findViewById(R.id.reservation_list)
+        this.add_reservation_flbtn = view.findViewById(R.id.float_btn_add)
+        if (Common.user?.authority == Authority.NON_USER){
+            this.add_reservation_flbtn?.visibility = View.GONE
+        }
 
         ReservationService.getListHttpRequest(this.requireContext(), this, this)
 
-        view.findViewById<FloatingActionButton>(R.id.float_btn_add).setOnClickListener {
+        add_reservation_flbtn?.setOnClickListener {
             val intent = Intent(this.requireContext(), Summary::class.java)
             startActivity(intent)
         }
@@ -97,11 +103,50 @@ class ReservationFragment : Fragment(), Success<Reservation>, ListSuccess<Reserv
                 representation.id = reservation.id
                 representation.time = reservation.time
                 representation.seatNumber = reservation.seatNumber
-                //city
-                //user
-                //restaurant
+                representation.city = findCityById(reservation.cityId)
+                representation.user = findUserById(reservation.userId)
+                representation.restaurant = findRestaurantById(reservation.restaurantId)
             }
             return representations
+        }
+
+        private fun findCityById(id: Long): String {
+            var result = ""
+            if (citiesList.isNotEmpty()) {
+                result = citiesList[0].cityName
+            }
+            citiesList.forEach { city ->
+                if (city.id == id) {
+                    result = city.cityName
+                }
+            }
+            return result
+        }
+
+        private fun findUserById(id: Long): String {
+            var result = ""
+            if (usersList.isNotEmpty()){
+                result = usersList[0].username
+            }
+            usersList.forEach { user ->
+                if(user.id == id) {
+                    result = user.username
+                }
+            }
+            return result
+        }
+
+        private fun findRestaurantById(id: Long): String {
+            var result = ""
+            if(restaurantsList.isNotEmpty()) {
+                result = restaurantsList[0].name
+            }
+            restaurantsList.forEach { restaurant ->
+                if (restaurant.id == id) {
+                    result = restaurant.name
+                }
+            }
+            return result
         }
     }
 
