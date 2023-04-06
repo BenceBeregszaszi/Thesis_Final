@@ -21,15 +21,4 @@ public class GetAllReservationControllerTest extends ReservationIt {
         //THEN
         isOk(resultActions);
     }
-
-    @Test
-    @SneakyThrows
-    @WithTestUser(user = TestUserAdam.class)
-    public void getAllReservationWithWrongAuthorityThenReceivesBadRequest(){
-        //GIVEN
-        //WHEN
-        ResultActions resultActions = get(URL);
-        //THEN
-        hasNoAccess(resultActions);
-    }
 }
