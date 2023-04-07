@@ -1,6 +1,8 @@
 package com.restaurant.app.mobile
 
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.opengl.Visibility
 import android.os.Bundle
@@ -15,11 +17,14 @@ import com.restaurant.app.mobile.adapters.CityAdapter
 import com.restaurant.app.mobile.common.Authority
 import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.City
+import com.restaurant.app.mobile.dto.Restaurant
 import com.restaurant.app.mobile.interfaces.Delete
 import com.restaurant.app.mobile.interfaces.ListSuccess
 import com.restaurant.app.mobile.interfaces.Success
 import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.CityService
+import com.restaurant.app.mobile.service.RestaurantService
+import java.util.stream.Collectors
 
 
 class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error {
@@ -28,6 +33,7 @@ class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error
     private val SUCCESS_MESSAGE: String = "Successful operation!"
 
     private var cities: ArrayList<City> = ArrayList()
+    private var restaurants: ArrayList<Restaurant> = ArrayList()
     private var index: Int = -1
 
     override fun onCreateView(
@@ -46,11 +52,16 @@ class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error
         this.cityList = view.findViewById(R.id.city_list)
 
         CityService.getListHttpRequest(this.requireContext(),this, this)
+        getRestaurants(this)
 
         this.cityList?.setOnItemClickListener { _, _, position, _ ->
             val selectedCity = this.cityList?.adapter?.getItem(position) as City
             val  intent = Intent(this.requireContext(), Summary::class.java)
             intent.putExtra("city", selectedCity)
+            val selectedRestaurants = this.restaurants.stream().filter {
+                    restaurant -> selectedCity.restaurants.contains(restaurant.id)
+            }.collect(Collectors.toList()) as ArrayList
+            intent.putExtra("restaurants", selectedRestaurants)
             startActivity(intent)
         }
 
@@ -64,6 +75,7 @@ class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error
         }
         this.add_city_flbtn?.setOnClickListener {
             val intent = Intent(this.requireContext(), MakeCity::class.java)
+            intent.putExtra("restaurants", this.restaurants)
             startActivity(intent)
             CityService.getListHttpRequest(this.requireContext(), this, this)
         }
@@ -99,5 +111,24 @@ class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error
     private fun renderCityList() {
         val cityAdapter = CityAdapter(this.cities, this.requireContext())
         this.cityList?.adapter = cityAdapter
+    }
+
+    companion object :  ListSuccess<Restaurant>, Error  {
+
+        @SuppressLint("StaticFieldLeak")
+        private lateinit var cityFragment: CityFragment
+
+        fun getRestaurants(cityFragment: CityFragment) {
+            this.cityFragment = cityFragment
+            RestaurantService.getListHttpRequest(cityFragment.requireContext(), this, this)
+        }
+
+        override fun error(error: VolleyError) {
+            error.message?.let { Common.makeToastMessage(cityFragment.requireContext(), it) }
+        }
+
+        override fun onListSuccess(result: ArrayList<Restaurant>) {
+            cityFragment.restaurants.addAll(result);
+        }
     }
 }

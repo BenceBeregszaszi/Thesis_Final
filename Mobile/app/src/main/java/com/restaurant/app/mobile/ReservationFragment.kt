@@ -1,6 +1,5 @@
 package com.restaurant.app.mobile
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -19,14 +18,15 @@ import com.restaurant.app.mobile.service.CityService
 import com.restaurant.app.mobile.service.ReservationService
 import com.restaurant.app.mobile.service.RestaurantService
 import com.restaurant.app.mobile.service.UserService
+import java.util.stream.Collectors
 
-class ReservationFragment : Fragment(), Success<Reservation>, ListSuccess<Reservation>, Delete, Error {
+class ReservationFragment : Fragment(), ListSuccess<Reservation>, Error {
 
-    private val SUCCESS_MESSAGE = "Success operation!"
     private var reservation_list: ListView? = null
     private var add_reservation_flbtn : FloatingActionButton? = null
     private var reservations: ArrayList<Reservation> = ArrayList()
-    private var index = -1
+    private var citiesList = ArrayList<City>()
+    private var restaurantsList = ArrayList<Restaurant>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,60 +39,73 @@ class ReservationFragment : Fragment(), Success<Reservation>, ListSuccess<Reserv
         super.onViewCreated(view, savedInstanceState)
         this.reservation_list = view.findViewById(R.id.reservation_list)
         this.add_reservation_flbtn = view.findViewById(R.id.float_btn_add)
-        if (Common.user?.authority == Authority.NON_USER){
-            this.add_reservation_flbtn?.visibility = View.GONE
-        }
 
-        ReservationService.getListHttpRequest(this.requireContext(), this, this)
+        if(Common.user!!.authority != Authority.NON_USER) {
+            ReservationService.getListHttpRequest(this.requireContext(), this, this)
+            getData(this)
+        }
 
         add_reservation_flbtn?.setOnClickListener {
             val intent = Intent(this.requireContext(), Summary::class.java)
+            intent.putExtra("cities", citiesList)
+            intent.putExtra("restaurants", restaurantsList)
             startActivity(intent)
+        }
+    }
+
+    override fun onListSuccess(result: ArrayList<Reservation>) {
+        if(Common.user?.authority == Authority.ADMIN) {
+            this.reservations = result
+        }
+        if(Common.user?.authority == Authority.USER) {
+            this.reservations =
+                result.stream().filter { reservation -> reservation.userId == Common.user!!.id }.collect(Collectors.toList()) as ArrayList<Reservation>
+        }
+        renderReservationList(this.reservation_list, this.reservations)
+    }
+
+    override fun error(error: VolleyError) {
+        if (error.networkResponse.statusCode == 401) {
+            val intent = Intent(this.requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+        } else {
+            Common.makeToastMessage(this.requireContext(),error.message!!)
         }
     }
 
     companion object : MultipleRequestCallback<User, City, Restaurant>,  Error {
 
         private var usersList = ArrayList<User>()
-        private var citiesList = ArrayList<City>()
-        private var restaurantsList = ArrayList<Restaurant>()
-        private lateinit var context: Context
 
-        fun getData(context: Context) {
-            this.context = context
-            UserService.getListHttpRequest(context, this, this)
+        private lateinit var reservationFragment: ReservationFragment
+
+        fun getData(reservationFragment: ReservationFragment) {
+            this.reservationFragment = reservationFragment
+            UserService.getListHttpRequest(this.reservationFragment.requireContext(), this, this)
         }
 
         override fun onSuccessList(result: ArrayList<User>) {
             usersList = result
-            CityService.getListHttpRequest(context, this, this)
+            CityService.getListHttpRequest(this.reservationFragment.requireContext(), this, this)
         }
 
         override fun onSuccessListSecond(result: ArrayList<City>) {
-            citiesList = result
-            RestaurantService.getListHttpRequest(context, this, this)
+            reservationFragment.citiesList = result
+            RestaurantService.getListHttpRequest(this.reservationFragment.requireContext(), this, this)
         }
 
         override fun onSuccessListThird(result: ArrayList<Restaurant>) {
-            restaurantsList = result
-            if (areListsEmpty()) {
-             return
-            } else {
-                Common.makeToastMessage(context, "Success operation!");
-            }
+            reservationFragment.restaurantsList = result
+            Common.makeToastMessage(this.reservationFragment.requireContext(), "Success operation!");
         }
 
         override fun error(error: VolleyError) {
-            error.message?.let { Common.makeToastMessage(context, it) }
-        }
-
-        private fun areListsEmpty() : Boolean {
-            return restaurantsList.isEmpty() || usersList.isEmpty() || citiesList.isEmpty();
+            error.message?.let { Common.makeToastMessage(this.reservationFragment.requireContext(), it) }
         }
 
         private fun renderReservationList(reservation_list: ListView?, reservations: ArrayList<Reservation>) {
             val representation = mapReservationToReservationRepresentation(reservations)
-            val reservationAdapter = ReservationAdapter(representation, context)
+            val reservationAdapter = ReservationAdapter(representation, this.reservationFragment.requireContext())
             reservation_list?.adapter = reservationAdapter
         }
 
@@ -112,10 +125,10 @@ class ReservationFragment : Fragment(), Success<Reservation>, ListSuccess<Reserv
 
         private fun findCityById(id: Long): String {
             var result = ""
-            if (citiesList.isNotEmpty()) {
-                result = citiesList[0].cityName
+            if (reservationFragment.citiesList.isNotEmpty()) {
+                result = reservationFragment.citiesList[0].cityName
             }
-            citiesList.forEach { city ->
+            reservationFragment.citiesList.forEach { city ->
                 if (city.id == id) {
                     result = city.cityName
                 }
@@ -138,41 +151,15 @@ class ReservationFragment : Fragment(), Success<Reservation>, ListSuccess<Reserv
 
         private fun findRestaurantById(id: Long): String {
             var result = ""
-            if(restaurantsList.isNotEmpty()) {
-                result = restaurantsList[0].name
+            if(reservationFragment.restaurantsList.isNotEmpty()) {
+                result = reservationFragment.restaurantsList[0].name
             }
-            restaurantsList.forEach { restaurant ->
+            reservationFragment.restaurantsList.forEach { restaurant ->
                 if (restaurant.id == id) {
                     result = restaurant.name
                 }
             }
             return result
-        }
-    }
-
-    override fun onSuccess(result: Reservation) {
-        this.reservations.add(result)
-        getData(this.requireContext())
-
-    }
-
-    override fun onListSuccess(result: ArrayList<Reservation>) {
-        this.reservations = result
-        renderReservationList(this.reservation_list, this.reservations)
-    }
-
-    override fun deleteSuccess() {
-        this.reservations.removeAt(index)
-        renderReservationList(this.reservation_list, this.reservations)
-        Common.makeToastMessage(this.requireContext(), SUCCESS_MESSAGE)
-    }
-
-    override fun error(error: VolleyError) {
-        if (error.networkResponse.statusCode == 401) {
-            val intent = Intent(this.requireContext(), LoginActivity::class.java)
-            startActivity(intent)
-        } else {
-            Common.makeToastMessage(this.requireContext(),error.message!!)
         }
     }
 }
