@@ -107,7 +107,7 @@ class Summary : AppCompatActivity(), Success<Reservation>, ListSuccess<City>, Er
                 position: Int,
                 id: Long
             ) {
-                val selectedItemId: Long = (parent!!.selectedItemId as SpinnerProperty).getItemId()
+                val selectedItemId: Long = (parent!!.selectedItem as SpinnerProperty).getItemId()
                 val selectedCities = this@Summary.cities.stream()
                     .filter { city -> city.restaurants.contains(selectedItemId) }.collect(Collectors.toList())
                 citiesSpinner.adapter = SpinnerAdapter(selectedCities as ArrayList<SpinnerProperty>, this@Summary)
