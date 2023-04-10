@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.ResultActions;
 
 public class CreateCityControllerTest extends CityIt {
 
-    //mock
     private static final String URL = "/cities";
 
     @Test

@@ -1,6 +1,5 @@
 package ekke.spring;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +23,6 @@ public abstract class IntegrationTestBase {
 
     @Autowired
     protected MockMvc mockMvc;
-
-    @Autowired
-    protected ObjectMapper objectMapper;
 
     @SneakyThrows
     protected ResultActions get(final String url){
