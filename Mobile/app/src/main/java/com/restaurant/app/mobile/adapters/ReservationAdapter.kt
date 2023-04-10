@@ -40,13 +40,13 @@ class ReservationAdapter() : BaseAdapter() {
         } else {
             newView = p1
         }
-        var cityValue: TextView = newView.findViewById(R.id.city_value)
-        var restaurantValue: TextView = newView.findViewById(R.id.restaurant_value)
-        var userValue: TextView = newView.findViewById(R.id.user_value)
-        var dateValue: TextView = newView.findViewById(R.id.date_value)
+        val cityValue: TextView = newView.findViewById(R.id.city_value)
+        val restaurantValue: TextView = newView.findViewById(R.id.restaurant_value)
+        val userValue: TextView = newView.findViewById(R.id.user_value)
+        val dateValue: TextView = newView.findViewById(R.id.date_value)
 
         cityValue.text = this.reservations[p0].city
-        restaurantValue.text = this.reservations[0].restaurant
+        restaurantValue.text = this.reservations[p0].restaurant
         userValue.text = this.reservations[p0].user
         dateValue.text = this.reservations[p0].time.toString()
         return newView

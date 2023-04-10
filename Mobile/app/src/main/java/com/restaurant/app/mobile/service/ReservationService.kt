@@ -17,7 +17,7 @@ object ReservationService : MapResponseToObj<Reservation>,
     private val reservationUrl: String = "${Common.baseUrl}/reservations"
 
     fun getListHttpRequest(context: Context, callback: ListSuccess<Reservation>, error: Error) {
-        val request = JsonArrayRequest(Request.Method.GET, reservationUrl, null,
+        val request = CustomJSONArrayRequest(reservationUrl, Common.getHeaders(),
             {
                     response -> val reservations = convertResponseToObjList(response)
                                 callback.onListSuccess(reservations)
@@ -29,7 +29,7 @@ object ReservationService : MapResponseToObj<Reservation>,
     }
 
     fun getHttpRequest(id: Long, context: Context, callback: Success<Reservation>, error: Error) {
-        val request = CustomJSONObjectRequest(Request.Method.GET, "$reservationUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.GET, "$reservationUrl/$id",  Common.getHeaders(),null,
             {
                     response -> val reservation = mapToObj(response)
                                 callback.onSuccess(reservation)
@@ -52,7 +52,7 @@ object ReservationService : MapResponseToObj<Reservation>,
         newObj.put("restaurantId", body.restaurantId)
         newObj.put("seatNumber", body.seatNumber)
         newObj.put("time", body.time)
-        val request = CustomJSONObjectRequest(Request.Method.POST, reservationUrl, newObj,
+        val request = CustomJSONObjectRequest(Request.Method.POST, reservationUrl,  Common.getHeaders(), newObj,
             {
                     response -> val reservation = mapToObj(response)
                                 callback.onSuccess(reservation)
@@ -75,7 +75,7 @@ object ReservationService : MapResponseToObj<Reservation>,
         newObj.put("restaurantId", body.restaurantId)
         newObj.put("seatNumber", body.seatNumber)
         newObj.put("time", body.time)
-        val request = CustomJSONObjectRequest(Request.Method.PUT, "$reservationUrl/$id", newObj,
+        val request = CustomJSONObjectRequest(Request.Method.PUT, "$reservationUrl/$id",  Common.getHeaders(), newObj,
             {
                     response -> val reservation = mapToObj(response)
                                 callback.onSuccess(reservation)
@@ -92,7 +92,7 @@ object ReservationService : MapResponseToObj<Reservation>,
         callback: Delete,
         error: Error
     ) {
-        val request = CustomJSONObjectRequest(Request.Method.DELETE, "$reservationUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.DELETE, "$reservationUrl/$id",  Common.getHeaders(), null,
             {
                     callback.deleteSuccess()
             },

@@ -17,13 +17,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
-        val sharedPref = getSharedPreferences("MainData", MODE_PRIVATE)
+        val sharedPref =  this.getPreferences(MODE_PRIVATE)
         Common.accessToken = sharedPref.getString("accessToken", "").toString()
-        Common.refreshToken = sharedPref.getString("refreshToken", "").toString()
 
         replaceFragment(CityFragment())
 
-        binding!!.bottomNavigationView?.setOnItemSelectedListener {
+        binding!!.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.cities -> {
                     replaceFragment(CityFragment())

@@ -42,7 +42,6 @@ public class UserController extends ControllerBase{
 
 
     @PutMapping("/users/forget-password")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<Void> forgetPassword(@RequestBody final ForgetPasswordDto forgetPasswordDto) {
         userService.forgetPassword(forgetPasswordDto);
         return ResponseEntity.ok().build();

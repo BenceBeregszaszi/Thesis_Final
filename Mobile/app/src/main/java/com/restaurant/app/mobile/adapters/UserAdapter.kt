@@ -25,7 +25,7 @@ class UserAdapter() : BaseAdapter() {
     }
 
     override fun getItem(p0: Int): Any {
-        return this.users[0]
+        return this.users[p0]
     }
 
     override fun getItemId(p0: Int): Long {
@@ -36,12 +36,12 @@ class UserAdapter() : BaseAdapter() {
         val newView: View
         if (p1 == null){
             val inflater: LayoutInflater = this.context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            newView = inflater.inflate(R.layout.restaurant_list, p2, false)
+            newView = inflater.inflate(R.layout.user_list, p2, false)
         } else {
             newView = p1
         }
-        val username: TextView = newView.findViewById(R.id.username_text_list)
-        val email: TextView = newView.findViewById(R.id.email_text_list)
+        val username: TextView = newView.findViewById(R.id.email_tb_text)
+        val email: TextView = newView.findViewById(R.id.username_text_list)
         username.text = this.users[p0].username
         email.text = this.users[p0].email
         return newView

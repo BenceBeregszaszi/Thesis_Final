@@ -35,14 +35,20 @@ class ReservationFragment : Fragment(), ListSuccess<Reservation>, Error {
         return inflater.inflate(R.layout.fragment_reservation, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(Common.user?.authorities?.contains(Authority.NON_USER) != true) {
+            ReservationService.getListHttpRequest(this.requireContext(), this, this)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.reservation_list = view.findViewById(R.id.reservation_list)
-        this.add_reservation_flbtn = view.findViewById(R.id.float_btn_add)
+        this.add_reservation_flbtn = view.findViewById(R.id.reservation_add_flt_btn)
 
-        if(Common.user!!.authority != Authority.NON_USER) {
+        if(Common.user?.authorities?.contains(Authority.NON_USER) != true) {
             ReservationService.getListHttpRequest(this.requireContext(), this, this)
-            getData(this)
         }
 
         add_reservation_flbtn?.setOnClickListener {
@@ -54,14 +60,15 @@ class ReservationFragment : Fragment(), ListSuccess<Reservation>, Error {
     }
 
     override fun onListSuccess(result: ArrayList<Reservation>) {
-        if(Common.user?.authority == Authority.ADMIN) {
+        if(Common.user?.authorities?.contains(Authority.ADMIN) == true) {
             this.reservations = result
+            getData(this)
         }
-        if(Common.user?.authority == Authority.USER) {
+        if(Common.user?.authorities?.contains(Authority.USER) == true) {
             this.reservations =
                 result.stream().filter { reservation -> reservation.userId == Common.user!!.id }.collect(Collectors.toList()) as ArrayList<Reservation>
+            getData(this)
         }
-        renderReservationList(this.reservation_list, this.reservations)
     }
 
     override fun error(error: VolleyError) {
@@ -96,21 +103,21 @@ class ReservationFragment : Fragment(), ListSuccess<Reservation>, Error {
 
         override fun onSuccessListThird(result: ArrayList<Restaurant>) {
             reservationFragment.restaurantsList = result
-            Common.makeToastMessage(this.reservationFragment.requireContext(), "Success operation!");
+            renderReservationList()
         }
 
         override fun error(error: VolleyError) {
             error.message?.let { Common.makeToastMessage(this.reservationFragment.requireContext(), it) }
         }
 
-        private fun renderReservationList(reservation_list: ListView?, reservations: ArrayList<Reservation>) {
-            val representation = mapReservationToReservationRepresentation(reservations)
+        private fun renderReservationList() {
+            val representation = mapReservationToReservationRepresentation(this.reservationFragment.reservations)
             val reservationAdapter = ReservationAdapter(representation, this.reservationFragment.requireContext())
-            reservation_list?.adapter = reservationAdapter
+            this.reservationFragment.reservation_list?.adapter = reservationAdapter
         }
 
         private fun mapReservationToReservationRepresentation(reservations: ArrayList<Reservation>): List<ReservationRepresentation> {
-            val representations: List<ReservationRepresentation> = ArrayList()
+            val representations: ArrayList<ReservationRepresentation> = ArrayList()
             reservations.forEach { reservation ->
                 val representation = ReservationRepresentation()
                 representation.id = reservation.id
@@ -119,6 +126,7 @@ class ReservationFragment : Fragment(), ListSuccess<Reservation>, Error {
                 representation.city = findCityById(reservation.cityId)
                 representation.user = findUserById(reservation.userId)
                 representation.restaurant = findRestaurantById(reservation.restaurantId)
+                representations.add(representation)
             }
             return representations
         }

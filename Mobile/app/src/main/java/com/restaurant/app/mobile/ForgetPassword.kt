@@ -11,6 +11,8 @@ import com.restaurant.app.mobile.dto.User
 import com.restaurant.app.mobile.interfaces.Success
 import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.UserService
+import java.math.BigInteger
+import java.security.MessageDigest
 
 class ForgetPassword : AppCompatActivity(), Success<User>, Error {
 
@@ -25,10 +27,10 @@ class ForgetPassword : AppCompatActivity(), Success<User>, Error {
         val passwordAgain = findViewById<EditText>(R.id.forget_tb_passwordAgain)
 
         save.setOnClickListener {
-            if (password.text == passwordAgain.text) {
+            if (password.text.toString() == passwordAgain.text.toString()) {
                 val forgetPasswordDto = ForgetPassword()
                 forgetPasswordDto.reminder = reminder.text.toString()
-                forgetPasswordDto.newPassword = password.text.toString()
+                forgetPasswordDto.newPassword = hashPassword(password.text.toString())
                 forgetPasswordDto.email = email.text.toString()
 
                 UserService.forgetPassword(forgetPasswordDto, this, this, this)
@@ -42,5 +44,10 @@ class ForgetPassword : AppCompatActivity(), Success<User>, Error {
 
     override fun error(error: VolleyError) {
         Common.makeToastMessage(this,error.message!!)
+    }
+
+    private fun hashPassword(password: String): String {
+        val md5 = MessageDigest.getInstance("MD5")
+        return BigInteger(1, md5.digest(password.toByteArray())).toString(16);
     }
 }

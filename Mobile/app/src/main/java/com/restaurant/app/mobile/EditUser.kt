@@ -7,54 +7,65 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Switch
 import com.android.volley.VolleyError
+import com.restaurant.app.mobile.common.Authority
 import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.dto.User
 import com.restaurant.app.mobile.interfaces.Delete
 import com.restaurant.app.mobile.interfaces.Success
 import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.UserService
+import java.math.BigInteger
+import java.security.MessageDigest
+import java.util.Objects
 
 class EditUser : AppCompatActivity(), Success<User>, Delete, Error {
 
-    var user: User? = null
+    var id: Long = 0
+    var authorities = ArrayList<Authority>()
     var save: Boolean = false
     private val SUCCESS_MESSAGE: String = "Successful operation!"
-
-    var tb_username : EditText? = null
-    var tb_password : EditText? = null
-    var tb_email : EditText? = null
-    var tb_reminder : EditText? = null
-    var sw_disabled : Switch? = null
-    var btn_save : Button? = null
-    var btn_delete: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_user)
+        var tb_username: EditText  = findViewById(R.id.user_tb_username)
+        val tb_password: EditText = findViewById(R.id.user_tb_password)
+        val tb_email: EditText = findViewById(R.id.user_tb_email)
+        val tb_reminder: EditText = findViewById(R.id.user_tb_reminder)
+        val sw_disabled: Switch = findViewById(R.id.user_sw_disabled)
+        val btn_save: Button = findViewById(R.id.user_btn_save)
+        val btn_delete: Button = findViewById(R.id.user_btn_delete)
 
-        if (intent.extras != null) {
-            user = intent.extras!!.get("user") as User
+        var data = intent.extras
+        if (Objects.nonNull(data)) {
+            data = data!!
+            val userToEdit = data.get("user") as User
+            id = userToEdit.id
+            authorities = userToEdit.authorities
+            tb_username.setText(userToEdit.username)
+            tb_email.setText(userToEdit.email)
+            tb_reminder.setText(userToEdit.reminder)
+            sw_disabled.isChecked = userToEdit.isDisabled
         }
 
-        tb_username  = findViewById(R.id.user_tb_username)
-        tb_password = findViewById(R.id.user_tb_password)
-        tb_email = findViewById(R.id.user_tb_email)
-        tb_reminder = findViewById(R.id.user_tb_reminder)
-        sw_disabled = findViewById(R.id.user_sw_disabled)
-        btn_save = findViewById(R.id.user_btn_save)
-        btn_delete = findViewById(R.id.user_btn_delete)
-
-        btn_save?.setOnClickListener {
-            this.user?.username = tb_username?.text.toString()
-            this.user?.password = tb_password?.text.toString()
-            this.user?.email = tb_email?.text.toString()
-            this.user?.reminder = tb_reminder?.text.toString()
-            this.user?.isDisabled = sw_disabled!!.isChecked
-            UserService.putHttpRequest(this.user!!.id, this.user!!, this, this, this)
+        btn_save.setOnClickListener {
+            val user = User()
+            user.username = tb_username.text.toString()
+            if(tb_password.text.isEmpty()) {
+                user.password = Common.user!!.password
+            } else {
+                val hashedPassword = hashPassword(tb_password.text.toString())
+                user.password = hashedPassword
+            }
+            user.email = tb_email.text.toString()
+            user.reminder = tb_reminder.text.toString()
+            user.isDisabled = sw_disabled.isChecked
+            user.authorities = authorities
+            UserService.putHttpRequest(id, user, this, this, this)
         }
 
-        btn_delete?.setOnClickListener {
-            UserService.deleteHttpRequest(user!!.id, this, this, this)
+        btn_delete.setOnClickListener {
+            UserService.deleteHttpRequest(id, this, this, this)
         }
     }
 
@@ -75,5 +86,10 @@ class EditUser : AppCompatActivity(), Success<User>, Delete, Error {
         } else {
             Common.makeToastMessage(this,"Something went wrong!")
         }
+    }
+
+    private fun hashPassword(password: String): String {
+        val md5 = MessageDigest.getInstance("MD5")
+        return BigInteger(1, md5.digest(password.toByteArray())).toString(16);
     }
 }

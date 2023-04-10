@@ -45,8 +45,8 @@ class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.add_city_flbtn = view.findViewById(R.id.float_btn_add)
-        if(Common.user?.authority != Authority.ADMIN) {
+        this.add_city_flbtn = view.findViewById(R.id.cities_add_flt_btn)
+        if(Common.user?.authorities?.contains(Authority.ADMIN) != true) {
             add_city_flbtn?.visibility = View.GONE
         }
         this.cityList = view.findViewById(R.id.city_list)
@@ -56,7 +56,7 @@ class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error
 
         this.cityList?.setOnItemClickListener { _, _, position, _ ->
             val selectedCity = this.cityList?.adapter?.getItem(position) as City
-            val  intent = Intent(this.requireContext(), Summary::class.java)
+            val intent = Intent(this.requireContext(), Summary::class.java)
             intent.putExtra("city", selectedCity)
             val selectedRestaurants = this.restaurants.stream().filter {
                     restaurant -> selectedCity.restaurants.contains(restaurant.id)
@@ -69,6 +69,10 @@ class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error
             val selectedCity = this.cityList?.adapter?.getItem(position) as City
             val intent = Intent(this.requireContext(), MakeCity::class.java)
             intent.putExtra("city", selectedCity)
+            val restaurantsToCity = restaurants.stream()
+                .filter { restaurant -> restaurant.cities.contains(selectedCity.id) }
+                .collect(Collectors.toList()) as ArrayList
+            intent.putExtra("restaurants", restaurantsToCity)
             startActivity(intent)
             CityService.getListHttpRequest(this.requireContext(),this, this)
             return@setOnItemLongClickListener(true)

@@ -2,7 +2,6 @@ package com.restaurant.app.mobile.service
 
 import android.content.Context
 import com.android.volley.Request
-import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import com.restaurant.app.mobile.common.*
 import com.restaurant.app.mobile.dto.City
@@ -18,7 +17,7 @@ object RestaurantService : MapResponseToObj<Restaurant>,
     private val restaurantUrl: String = "${Common.baseUrl}/restaurants"
 
     fun getListHttpRequest(context: Context, callback: ListSuccess<Restaurant>, error: Error) {
-        val request = JsonArrayRequest(Request.Method.GET, restaurantUrl, null,
+        val request = CustomJSONArrayRequest(restaurantUrl, Common.getHeaders(),
             {
                     response -> val restaurants = convertResponseToObjList(response)
                                 callback.onListSuccess(restaurants)
@@ -30,7 +29,7 @@ object RestaurantService : MapResponseToObj<Restaurant>,
     }
 
     fun getListHttpRequest(context: Context, callback: MultipleRequestCallback<User, City, Restaurant>, error: Error) {
-        val request = JsonArrayRequest(Request.Method.GET, restaurantUrl, null,
+        val request = CustomJSONArrayRequest(restaurantUrl,  Common.getHeaders(),
             {
                     response -> val restaurants = convertResponseToObjList(response)
                 callback.onSuccessListThird(restaurants)
@@ -42,7 +41,7 @@ object RestaurantService : MapResponseToObj<Restaurant>,
     }
 
     fun getHttpRequest(id: Long, context: Context, callback: Success<Restaurant>, error: Error) {
-        val request = CustomJSONObjectRequest(Request.Method.GET, "$restaurantUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.GET, "$restaurantUrl/$id",  Common.getHeaders(), null,
             {
                     response -> val restaurant = mapToObj(response)
                                 callback.onSuccess(restaurant)
@@ -64,7 +63,7 @@ object RestaurantService : MapResponseToObj<Restaurant>,
         newObj.put("maySeatsNumber", body.maxSeatsNumber)
         newObj.put("address", body.address)
         newObj.put("cities", body.cities)
-        val request = CustomJSONObjectRequest(Request.Method.POST, restaurantUrl, newObj,
+        val request = CustomJSONObjectRequest(Request.Method.POST, restaurantUrl,  Common.getHeaders(), newObj,
             {
                     response -> val restaurant = mapToObj(response)
                                 callback.onSuccess(restaurant)
@@ -87,7 +86,7 @@ object RestaurantService : MapResponseToObj<Restaurant>,
         newObj.put("maySeatsNumber", body.maxSeatsNumber)
         newObj.put("address", body.address)
         newObj.put("cities", body.cities)
-        val request = CustomJSONObjectRequest(Request.Method.PUT, "$restaurantUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.PUT, "$restaurantUrl/$id",  Common.getHeaders(), null,
             {
                     response -> val restaurant = mapToObj(response)
                                 callback.onSuccess(restaurant)
@@ -104,7 +103,7 @@ object RestaurantService : MapResponseToObj<Restaurant>,
         callback: Delete,
         error: Error
     ) {
-        val request = CustomJSONObjectRequest(Request.Method.DELETE, "$restaurantUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.DELETE, "$restaurantUrl/$id",  Common.getHeaders(), null,
             {
                     callback.deleteSuccess()
             },

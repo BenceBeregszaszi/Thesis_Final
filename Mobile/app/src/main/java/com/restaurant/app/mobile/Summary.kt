@@ -46,17 +46,21 @@ class Summary : AppCompatActivity(), Success<Reservation>, ListSuccess<City>, Er
         var data = intent.extras
         if(Objects.nonNull(data)) {
             data = data!!
-            val selectedCity = data.get("city") as City
-            val selectedRestaurant = data.get("restaurant") as Restaurant
+            val selectedCity = data.get("city") as City?
+            val selectedRestaurant = data.get("restaurant") as Restaurant?
             if (Objects.isNull(selectedCity) && Objects.isNull(selectedRestaurant)) {
                 CityService.getListHttpRequest(this, this, this)
                 getRestaurants(this)
             } else {
                 if(Objects.nonNull(selectedCity)) {
-                    cities.add(selectedCity)
+                    if (selectedCity != null) {
+                        cities.add(selectedCity)
+                    }
                     restaurants.addAll(data.get("restaurants") as ArrayList<Restaurant>)
                 } else {
-                    restaurants.add(selectedRestaurant)
+                    if (selectedRestaurant != null) {
+                        restaurants.add(selectedRestaurant)
+                    }
                     cities.addAll(data.get("cities") as ArrayList<City>)
                 }
             }
@@ -68,9 +72,9 @@ class Summary : AppCompatActivity(), Success<Reservation>, ListSuccess<City>, Er
         saveButton.setOnClickListener {
             val reservation = Reservation()
             if (Objects.nonNull(Common.user)) {
-                reservation.id = Common.user!!.id
+                reservation.userId = Common.user!!.id
             } else {
-                reservation.id = 4
+                reservation.userId = 4
             }
             reservation.cityId = (citiesSpinner.selectedItem as SpinnerProperty).getItemId()
             reservation.restaurantId = (restaurantSpinner.selectedItem as SpinnerProperty).getItemId()

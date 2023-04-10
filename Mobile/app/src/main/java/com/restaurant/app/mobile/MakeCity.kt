@@ -18,9 +18,10 @@ import com.restaurant.app.mobile.interfaces.Success
 import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.interfaces.SpinnerProperty
 import com.restaurant.app.mobile.service.CityService
+import java.util.Objects
 import java.util.stream.Collectors
 
-class MakeCity : AppCompatActivity(), Success<City>, Delete, Error{
+class MakeCity : AppCompatActivity(), Success<City>, Delete, Error {
 
     private var city: City = City()
     private var restaurantObjects: ArrayList<SpinnerProperty> = ArrayList()
@@ -37,10 +38,11 @@ class MakeCity : AppCompatActivity(), Success<City>, Delete, Error{
         val addRestaurant = findViewById<Button>(R.id.btn_add_restaurant)
 
 
-        if (intent.extras != null) {
-            this.city = intent.extras!!.get("city") as City
-            this.restaurantObjects = intent.extras!!.get("restaurants") as ArrayList<SpinnerProperty>
-            selectedRestaurant.adapter = SpinnerAdapter(this.restaurantObjects, this)
+        val data = intent.extras!!
+        this.restaurantObjects = (data.get("restaurants") as ArrayList<SpinnerProperty>)
+        selectedRestaurant.adapter = SpinnerAdapter(this.restaurantObjects, this)
+        if (Objects.nonNull(data.get("city"))) {
+            this.city = data.get("city") as City
             findViewById<EditText>(R.id.tb_postCode).setText(this.city.postCode)
             findViewById<EditText>(R.id.tb_cityName).setText(this.city.cityName)
             makeCity.visibility = View.GONE

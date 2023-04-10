@@ -22,6 +22,12 @@ public class AuthenticatedUser implements JwtUser, Principal {
     private String username;
     private String password;
 
+    private String email;
+
+    private String reminder;
+
+    private Boolean isDisabled;
+
     @JsonDeserialize(contentAs = Authority.class)
     private Collection<? extends GrantedAuthority> authorities;
 

@@ -41,7 +41,7 @@ object CityService :  ResponseToObjectList<City>, MapResponseToObj<City> {
     }
 
     fun getHttpRequest(id: Long, context: Context, callback: Success<City>, error: Error) {
-        val request = CustomJSONObjectRequest(Request.Method.GET, "$cityUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.GET, "$cityUrl/$id",  Common.getHeaders(),null,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)
@@ -61,7 +61,7 @@ object CityService :  ResponseToObjectList<City>, MapResponseToObj<City> {
         } else {
             newObj.put("restaurants", body.restaurants)
         }
-        val request = object : CustomJSONObjectRequest(Method.POST, cityUrl, newObj,
+        val request = object : CustomJSONObjectRequest(Method.POST, cityUrl,  Common.getHeaders(), newObj,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)
@@ -88,7 +88,7 @@ object CityService :  ResponseToObjectList<City>, MapResponseToObj<City> {
         } else {
             newObj.put("restaurants", body.restaurants)
         }
-        val request = object : CustomJSONObjectRequest(Request.Method.PUT, "$cityUrl/$id", newObj,
+        val request = object : CustomJSONObjectRequest(Request.Method.PUT, "$cityUrl/$id",  Common.getHeaders(), newObj,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)
@@ -102,7 +102,7 @@ object CityService :  ResponseToObjectList<City>, MapResponseToObj<City> {
     }
 
     fun deleteHttpRequest(id: Long, context: Context, callback: Delete, error: Error) {
-        val request = object : CustomJSONObjectRequest(Request.Method.DELETE, "$cityUrl/$id", null,
+        val request = object : CustomJSONObjectRequest(Method.DELETE, "$cityUrl/$id",  Common.getHeaders(), null,
             {
                     callback.deleteSuccess()
             },

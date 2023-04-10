@@ -3,7 +3,6 @@ package com.restaurant.app.mobile.service
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
-import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import com.restaurant.app.mobile.common.*
 import com.restaurant.app.mobile.dto.City
@@ -20,7 +19,7 @@ object UserService : ResponseToObjectList<User>, MapResponseToObj<User> {
     private val userUrl: String = "${Common.baseUrl}/users"
 
     fun getListHttpRequest(context: Context, callback: ListSuccess<User>, error: Error) {
-        val request = JsonArrayRequest(Request.Method.GET, userUrl, null,
+        val request = CustomJSONArrayRequest(userUrl, Common.getHeaders(),
             {
                     response -> val users = convertResponseToObjList(response)
                                 callback.onListSuccess(users)
@@ -32,7 +31,7 @@ object UserService : ResponseToObjectList<User>, MapResponseToObj<User> {
     }
 
     fun getListHttpRequest(context: Context, callback: MultipleRequestCallback<User, City, Restaurant>, error: Error) {
-        val request = JsonArrayRequest(Request.Method.GET, userUrl, null,
+        val request = CustomJSONArrayRequest(userUrl, Common.getHeaders(),
             {
                     response -> val users = convertResponseToObjList(response)
                 callback.onSuccessList(users)
@@ -44,7 +43,7 @@ object UserService : ResponseToObjectList<User>, MapResponseToObj<User> {
     }
 
     fun getHttpRequest(id: Long, context: Context, callback: Success<User> , error: Error) {
-        val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$id",  Common.getHeaders(), null,
             {
                     response -> val user = mapToObj(response)
                                 callback.onSuccess(user)
@@ -56,7 +55,7 @@ object UserService : ResponseToObjectList<User>, MapResponseToObj<User> {
     }
 
     fun getUserByUsername(username: String, context: Context, callback: Success<User> , error: Error) {
-        val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$username", null,
+        val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$username",  Common.getHeaders(), null,
             {
                     response -> val user = mapToObj(response)
                                 callback.onSuccess(user)
@@ -75,7 +74,7 @@ object UserService : ResponseToObjectList<User>, MapResponseToObj<User> {
         newObj.put("authority", Authority.USER)
         newObj.put("isDisabled", body.isDisabled)
         newObj.put("reminder", body.reminder)
-        val request = CustomJSONObjectRequest(Request.Method.POST, "${Common.baseUrl}/authentication/register", newObj,
+        val request = CustomJSONObjectRequest(Request.Method.POST, "${Common.baseUrl}/authentication/register",  Common.getHeaders(), newObj,
             {
                     callback.onSuccess(User())
             },
@@ -96,9 +95,10 @@ object UserService : ResponseToObjectList<User>, MapResponseToObj<User> {
         newObj.put("username", body.username)
         newObj.put("password", body.password)
         newObj.put("email", body.email)
-        newObj.put("authority", body.authority)
+        newObj.put("authority", body.authorities[0])
         newObj.put("isDisabled", body.isDisabled)
-        val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$id", newObj,
+        newObj.put("reminder", body.reminder)
+        val request = CustomJSONObjectRequest(Request.Method.PUT, "$userUrl/$id",  Common.getHeaders(), newObj,
             {
                     response -> val user = mapToObj(response)
                                 callback.onSuccess(user)
@@ -114,7 +114,7 @@ object UserService : ResponseToObjectList<User>, MapResponseToObj<User> {
         newObj.put("email", body.email)
         newObj.put("newPassword", body.newPassword)
         newObj.put("reminder", body.reminder)
-        val request = CustomJSONObjectRequest(Request.Method.PUT, "$userUrl/forget-password", newObj,
+        val request = CustomJSONObjectRequest(Request.Method.PUT, "$userUrl/forget-password", null, newObj,
             {
                     callback.onSuccess(User())
             },
@@ -125,7 +125,7 @@ object UserService : ResponseToObjectList<User>, MapResponseToObj<User> {
     }
 
     fun deleteHttpRequest(id: Long, context: Context, callback: Delete, error: Error) {
-        val request = CustomJSONObjectRequest(Request.Method.GET, "$userUrl/$id", null,
+        val request = CustomJSONObjectRequest(Request.Method.DELETE, "$userUrl/$id",  Common.getHeaders(), null,
             {
                     callback.deleteSuccess()
             },
@@ -160,8 +160,9 @@ object UserService : ResponseToObjectList<User>, MapResponseToObj<User> {
         user.username = response.getString("username")
         user.password = response.getString("password")
         user.email = response.getString("email")
-        user.authority = Authority.valueOf(response.getString("authority"))
+        user.authorities.add(Authority.valueOf(response.getString("authority")))
         user.isDisabled = response.getBoolean("isDisabled")
+        user.reminder = response.getString("reminder")
         return user
     }
 }

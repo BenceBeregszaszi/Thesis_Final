@@ -24,14 +24,14 @@ public class SetDeserializer extends StdDeserializer<HashSet<Long>> {
     @Override
     public HashSet<Long> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-        Set<Long> set = new HashSet<>();
+        HashSet<Long> set = new HashSet<>();
         if (node.asText().isEmpty()){
             return new HashSet<>();
         }
-        String[] parts = node.asText().trim().replace("[", "").replace("]", "").split(",");
+        String[] parts = node.asText().replace("[", "").replace("]", "").split(",");
         for (String part : parts) {
-            set.add(Long.parseLong(part));
+            set.add(Long.parseLong(part.trim()));
         }
-        return (HashSet<Long>) set;
+        return set;
     }
 }

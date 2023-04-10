@@ -14,6 +14,7 @@ import ekke.spring.validators.UserDtoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(isolation = Isolation.READ_COMMITTED)
 public class UserService implements CrudServices<UserDto> {
 
     @Autowired
@@ -108,6 +109,7 @@ public class UserService implements CrudServices<UserDto> {
         oldUser.setUsername(newUser.getUsername());
         oldUser.setReminder(newUser.getReminder());
         oldUser.setEmail(newUser.getEmail());
+        oldUser.setIsDisabled(newUser.getIsDisabled());
         oldUser.setPassword(newUser.getPassword());
         return oldUser;
     }

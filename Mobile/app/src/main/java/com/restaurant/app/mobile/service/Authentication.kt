@@ -4,6 +4,7 @@ import android.content.Context
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.restaurant.app.mobile.common.Common
 import com.restaurant.app.mobile.common.CustomJSONObjectRequest
 import com.restaurant.app.mobile.interfaces.MapResponseToObj
 import com.restaurant.app.mobile.dto.AuthenticationRequest
@@ -23,7 +24,7 @@ object Authentication : MapResponseToObj<TokenPair> {
         val newObj = JSONObject()
         newObj.put("username", body.username)
         newObj.put("password", hashPassword(body.password))
-        val request = CustomJSONObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", newObj,
+        val request = CustomJSONObjectRequest(Request.Method.POST, "$authenticationUrl/authenticate", Common.getHeaders(), newObj,
             {
                     response -> val tokens = mapToObj(response)
                                 callback.onSuccess(tokens)

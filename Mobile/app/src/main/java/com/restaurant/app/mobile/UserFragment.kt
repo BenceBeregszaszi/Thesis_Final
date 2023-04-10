@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
+import androidx.lifecycle.Lifecycle
 import com.android.volley.VolleyError
 import com.restaurant.app.mobile.adapters.UserAdapter
 import com.restaurant.app.mobile.common.Common
@@ -42,7 +43,8 @@ class UserFragment : Fragment(), Success<User>, Delete, ListSuccess<User>, Error
         userText = view.findViewById(R.id.usersTextView)
         btnLogin = view.findViewById(R.id.users_btn_login)
 
-        if (Common.accessToken == ""){
+        UserService.getListHttpRequest(this.requireContext(), this, this)
+        if (Common.accessToken.isEmpty()){
             userList?.visibility = View.GONE
             userText?.visibility = View.VISIBLE
             btnLogin?.visibility = View.VISIBLE
@@ -50,7 +52,6 @@ class UserFragment : Fragment(), Success<User>, Delete, ListSuccess<User>, Error
             userText?.visibility = View.GONE
             btnLogin?.visibility = View.GONE
             userList?.visibility = View.VISIBLE
-            UserService.getListHttpRequest(this.requireContext(), this, this)
         }
 
         this.userList?.setOnItemClickListener { _, _, position, _ ->
@@ -66,23 +67,8 @@ class UserFragment : Fragment(), Success<User>, Delete, ListSuccess<User>, Error
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (Common.accessToken == ""){
-            userList?.visibility = View.GONE
-            userText?.visibility = View.VISIBLE
-            btnLogin?.visibility = View.VISIBLE
-        } else {
-            userText?.visibility = View.GONE
-            btnLogin?.visibility = View.GONE
-            userList?.visibility = View.VISIBLE
-            UserService.getListHttpRequest(this.requireContext(), this, this)
-        }
-    }
-
     override fun onSuccess(result: User) {
         this.users.add(result)
-        renderUsersList()
         Common.makeToastMessage(this.requireContext(), SUCCESS_MESSAGE)
     }
 

@@ -27,6 +27,8 @@ class LoginActivity : AppCompatActivity(), Success<TokenPair>, Error{
 
         val forgetBtn: Button = findViewById(R.id.forget_btn)
 
+        val register: Button = findViewById(R.id.toRegister_btn)
+
         login.setOnClickListener {
             val username = findViewById<EditText>(R.id.text_username)
             val password = findViewById<EditText>(R.id.text_password)
@@ -36,6 +38,11 @@ class LoginActivity : AppCompatActivity(), Success<TokenPair>, Error{
             Authentication.logIn(authRequest,this,this, this)
         }
 
+        register.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
         forgetBtn.setOnClickListener {
             val intent = Intent(this, ForgetPassword::class.java)
             startActivity(intent)
@@ -43,11 +50,11 @@ class LoginActivity : AppCompatActivity(), Success<TokenPair>, Error{
     }
 
     override fun onSuccess(result: TokenPair) {
-        val sharedPref = getSharedPreferences("Login data", Context.MODE_PRIVATE)
-        val editor = sharedPref.edit()
-        editor.putString("accessToken", result.accessToken)
-        editor.putString("refreshToken", result.refreshToken)
-        editor.apply()
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("accessToken", result.accessToken)
+            commit()
+        }
         val jwt = JWT(result.accessToken)
         Common.user = jwt.getClaim("user").asObject(User().javaClass)
         Common.accessToken = result.accessToken
@@ -56,6 +63,6 @@ class LoginActivity : AppCompatActivity(), Success<TokenPair>, Error{
     }
 
     override fun error(error: VolleyError) {
-        Common.makeToastMessage(this,error.message!!)
+        error.message?.let { Common.makeToastMessage(this, it) }
     }
 }

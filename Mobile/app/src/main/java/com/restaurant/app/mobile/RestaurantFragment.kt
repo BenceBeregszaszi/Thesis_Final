@@ -43,11 +43,10 @@ class RestaurantFragment : Fragment(), Success<Restaurant>, ListSuccess<Restaura
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.restaurantList = view.findViewById(R.id.restaurant_list)
-        this.add_restaurant_flbtn = view.findViewById(R.id.float_btn_add)
-        if(Common.user?.authority != Authority.ADMIN) {
+        this.add_restaurant_flbtn = view.findViewById(R.id.restaurant_add_flt_btn)
+        if(Common.user?.authorities?.contains(Authority.ADMIN) != true) {
             add_restaurant_flbtn?.visibility = View.GONE
         }
-
         RestaurantService.getListHttpRequest(this.requireContext(), this, this)
         getCities(this)
 
@@ -66,6 +65,10 @@ class RestaurantFragment : Fragment(), Success<Restaurant>, ListSuccess<Restaura
             val selectedRestaurant = this.restaurantList?.adapter?.getItem(position) as Restaurant
             val intent = Intent(this.requireContext(), MakeRestaurant::class.java)
             intent.putExtra("restaurant", selectedRestaurant)
+            val citiesToRestaurant = cities.stream()
+                .filter { city -> city.restaurants.contains(selectedRestaurant.id) }
+                .collect(Collectors.toList()) as ArrayList
+            intent.putExtra("cities", citiesToRestaurant)
             startActivity(intent)
             RestaurantService.getListHttpRequest(this.requireContext(), this, this)
             return@setOnItemLongClickListener(true)
@@ -99,6 +102,7 @@ class RestaurantFragment : Fragment(), Success<Restaurant>, ListSuccess<Restaura
         if (error.networkResponse.statusCode == 401) {
             val intent = Intent(this.requireContext(), LoginActivity::class.java)
             startActivity(intent)
+            RestaurantService.getListHttpRequest(this.requireContext(), this, this)
         } else {
             Common.makeToastMessage(this.requireContext(), error.message!!)
         }

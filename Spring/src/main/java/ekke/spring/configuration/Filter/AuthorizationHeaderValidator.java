@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthorizationHeaderValidator extends BaseValidator {
     private final String prefix = "Bearer";
-    private final String authorizationHeaderPattern = "^" + prefix + " ..*$";
+    private final String authorizationHeaderPattern = "^" + prefix + " .+$";
 
     public void validate(final String object) {
         validateStringNotNullOrEmpty(object);
