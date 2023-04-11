@@ -33,4 +33,5 @@
     <string name="admin">Log in as Admin to see the Users!</string>
     <string name="date">Date:</string>
     <string name="add">Add</string>
+    <string name="back_btn">Back</string>
 </resources>

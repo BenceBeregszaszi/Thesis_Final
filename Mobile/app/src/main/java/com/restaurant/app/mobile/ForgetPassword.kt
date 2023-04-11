@@ -25,6 +25,7 @@ class ForgetPassword : AppCompatActivity(), Success<User>, Error {
         val email = findViewById<EditText>(R.id.forget_tb_email)
         val password = findViewById<EditText>(R.id.forget_tb_password)
         val passwordAgain = findViewById<EditText>(R.id.forget_tb_passwordAgain)
+        val backBtn =findViewById<Button>(R.id.forget_pw_back_btn)
 
         save.setOnClickListener {
             if (password.text.toString() == passwordAgain.text.toString()) {
@@ -35,6 +36,9 @@ class ForgetPassword : AppCompatActivity(), Success<User>, Error {
 
                 UserService.forgetPassword(forgetPasswordDto, this, this, this)
             }
+        }
+        backBtn.setOnClickListener {
+            finish()
         }
     }
 

@@ -24,10 +24,9 @@ class LoginActivity : AppCompatActivity(), Success<TokenPair>, Error{
         setContentView(R.layout.activity_login)
 
         val login: Button = findViewById(R.id.login_btn)
-
         val forgetBtn: Button = findViewById(R.id.forget_btn)
-
         val register: Button = findViewById(R.id.toRegister_btn)
+        val backBtn: Button = findViewById(R.id.login_back_btn)
 
         login.setOnClickListener {
             val username = findViewById<EditText>(R.id.text_username)
@@ -46,6 +45,10 @@ class LoginActivity : AppCompatActivity(), Success<TokenPair>, Error{
         forgetBtn.setOnClickListener {
             val intent = Intent(this, ForgetPassword::class.java)
             startActivity(intent)
+        }
+
+        backBtn.setOnClickListener {
+            finish()
         }
     }
 

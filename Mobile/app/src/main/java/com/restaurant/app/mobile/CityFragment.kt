@@ -24,6 +24,7 @@ import com.restaurant.app.mobile.interfaces.Success
 import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.CityService
 import com.restaurant.app.mobile.service.RestaurantService
+import java.util.Objects
 import java.util.stream.Collectors
 
 
@@ -97,11 +98,14 @@ class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error
     }
 
     override fun error(error: VolleyError) {
-        if (error.networkResponse.statusCode == 401) {
-            val intent = Intent(this.requireContext(), LoginActivity::class.java)
-            startActivity(intent)
-            CityService.getListHttpRequest(this.requireContext(),this, this)
-        } else {
+        if(error.networkResponse != null) {
+            if(error.networkResponse.statusCode == 401) {
+                val intent = Intent(this.requireContext(), LoginActivity::class.java)
+                startActivity(intent)
+                CityService.getListHttpRequest(this.requireContext(),this, this)
+            }
+        }
+         else {
             Common.makeToastMessage(this.requireContext(),"Something went wrong!")
         }
     }
@@ -113,8 +117,10 @@ class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error
     }
 
     private fun renderCityList() {
-        val cityAdapter = CityAdapter(this.cities, this.requireContext())
-        this.cityList?.adapter = cityAdapter
+        if(isAdded) {
+            val cityAdapter = CityAdapter(this.cities, this.requireContext())
+            this.cityList?.adapter = cityAdapter
+        }
     }
 
     companion object :  ListSuccess<Restaurant>, Error  {

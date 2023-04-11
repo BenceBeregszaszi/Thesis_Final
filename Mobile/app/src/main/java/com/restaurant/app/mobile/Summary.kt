@@ -42,6 +42,7 @@ class Summary : AppCompatActivity(), Success<Reservation>, ListSuccess<City>, Er
         val restaurantSpinner: Spinner = findViewById(R.id.restaurants_spinner)
         val tbSeatNumber: EditText = findViewById(R.id.tb_max_seats_number)
         val datePicker: DatePicker = findViewById(R.id.datePickerSummary)
+        val backBtn: Button = findViewById(R.id.summary_back_btn)
 
         var data = intent.extras
         if(Objects.nonNull(data)) {
@@ -56,12 +57,16 @@ class Summary : AppCompatActivity(), Success<Reservation>, ListSuccess<City>, Er
                     if (selectedCity != null) {
                         cities.add(selectedCity)
                     }
-                    restaurants.addAll(data.get("restaurants") as ArrayList<Restaurant>)
+                    if(data.get("restaurants") != null) {
+                        restaurants.addAll(data.get("restaurants") as ArrayList<Restaurant>)
+                    }
                 } else {
                     if (selectedRestaurant != null) {
                         restaurants.add(selectedRestaurant)
                     }
-                    cities.addAll(data.get("cities") as ArrayList<City>)
+                    if(data.get("cities") != null){
+                        cities.addAll(data.get("cities") as ArrayList<City>)
+                    }
                 }
             }
         }
@@ -119,6 +124,10 @@ class Summary : AppCompatActivity(), Success<Reservation>, ListSuccess<City>, Er
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
+        }
+
+        backBtn.setOnClickListener {
+            finish()
         }
     }
 

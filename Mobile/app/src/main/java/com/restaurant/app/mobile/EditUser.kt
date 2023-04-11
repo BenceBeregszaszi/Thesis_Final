@@ -35,6 +35,7 @@ class EditUser : AppCompatActivity(), Success<User>, Delete, Error {
         val sw_disabled: Switch = findViewById(R.id.user_sw_disabled)
         val btn_save: Button = findViewById(R.id.user_btn_save)
         val btn_delete: Button = findViewById(R.id.user_btn_delete)
+        val btn_back: Button = findViewById(R.id.edit_back_btn)
 
         var data = intent.extras
         if (Objects.nonNull(data)) {
@@ -66,6 +67,10 @@ class EditUser : AppCompatActivity(), Success<User>, Delete, Error {
 
         btn_delete.setOnClickListener {
             UserService.deleteHttpRequest(id, this, this, this)
+        }
+
+        btn_back.setOnClickListener {
+            finish()
         }
     }
 

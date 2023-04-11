@@ -16,6 +16,7 @@ class RegisterActivity : AppCompatActivity(), Success<User>, Error {
 
     private var register: Button? = null
     private var login: Button? = null
+    private var backBtn: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +24,8 @@ class RegisterActivity : AppCompatActivity(), Success<User>, Error {
 
         this.register = findViewById(R.id.btn_register)
         this.login = findViewById(R.id.toLogin_btn)
+        this.backBtn = findViewById(R.id.register_back_btn)
+
 
         this.login?.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
@@ -41,6 +44,10 @@ class RegisterActivity : AppCompatActivity(), Success<User>, Error {
             user.isDisabled = false
             user.reminder = reminder
             Authentication.register(user, this, this, this)
+        }
+
+        this.backBtn?.setOnClickListener {
+            finish()
         }
     }
 

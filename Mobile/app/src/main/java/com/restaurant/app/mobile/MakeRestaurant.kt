@@ -34,6 +34,7 @@ class MakeRestaurant : AppCompatActivity(), Success<Restaurant>, Delete,  Error{
         val deleteRestaurant = findViewById<Button>(R.id.resta_btn_delete)
         val selectedCity = findViewById<Spinner>(R.id.make_restaurant_cities)
         val addCity = findViewById<Button>(R.id.btn_add_city)
+        val backBtn = findViewById<Button>(R.id.make_restaurant_back_btn)
 
         val data = intent.extras!!
         this.cityObjects = data.get("cities") as ArrayList<SpinnerProperty>
@@ -55,6 +56,8 @@ class MakeRestaurant : AppCompatActivity(), Success<Restaurant>, Delete,  Error{
         addCity.setOnClickListener {
             val item = selectedCity.selectedItem as SpinnerProperty
             selectedCities.add(item.getItemId())
+            cityObjects.removeIf { city -> city.getItemId() == item.getItemId() }
+            selectedCity.adapter = SpinnerAdapter(this.cityObjects, this)
         }
 
         makeRestaurant.setOnClickListener {
@@ -74,6 +77,9 @@ class MakeRestaurant : AppCompatActivity(), Success<Restaurant>, Delete,  Error{
 
         deleteRestaurant.setOnClickListener {
             RestaurantService.deleteHttpRequest(this.restaurant.id, this, this, this)
+        }
+        backBtn.setOnClickListener {
+            finish()
         }
     }
 

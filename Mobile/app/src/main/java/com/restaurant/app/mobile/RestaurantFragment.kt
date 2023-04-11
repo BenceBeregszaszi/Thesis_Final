@@ -57,7 +57,7 @@ class RestaurantFragment : Fragment(), Success<Restaurant>, ListSuccess<Restaura
             val selectedCities = this.cities.stream().filter {
                 city -> selectedRestaurant.cities.contains(city.id)
             }.collect(Collectors.toList()) as ArrayList
-            intent.putExtra("cites", selectedCities)
+            intent.putExtra("cities", selectedCities)
             startActivity(intent)
         }
 
@@ -102,15 +102,16 @@ class RestaurantFragment : Fragment(), Success<Restaurant>, ListSuccess<Restaura
         if (error.networkResponse.statusCode == 401) {
             val intent = Intent(this.requireContext(), LoginActivity::class.java)
             startActivity(intent)
-            RestaurantService.getListHttpRequest(this.requireContext(), this, this)
         } else {
             Common.makeToastMessage(this.requireContext(), error.message!!)
         }
     }
 
     private fun renderRestaurantList() {
-        val restaurantAdapter = RestaurantAdapter(this.restaurants, this.requireContext())
-        this.restaurantList?.adapter = restaurantAdapter
+        if(isAdded) {
+            val restaurantAdapter = RestaurantAdapter(this.restaurants, this.requireContext())
+            this.restaurantList?.adapter = restaurantAdapter
+        }
     }
 
     companion object: ListSuccess<City>, Error {

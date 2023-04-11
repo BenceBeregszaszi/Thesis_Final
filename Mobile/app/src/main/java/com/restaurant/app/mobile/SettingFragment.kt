@@ -94,7 +94,7 @@ class SettingFragment : Fragment(), Success<User>, Error {
             val intent = Intent(this.requireContext(), LoginActivity::class.java)
             startActivity(intent)
         } else {
-            Common.makeToastMessage(this.requireContext(), error.message!!)
+            error.message?.let { Common.makeToastMessage(this.requireContext(), it) }
         }
     }
 
