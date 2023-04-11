@@ -83,12 +83,13 @@ object CityService :  ResponseToObjectList<City>, MapResponseToObj<City> {
         val newObj = JSONObject()
         newObj.put("postCode", body.postCode)
         newObj.put("cityName", body.cityName)
+        newObj.put("restaurants", body.restaurants)
         if(body.restaurants.isEmpty()) {
-            newObj.put("restaurants", "[]")
+            newObj.put("restaurants", HashSet<Long>())
         } else {
             newObj.put("restaurants", body.restaurants)
         }
-        val request = object : CustomJSONObjectRequest(Request.Method.PUT, "$cityUrl/$id",  Common.getHeaders(), newObj,
+        val request = object : CustomJSONObjectRequest(Method.PUT, "$cityUrl/$id",  Common.getHeaders(), newObj,
             {
                     response -> val city = mapToObj(response)
                                 callback.onSuccess(city)

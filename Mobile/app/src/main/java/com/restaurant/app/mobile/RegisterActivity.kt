@@ -11,6 +11,8 @@ import com.restaurant.app.mobile.dto.User
 import com.restaurant.app.mobile.interfaces.Success
 import com.restaurant.app.mobile.interfaces.Error
 import com.restaurant.app.mobile.service.Authentication
+import java.math.BigInteger
+import java.security.MessageDigest
 
 class RegisterActivity : AppCompatActivity(), Success<User>, Error {
 
@@ -39,7 +41,7 @@ class RegisterActivity : AppCompatActivity(), Success<User>, Error {
             val email: String = findViewById<EditText>(R.id.tb_email).text.toString()
             val user = User()
             user.username = username
-            user.password = password
+            user.password = hashPassword(password)
             user.email = email
             user.isDisabled = false
             user.reminder = reminder
@@ -57,5 +59,10 @@ class RegisterActivity : AppCompatActivity(), Success<User>, Error {
 
     override fun error(error: VolleyError) {
         Common.makeToastMessage(this,error.message!!)
+    }
+
+    private fun hashPassword(password: String): String {
+        val md5 = MessageDigest.getInstance("MD5")
+        return BigInteger(1, md5.digest(password.toByteArray())).toString(16);
     }
 }

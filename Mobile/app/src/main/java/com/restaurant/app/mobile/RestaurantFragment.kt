@@ -66,7 +66,7 @@ class RestaurantFragment : Fragment(), Success<Restaurant>, ListSuccess<Restaura
             val intent = Intent(this.requireContext(), MakeRestaurant::class.java)
             intent.putExtra("restaurant", selectedRestaurant)
             val citiesToRestaurant = cities.stream()
-                .filter { city -> city.restaurants.contains(selectedRestaurant.id) }
+                .filter { city -> !city.restaurants.contains(selectedRestaurant.id) }
                 .collect(Collectors.toList()) as ArrayList
             intent.putExtra("cities", citiesToRestaurant)
             startActivity(intent)

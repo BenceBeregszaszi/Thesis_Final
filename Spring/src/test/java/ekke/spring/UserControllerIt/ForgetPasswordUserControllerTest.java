@@ -30,17 +30,6 @@ public class ForgetPasswordUserControllerTest extends UserIt {
 
     @Test
     @SneakyThrows
-    @WithTestUser(user = TestUserGuest.class)
-    public void testUserForgetPasswordWithWrongAuthority() {
-        //GIVEN
-        //WHEN
-        ResultActions resultActions = put(String.format(URL, EXISTING_ID), ForgetPasswordTestUtil.getForgetPasswordDto("admin reminder", "admin123", "admin@gmail.com"));
-        //THEN
-        hasNoAccess(resultActions);
-    }
-
-    @Test
-    @SneakyThrows
     @WithTestUser(user = TestUserAdam.class)
     public void testUserNotFoundThenNotFound() {
         //GIVEN

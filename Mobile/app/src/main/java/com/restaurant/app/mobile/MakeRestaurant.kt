@@ -72,6 +72,7 @@ class MakeRestaurant : AppCompatActivity(), Success<Restaurant>, Delete,  Error{
             this.restaurant.name = findViewById<EditText>(R.id.resta_tb_name).text.toString()
             this.restaurant.maxSeatsNumber = findViewById<EditText>(R.id.resta_tb_seat_number).text.toString().toInt()
             this.restaurant.address = findViewById<EditText>(R.id.resta_tb_address).text.toString()
+            this.restaurant.cities.addAll(selectedCities)
             RestaurantService.putHttpRequest(this.restaurant.id, this.restaurant, this, this, this)
         }
 
@@ -96,7 +97,7 @@ class MakeRestaurant : AppCompatActivity(), Success<Restaurant>, Delete,  Error{
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         } else {
-            Common.makeToastMessage(this,error.message!!)
+            error.message?.let { Common.makeToastMessage(this, it) }
         }
     }
 }

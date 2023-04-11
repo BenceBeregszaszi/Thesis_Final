@@ -65,13 +65,14 @@ class MakeCity : AppCompatActivity(), Success<City>, Delete, Error {
         makeCity.setOnClickListener {
             this.city.postCode = findViewById<EditText>(R.id.tb_postCode).text.toString()
             this.city.cityName = findViewById<EditText>(R.id.tb_cityName).text.toString()
-            this.city.restaurants = this.restaurants.toHashSet()
+            this.city.restaurants.addAll(restaurants)
             CityService.postHttpRequest(this.city, this, this, this)
         }
 
         editCity.setOnClickListener {
             this.city.postCode = findViewById<EditText>(R.id.tb_postCode).text.toString()
             this.city.cityName = findViewById<EditText>(R.id.tb_cityName).text.toString()
+            this.city.restaurants.addAll(restaurants)
             CityService.putHttpRequest(this.city.id, this.city, this, this, this)
         }
 
@@ -97,7 +98,7 @@ class MakeCity : AppCompatActivity(), Success<City>, Delete, Error {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         } else {
-            Common.makeToastMessage(this,error.message!!)
+            error.message?.let { Common.makeToastMessage(this, it) }
         }
     }
 }

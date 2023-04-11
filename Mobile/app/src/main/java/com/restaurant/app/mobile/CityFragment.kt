@@ -71,7 +71,7 @@ class CityFragment : Fragment(), Success<City>, ListSuccess<City>, Delete, Error
             val intent = Intent(this.requireContext(), MakeCity::class.java)
             intent.putExtra("city", selectedCity)
             val restaurantsToCity = restaurants.stream()
-                .filter { restaurant -> restaurant.cities.contains(selectedCity.id) }
+                .filter { restaurant -> !restaurant.cities.contains(selectedCity.id) }
                 .collect(Collectors.toList()) as ArrayList
             intent.putExtra("restaurants", restaurantsToCity)
             startActivity(intent)

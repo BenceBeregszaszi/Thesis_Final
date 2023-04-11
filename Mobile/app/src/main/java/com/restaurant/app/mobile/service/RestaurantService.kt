@@ -83,10 +83,10 @@ object RestaurantService : MapResponseToObj<Restaurant>,
     ) {
         val newObj = JSONObject()
         newObj.put("name", body.name)
-        newObj.put("maySeatsNumber", body.maxSeatsNumber)
+        newObj.put("maxSeatsNumber", body.maxSeatsNumber)
         newObj.put("address", body.address)
         newObj.put("cities", body.cities)
-        val request = CustomJSONObjectRequest(Request.Method.PUT, "$restaurantUrl/$id",  Common.getHeaders(), null,
+        val request = CustomJSONObjectRequest(Request.Method.PUT, "$restaurantUrl/$id",  Common.getHeaders(), newObj,
             {
                     response -> val restaurant = mapToObj(response)
                                 callback.onSuccess(restaurant)
